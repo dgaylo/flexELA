@@ -1,0 +1,21 @@
+PROJECT_NAME = "FlexELA"
+GENERATE_LATEX = NO
+
+INPUT = "../src" "../README.md"
+INCLUDE_PATTERNS = ".h"
+EXCLUDE_PATTERNS = "*/tests/*" "*.cpp"
+
+CITE_BIB_FILES = "refs.bib"
+USE_MDFILE_AS_MAINPAGE = README.md
+
+RECURSIVE = YES
+IMAGE_PATH="./figures"
+
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
+PREDEFINED             = ELA_USE_MPI
+
+# extensions
+HAVE_DOT = "no"
+USE_MATHJAX = "yes"

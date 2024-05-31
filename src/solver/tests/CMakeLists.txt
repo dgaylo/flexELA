@@ -1,0 +1,7 @@
+if(ELA_USE_MPI)
+else()
+    set(TEST_PGRM solver_test)
+    add_executable(${TEST_PGRM} solver_test.cpp)
+    target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
+    gtest_discover_tests(${TEST_PGRM})
+endif()
