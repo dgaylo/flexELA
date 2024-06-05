@@ -1,5 +1,6 @@
-#include "solver.h"
-
+#include "ELA_Solver.h"
+#include "globalVariables.h"
+#include "domain/domain.h"
 
 void ELA_SolverSaveDilation(const double* c_in, const double* vof_in) {
     // wrap input fields

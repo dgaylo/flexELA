@@ -1,24 +1,27 @@
 #include <gtest/gtest.h>
 #include <fenv.h>
 
-#include "../../ELA_Solver.h"
-#include "../../globalVariables.h"
-
-#include "../solver.h"
+#include "../ELA_Solver.h"
+#include "../globalVariables.h"
 
 unsigned int count=0;
 
-std::size_t getFieldSize() {
-    const int* n =ela::dom->n;
-    const int* pad =ela::inputPad;
+constexpr int N[3]={10,12,14};
+const int& NI=N[0];
+const int& NJ=N[1];
+const int& NK=N[2];
+const int NN = 2;
 
+constexpr int pad[6]={1,1,1,1,1,1};
+
+std::size_t getFieldSize() {
     return 
-        (n[0]+pad[0]+pad[1]) *
-        (n[1]+pad[2]+pad[3]) *
-        (n[2]+pad[4]+pad[5]);
+        (N[0]+pad[0]+pad[1]) *
+        (N[1]+pad[2]+pad[3]) *
+        (N[2]+pad[4]+pad[5]);
 }
 
-svec::Value fRand(const double& fMin, const double& fMax)
+double fRand(const double& fMin, const double& fMax)
 {
     count++;
 
@@ -30,7 +33,7 @@ svec::Value fRand(const double& fMin, const double& fMax)
         return 0.0;
     }
 
-    svec::Value f = (svec::Value)rand() / RAND_MAX;
+    double f = (double)rand() / RAND_MAX;
     return fMin + f * (fMax - fMin);
 }
 
@@ -58,14 +61,6 @@ int* newRandomLabelFeild(const int& maxLabel) {
 class ELAEnvironment : public ::testing::Environment
 {
 public:
-    const int N[3]={10,12,14};
-    const int& NI=N[0];
-    const int& NJ=N[1];
-    const int& NK=N[2];
-    const int NN = 2;
-
-    const int pad[6]={1,1,1,1,1,1};
-
     virtual void SetUp() {
         ELA_Init(N, pad, NN);
     };
@@ -88,8 +83,8 @@ int main(int argc, char* argv[])
   return RUN_ALL_TESTS();
 }
 
-TEST(Solver,Normalize) {
-    for(auto n=0; n<ela::dom->nn; ++n) {
+TEST(ELA,Normalize) {
+    for(auto n=0; n<NN; ++n) {
         const int* labels = newRandomLabelFeild(3);
         const double* vol = newRandomDoubleFeild(-0.1,3.0);
         ELA_InitLabels(vol,n,labels);
@@ -99,11 +94,11 @@ TEST(Solver,Normalize) {
 
 
     const double* f = newRandomDoubleFeild(0.0,1.0);
-    auto fFeild = solver::wrapField(f);
+    auto fFeild = ela::wrapField(f);
 
     ELA_SolverNormalizeLabel(f);
 
-    for(auto n=0; n<ela::dom->nn; ++n) {
+    for(auto n=0; n<NN; ++n) {
         
         auto fItr=fFeild.begin();
         for(auto& s : ela::dom->s[n]) {
@@ -120,7 +115,7 @@ TEST(Solver,Normalize) {
                 ASSERT_EQ(s.NNZ(),0);
                 fItr++;
             } else {
-                if(solver::NORMALIZE_S)
+                if(ela::NORMALIZE_S)
                     ASSERT_DOUBLE_EQ(sum,1.0-*fItr);
                 fItr++;
             }
@@ -130,7 +125,7 @@ TEST(Solver,Normalize) {
     delete[] f;
 }
 
-TEST(Solver,FilterLabels) {
+TEST(ELA,FilterLabels) {
     for(auto n=0; n<ela::dom->nn; ++n) {
         const int* labels = newRandomLabelFeild(3);
         const double* vol = newRandomDoubleFeild(-0.1,3.0);
@@ -141,7 +136,7 @@ TEST(Solver,FilterLabels) {
 
 
     double* f = newRandomDoubleFeild(0.0,1.0);
-    auto fFeild = solver::wrapField(f);
+    auto fFeild = ela::wrapField(f);
 
     constexpr double tol=0.1;
     ELA_SolverFilterLabels(tol,f);
@@ -178,7 +173,7 @@ svec::Value getValue(const svec::SVector& s, const svec::Label& l) {
     return 0.0;
 }
 
-TEST(Solver,AdvectLabels) {
+TEST(ELA,AdvectLabels) {
     constexpr int maxLabel=3;
 
     for(auto n=0; n<ela::dom->nn; ++n) {
