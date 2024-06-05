@@ -64,9 +64,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
-  # generate coverage reports with gcov
-  add_compile_options(-g -O0 -coverage -fprofile-arcs -ftest-coverage)
-  link_libraries(-coverage -lgcov)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # generate coverage reports with gcov
+    add_compile_options(-g -O0 --coverage)
+    link_libraries(--coverage)
+
+    target_link_options(${PROJECT_NAME} INTERFACE --coverage)
+  endif()
 endif()
 
 

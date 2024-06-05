@@ -16,9 +16,9 @@ jobs:
       fail-fast: false
 
       matrix:
+        build_type: ['Debug','Coverage']
         c_compiler: [gcc, clang]
         mpiType: ['openMPI', 'MPICH', 'none']
-        build_type: [Debug]
         fortran_compatible: [on, off]
         include:
           - c_compiler: gcc
@@ -37,8 +37,18 @@ jobs:
             oversubscribe: off
 
         exclude:
+          # CMAKE has trouble with clang and MPICH
           - c_compiler: clang
-            mpiType: MPICH
+            mpiType: 'MPICH'
+
+          # Coverage only works with gcc
+          - build_type: 'Coverage'
+            c_compiler: clang
+
+          # no need to get coverage from two different MPI versions
+          - build_type: 'Coverage'
+            mpiType: 'OpenMPI'
+           
 
     steps:
     - uses: actions/checkout@v4
@@ -50,6 +60,10 @@ jobs:
     - if: matrix.mpiType == 'MPICH'
       name: Install MPICH
       run: sudo apt-get update && sudo apt-get install -y mpich libmpich-dev && mpirun --version
+
+    - if: matrix.build_type == 'Coverage'
+      name: Install lcov
+      run: sudo apt-get update && sudo apt install -y lcov
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -76,8 +90,30 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
+    - if: matrix.build_type == 'Coverage'
+      name: Baseline coverage report
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: |
+        lcov --directory . --capture --initial --output-file ./coverage_base.info
+
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }} --rerun-failed --output-on-failure
+
+    - if: matrix.build_type == 'Coverage'
+      name: Create coverage report
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
+      run: |
+        lcov --directory . --capture --output-file ./coverage_test.info
+        lcov -a ./coverage_test.info -a ./coverage_base.info --output-file ./coverage.info
+
+    - if: matrix.build_type == 'Coverage'
+      name: Upload coverage report
+      uses: codecov/codecov-action@v4.4.1
+      with:
+        file: ${{ steps.strings.outputs.build-output-dir }}/coverage.info
+        verbose: true
+        token: ${{ secrets.CODECOV_TOKEN }}
+

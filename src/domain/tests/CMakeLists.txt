@@ -13,7 +13,7 @@ gtest_discover_tests(${TEST_PGRM}_F)
 
 set(TEST_PGRM domain_test)
 
-add_executable(${TEST_PGRM} test.cpp compression_test.cpp)
+add_executable(${TEST_PGRM} domain_test.cpp compression_test.cpp)
 target_link_libraries(${TEST_PGRM} GTest::gtest_main ${LIBRARY_NAME})
 gtest_discover_tests(${TEST_PGRM})
 
