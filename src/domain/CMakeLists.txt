@@ -29,7 +29,7 @@ target_sources(${LIBRARY_NAME}
             ${HDRS}
 )
 
-target_link_libraries(${LIBRARY_NAME} PRIVATE svector)
+target_link_libraries(${LIBRARY_NAME} PUBLIC svector)
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

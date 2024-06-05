@@ -53,12 +53,12 @@ constexpr bool isBoss() const;
  */
 void updateGhost(const Face& recv);
 
-/**
- * @brief @copybrief Domain::getMax()
- * 
- */
+/** @brief @copybrief Domain::getMax() */
 template<class T>
 T getMax(const T& in) const;
+
+/** @brief Get the MPI communicator */
+MPI_Comm getMPIComm() const {return comm_cart;}
 
 private:
     MPI_Comm comm_cart;
