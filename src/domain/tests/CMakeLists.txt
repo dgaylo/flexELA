@@ -22,10 +22,18 @@ if(ELA_USE_MPI)
 set(TEST_PGRM mpidomain_test)
 set(TEST_Name MPIDomainTests)
 
+option(MPIRUN_OVERSUBSCRIBE off)
+
 add_executable(${TEST_PGRM} mpi_test.cpp)
 target_link_libraries(${TEST_PGRM} GTest::gtest_main ${LIBRARY_NAME})
 
-set(MPI_COMMAND mpirun -np 4 ./${TEST_PGRM})
+
+if(MPIRUN_OVERSUBSCRIBE)
+    set(MPI_COMMAND mpirun -np 4 --oversubscribe ./${TEST_PGRM})
+else()
+    set(MPI_COMMAND mpirun -np 4 ./${TEST_PGRM})   
+endif()
+
 add_test(NAME ${TEST_Name} 
     COMMAND ${MPI_COMMAND})
 
