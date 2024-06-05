@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <fenv.h>
 
-#include "../ELA_Solver.h"
-#include "../globalVariables.h"
+#include <ELA_Solver.h>
+#include "../src/globalVariables.h"
 
 unsigned int count=0;
 
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
   return RUN_ALL_TESTS();
 }
 
-TEST(ELA,Normalize) {
+TEST(ELASolver,Normalize) {
     for(auto n=0; n<NN; ++n) {
         const int* labels = newRandomLabelFeild(3);
         const double* vol = newRandomDoubleFeild(-0.1,3.0);
@@ -125,7 +125,7 @@ TEST(ELA,Normalize) {
     delete[] f;
 }
 
-TEST(ELA,FilterLabels) {
+TEST(ELASolver,FilterLabels) {
     for(auto n=0; n<ela::dom->nn; ++n) {
         const int* labels = newRandomLabelFeild(3);
         const double* vol = newRandomDoubleFeild(-0.1,3.0);
@@ -173,7 +173,7 @@ svec::Value getValue(const svec::SVector& s, const svec::Label& l) {
     return 0.0;
 }
 
-TEST(ELA,AdvectLabels) {
+TEST(ELASolver,AdvectLabels) {
     constexpr int maxLabel=3;
 
     for(auto n=0; n<ela::dom->nn; ++n) {

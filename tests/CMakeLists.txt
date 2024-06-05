@@ -1,3 +1,7 @@
+if(FORTRAN_COMPATIBLE)
+    add_definitions(-DF_STYLE)
+endif(FORTRAN_COMPATIBLE)
+
 if(ELA_USE_MPI)
 else()
     set(TEST_PGRM init_test)
