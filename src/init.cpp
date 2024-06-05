@@ -55,7 +55,10 @@ void ELA_InitLabels(const double *vof, const int &num, const int *labels)
         if( *l > ela::maxLabel[num] ) ela::maxLabel[num]=*l;
 
         // initialize s vector with single label
-        sVector=svec::SVector(svec::Element(*(l++), *(v++)));
+        sVector=svec::SVector(svec::Element{
+            static_cast<svec::Label>(*(l++)), 
+            static_cast<svec::Value>(*(v++))
+        });
     }
 
     // calculate maximum label

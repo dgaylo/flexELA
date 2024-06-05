@@ -1,6 +1,6 @@
 # generate main header
 configure_file(ELA.h ELA.h)
-target_include_directories(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_BINARY_DIR}")
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}")
 
 add_subdirectory(svector)
 target_link_libraries(${PROJECT_NAME} PRIVATE svector)

@@ -217,8 +217,8 @@ constexpr std::size_t getLength(const int n[3], const int pad[6]) {
 template <class T>
 inline Helper<T>::Helper(T *array, const int n[3], const int pad[6]) : 
     basePtr{array},
-    n(n[0], n[1], n[2]),
-    pad(pad[0], pad[1], pad[2], pad[3], pad[4], pad[5])
+    n{n[0], n[1], n[2]},
+    pad{pad[0], pad[1], pad[2], pad[3], pad[4], pad[5]}
 {}
 
 template <class T>
@@ -244,11 +244,11 @@ inline Helper<T> Helper<T>::slice(int is, int ie, int js, int je, int ks, int ke
 template <typename T>
 constexpr std::ptrdiff_t Helper<T>::getIndex(int i, int j, int k) const
 {
-std::ptrdiff_t bounds[3]={
-    n[0]+pad[0]+pad[1],
-    n[1]+pad[2]+pad[3],
-    n[2]+pad[4]+pad[5]
-};
+    std::ptrdiff_t bounds[3]={
+        n[0]+pad[0]+pad[1],
+        n[1]+pad[2]+pad[3],
+        n[2]+pad[4]+pad[5]
+    };
 
 #ifdef F_STYLE
     return ((k+pad[4]) * bounds[1] + (j+pad[2])) * bounds[0] + i + pad[0];
@@ -283,7 +283,7 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool 
 }
 
 template <class T>
-inline Helper<T>::Iterator &Helper<T>::Iterator::operator++()
+inline typename Helper<T>::Iterator& Helper<T>::Iterator::operator++()
 {
     ptr+=(fwd ? 1 : -1);
     if(fwd) index++;

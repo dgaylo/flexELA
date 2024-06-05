@@ -61,7 +61,7 @@ public:
     const int N[3]={10,12,14};
     const int& NI=N[0];
     const int& NJ=N[1];
-    const int& NK=N[3];
+    const int& NK=N[2];
     const int NN = 2;
 
     const int pad[6]={1,1,1,1,1,1};
@@ -156,11 +156,11 @@ TEST(Solver,FilterLabels) {
         
         auto fItr=fFeild.begin();
         for(auto& s : ela::dom->s[n]) {
-            if((*fItr==0.0)) {
+            if(*fItr==0.0) {
                 if(s.NNZ()!=0)
                     ASSERT_DOUBLE_EQ(s.sum(),1.0);
             }
-            if((*fItr==1.0)) {
+            if(*fItr==1.0) {
                 ASSERT_EQ(s.NNZ(),0);
             }
 
@@ -196,8 +196,8 @@ TEST(Solver,AdvectLabels) {
 
     for(int count=1; count<=100; count++) {
         // calculate volume
-        double total[ela::dom->nn] = {0};
-        double individual[ela::dom->nn][maxLabel+1] = {0};
+        double total[2] = {0};
+        double individual[2][maxLabel+1] = {0};
 
         for(auto i=-1; i<ela::dom->ni+1; ++i) {
         for(auto j=-1; j<ela::dom->nj+1; ++j) {
@@ -221,8 +221,8 @@ TEST(Solver,AdvectLabels) {
         }
 
         // calculate new volume
-        double total_new[ela::dom->nn] = {0};
-        double individual_new[ela::dom->nn][maxLabel+1] = {0};
+        double total_new[2] = {0};
+        double individual_new[2][maxLabel+1] = {0};
 
         for(auto i=-1; i<ela::dom->ni+1; ++i) {
         for(auto j=-1; j<ela::dom->nj+1; ++j) {

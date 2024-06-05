@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <ELA.h>
 
 constexpr int N[3]={10,12,14};
@@ -38,7 +39,8 @@ TEST(ELA,Init) {
     ELA_Init(N,pad,NN);
 
     int* labels= newDummyArray();
-    double* vol = new double[NI*NJ*NK](1.0);
+    double* vol = new double[NI*NJ*NK];
+    std::fill_n(vol, NI*NJ*NK, 1.0);
 
     ELA_InitLabels(vol, 0, labels);
 

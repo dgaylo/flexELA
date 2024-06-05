@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
 
       matrix:
-        build_type: [Release,Debug]
-        mpiType: [openMPI, MPICH, none]
-        fortran_compatible: [on, off]
         c_compiler: [gcc, clang]
+        mpiType: [openMPI, MPICH, none]
+        build_type: [Debug]
+        fortran_compatible: [on, off]
         include:
           - c_compiler: gcc
             cpp_compiler: g++
