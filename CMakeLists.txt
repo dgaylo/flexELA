@@ -56,9 +56,19 @@ if(BUILD_TESTING)
   include (CTest)
 endif(BUILD_TESTING)
 
-# Compile Options
-add_compile_options(-fsanitize=leak,address,undefined -fno-omit-frame-pointer -fno-common -O1)
-link_libraries(-fsanitize=leak,address,undefined)
+## Build Types
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  # add sanitizing
+  add_compile_options(-fsanitize=leak,address,undefined)
+  link_libraries(-fsanitize=leak,address,undefined)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
+  # generate coverage reports with gcov
+  add_compile_options(-g -O0 -coverage -fprofile-arcs -ftest-coverage)
+  link_libraries(-coverage -lgcov)
+endif()
+
 
 add_subdirectory(src)
 

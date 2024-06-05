@@ -17,7 +17,7 @@ jobs:
 
       matrix:
         c_compiler: [gcc, clang]
-        mpiType: [openMPI, MPICH, none]
+        mpiType: ['openMPI', 'MPICH', 'none']
         build_type: [Debug]
         fortran_compatible: [on, off]
         include:
@@ -26,13 +26,13 @@ jobs:
           - c_compiler: clang
             cpp_compiler: clang++
 
-          - mpiType: openMPI
+          - mpiType: 'openMPI'
             use_mpi: on
             oversubscribe: on
-          - mpiType: MPICH
+          - mpiType: 'MPICH'
             use_mpi: on
             oversubscribe: off
-          - mpiType: none
+          - mpiType: 'none'
             use_mpi: off
             oversubscribe: off
 
@@ -43,10 +43,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup MPI
-      run: |
-        if [ ${{ matrix.mpiType }} == openMPI ]; then sudo apt-get update && sudo apt-get install -y openmpi-bin libopenmpi-dev && mpirun --version; fi;
-        if [ ${{ matrix.mpiType }} == MPICH ]; then sudo apt-get update && sudo apt-get install -y mpich libmpich-dev && mpirun --version; fi;
+    - if: matrix.mpiType == 'openMPI'
+      name: Install OpenMPI
+      run: sudo apt-get update && sudo apt-get install -y openmpi-bin libopenmpi-dev && mpirun --version
+
+    - if: matrix.mpiType == 'MPICH'
+      name: Install MPICH
+      run: sudo apt-get update && sudo apt-get install -y mpich libmpich-dev && mpirun --version
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -78,4 +81,3 @@ jobs:
       # Execute tests defined by the CMake configuration. Note that --build-config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       run: ctest --build-config ${{ matrix.build_type }} --rerun-failed --output-on-failure
-    
