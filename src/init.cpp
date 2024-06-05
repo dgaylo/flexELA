@@ -6,6 +6,7 @@ namespace ela {
     DomainType* dom;
     svec::Label* maxLabel;
     int inputPad[6];
+    bool NORMALIZE_S = true;
 }
 
 

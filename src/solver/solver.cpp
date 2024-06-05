@@ -3,8 +3,8 @@
 
 void ELA_SolverSaveDilation(const double* c_in, const double* vof_in) {
     // wrap input fields
-    auto cField = solver::wrapField<const double>(c_in);
-    auto vofField = solver::wrapField<const double>(vof_in);
+    auto cField = ela::wrapField<const double>(c_in);
+    auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
     for(auto n=0; n<ela::dom->nn; ++n) {
@@ -35,7 +35,7 @@ void ELA_SolverClearDilation()
 void ELA_SolverDilateLabels(const double* u_div)
 {
     // wrap input fields
-    auto uField = solver::wrapField<const double>(u_div);
+    auto uField = ela::wrapField<const double>(u_div);
 
     // loop through all ELA instances
     for(auto n=0; n<ela::dom->nn; ++n) {
@@ -52,7 +52,7 @@ void ELA_SolverDilateLabels(const double* u_div)
 void ELA_SolverNormalizeLabel(const double* vof_in) 
 {
     // wrap input fields
-    auto vofField = solver::wrapField<const double>(vof_in);
+    auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
     for(auto n=0; n<ela::dom->nn; ++n) {
@@ -62,7 +62,7 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
             // ensure there are no negative values      
             sVector.chop();
 
-            if(solver::NORMALIZE_S) {
+            if(ela::NORMALIZE_S) {
                 // ensure sum(s)=1-f
                 // ELA paper eq. 47
                 sVector.normalize(1.0-*(f++));
@@ -76,7 +76,7 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
 
 void ELA_SolverFilterLabels(const double& tol, const double* vof_in) {
     // wrap input fields
-    auto vofField = solver::wrapField<const double>(vof_in);
+    auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
     for(auto n=0; n<ela::dom->nn; ++n) {
@@ -154,8 +154,8 @@ void ELA_AdvectLabels(const int& d, const double* flux, const double* delta) {
     }
     
     // wrap input fields
-    auto fluxField = solver::wrapField<const double>(flux);
-    auto deltaRow = solver::wrapRow<const double>(delta, d);
+    auto fluxField = ela::wrapField<const double>(flux);
+    auto deltaRow = ela::wrapRow<const double>(delta, d);
 
     #ifdef ELA_USE_MPI
         // update ghost cells in each direction
