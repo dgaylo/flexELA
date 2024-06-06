@@ -3,6 +3,7 @@
 #include "naming.h"
 
 #include "output/vv.h"
+#include "output/vtm.h"
 
 #include <algorithm>
 #include <string.h>
@@ -17,6 +18,18 @@ std::string getNameVVFileName(const char *folder, const int& t_num)
         std::string(T_NUM_DIGITS - t_numString.length(), '0') + t_numString + 
         "." + VOLUME_VECTOR_FILENAME_EXT;
 }
+
+std::string getNameVTMFileName(const char *folder, const int& t_num)
+{
+    std::string t_numString = std::to_string(t_num);
+
+    return
+        std::string(folder) + "/" +
+        std::string(TRACKING_MATRIX_FILENAME) +
+        std::string(T_NUM_DIGITS - t_numString.length(), '0') + t_numString +
+        "." + TRACKING_MATRIX_FILENAME_EXT;
+}
+
 
 void ELA_OutputWriteV(
     const double *vof_in, const int *labels, const double *dV_in, 
@@ -52,4 +65,40 @@ void ELA_OutputWriteV(
 
     // write the volume vector file
     vv.write(getNameVVFileName(folder,t_num).c_str());
+}
+
+void ELA_OutputWriteVTM(
+    const int *labels, const double *dV_in, const int& num,
+    const int &t_num, const char *folder)
+{
+    auto dVField =  ela::wrapField<const double>(dV_in);
+    auto labelField = ela::wrapField<const int>(labels);
+    auto& sField = ela::dom->s[num];
+
+    // calculate the number of rows (i=1..max(label))
+    int maxLabel = ela::dom->getMax<int>(
+        *std::max_element(labelField.begin(),labelField.end())
+    );
+
+    // initialize the volume tracking matrix
+    #ifdef ELA_USE_MPI
+    output::VolumeTrackingMatrix vtm = output::VolumeTrackingMatrix(maxLabel, ela::dom->getMPIComm());
+    #else
+    output::VolumeTrackingMatrix vtm = output::VolumeTrackingMatrix(maxLabel);
+    #endif
+
+    // do the integration locally
+    auto dV=dVField.begin();
+    auto s=sField.begin();
+    for(auto l : labelField) {
+        if(l!=0) vtm.addCell(l, (*dV), (*s));
+        ++s;
+        ++dV;
+    }
+
+    // finalize the volume volume tracking matrix for writing
+    vtm.finalize();
+
+    // write the volume vector file
+    vtm.write(getNameVTMFileName(folder,t_num).c_str());
 }

@@ -8,8 +8,12 @@ extern "C" {
 #endif
 
 void ELA_OutputWriteV(
-    const double* f, const int* labels,const double* dV,
+    const double* f, const int* labels, const double* dV,
     const int& t_num, const char* folder);
+
+void ELA_OutputWriteVTM(
+    const int *labels, const double *dV_in, const int& num,
+    const int &t_num, const char *folder);
 
 #ifdef __cplusplus
 }
