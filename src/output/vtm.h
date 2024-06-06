@@ -1,5 +1,5 @@
 #ifndef VTM_H
-#define VTM
+#define VTM_H
 
 #include "output.h"
 #include "../svector/svector.h"
