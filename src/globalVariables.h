@@ -16,7 +16,6 @@ typedef domain::Domain DomainType;
 #endif
 
 extern DomainType* dom;
-extern svec::Label* maxLabel;
 
 extern int inputPad[6];
 
