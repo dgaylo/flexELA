@@ -92,6 +92,22 @@ void SVector::chop()
     }
 }
 
+void svec::SVector::zeroEntry(const Label &l)
+{
+    auto itr=vec.begin();
+    while(itr!= vec.cend()) {
+        if(itr->l == l) {
+            vec.erase(itr);
+            return;
+        }
+        else if(itr->l > l) {
+            return;
+        }
+
+        ++itr;
+    }
+}
+
 SVector svec::fma(const SVector &lhs, const Value& C, const SVector &rhs)
 {
     SVector out= SVector();

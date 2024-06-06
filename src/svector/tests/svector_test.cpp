@@ -286,3 +286,32 @@ TEST(SVectorTests, FMA) {
         EXPECT_DOUBLE_EQ(s3.data()[i].v,solution2[i].v);
     }
 }
+
+TEST(SVectorTests, zeroEntry) {
+    svec::Element buff[6] = {
+        {0,0.1},
+        {1,0.1},
+        {3,0.2},
+        {4,0.8},
+        {6,0.3},
+        svec::END_ELEMENT
+    };
+    svec::SVector s=svec::SVector(buff);
+
+    // should not change anything
+    s.zeroEntry(5);
+    ASSERT_EQ(s.NNZ(),5);
+
+    // should not change anything
+    s.zeroEntry(8);
+    ASSERT_EQ(s.NNZ(),5);
+
+    // remove zero at the start
+    s.zeroEntry(0);
+    ASSERT_EQ(s.NNZ(),4);
+    for(auto i=0; i<4; i++) {
+        EXPECT_EQ(s.data()[i].l,buff[i+1].l);
+        EXPECT_EQ(s.data()[i].v,buff[i+1].v);
+    }
+
+}

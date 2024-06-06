@@ -14,7 +14,7 @@ namespace svec {
  * The SVector class is used to store a vector \f$\mathbf{s}\f$ in terms of its non-zero elements \f$s_\ell\f$.
  * The underlying storage structure is a `std::vector<Element>`, which allows the storage to grow dynamically as the number of non-zero elements changes.
  * 
- * @note While elements \f$s_\ell\f$ are refereed to in documentation as ''non-zero elements'', it is not guaranteed that \f$s_\ell\ne 0\f$
+ * @note While elements \f$s_\ell\f$ are refereed to in documentation as ''non-zero elements'', it is not guaranteed that \f$s_\ell\ne 0\f$.
  * 
  */
 class SVector {
@@ -142,6 +142,18 @@ public:
     void chop();
 
 /**
+ * @brief Set the entry at label \p l to zero
+ * 
+ * \f[
+ * s_l \gets 0 
+ * \f]
+ * 
+ * @param l the label to set to zero
+ * 
+ */
+    void zeroEntry(const Label &l);
+
+/**
  * @brief Clear out all non-zero entries
  * 
  * This has the effect of \f$\mathbf{s}\gets\mathbf{0}\f$.
@@ -170,9 +182,9 @@ private:
  * \left(C  \times \mathbf{a}\right) + \mathbf{b}
  * \f]
  * 
- * @param a First SVector, \f$\mathbf{a}\f$
+ * @param a SVector, \f$\mathbf{a}\f$
  * @param C Value, \f$C\f$
- * @param b Second SVector, \f$\mathbf{b}\f$
+ * @param b SVector, \f$\mathbf{b}\f$
  * @return SVector 
  */
 SVector fma(const SVector &a, const Value& C, const SVector &b);
@@ -182,10 +194,10 @@ SVector fma(const SVector &a, const Value& C, const SVector &b);
  * 
  * For a SVector \f$\mathbf{a}\f$ and a Value \f$C\f$, returns
  * \f[
- * a / C
+ * \mathbf{a} / C
  * \f]
  * 
- * @param a First SVector, \f$\mathbf{a}\f$ 
+ * @param a SVector, \f$\mathbf{a}\f$ 
  * @param C Value, \f$C\f$
  * @return SVector 
  */
@@ -196,10 +208,10 @@ SVector operator/(const SVector& a, const Value& C);
  * 
  * For a SVector \f$\mathbf{a}\f$ and a Value \f$C\f$, returns
  * \f[
- * a * C
+ * \mathbf{a} * C
  * \f]
  * 
- * @param a First SVector, \f$\mathbf{a}\f$ 
+ * @param a SVector, \f$\mathbf{a}\f$ 
  * @param C Value, \f$C\f$
  * @return SVector 
  */
