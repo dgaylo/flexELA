@@ -1,0 +1,35 @@
+#ifndef VTM_H
+#define VTM
+
+#include "output.h"
+#include "../svector/svector.h"
+
+namespace output {
+
+class VolumeTrackingMatrix {
+public:
+    #ifdef ELA_USE_MPI
+    VolumeTrackingMatrix(const int& rowCount, MPI_Comm comm);
+    #else
+    VolumeTrackingMatrix(const int& rowCount);
+    #endif
+
+    ~VolumeTrackingMatrix();
+
+    void addCell(const Int_BinType& label, const svec::Value& volume, const svec::SVector& s);
+
+    void finalize();
+
+    void write(const char* filename);
+private:
+    svec::SVector* const row;
+    const Int_BinType rc;
+#ifdef ELA_USE_MPI
+    const MPI_Comm comm;
+    int rank;
+#endif
+};
+
+}
+
+#endif

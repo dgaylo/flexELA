@@ -4,10 +4,12 @@ add_library(${LIBRARY_NAME} STATIC)
 set(HDRS
     output.h
     vv.h
+    vtm.h
 )
 
 set(SRCS
     vv.cpp
+    vtm.cpp
 )
 
 

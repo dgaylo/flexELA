@@ -2,12 +2,11 @@
 #define OUTPUT_H
 
 #include <cstdint>
+#include <cassert>
 #include <fstream>
 #ifdef ELA_USE_MPI
 #include <mpi.h>
 #endif
-
-#include "../svector/svector.h"
 
 //! For writing the volume tracking matrix (VTM) and volume vector (vv)
 namespace output {
