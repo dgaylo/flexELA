@@ -104,7 +104,7 @@ TEST(MPIDomainTests, Basic) {
         while(itrA!=ghostData.end()) {
             ASSERT_EQ(itrA->NNZ(), itrB->NNZ());
 
-            for(auto i=0; i<itrA->NNZ(); i++) {
+            for(std::size_t i=0; i<itrA->NNZ(); i++) {
                 ASSERT_EQ(itrA->data()[i].v, itrB->data()[i].v);
                 ASSERT_EQ(itrA->data()[i].l, itrB->data()[i].l);
             }
@@ -125,7 +125,7 @@ TEST(MPIDomainTests, Basic) {
         while(itrA!=ghostData.end()) {
             ASSERT_EQ(itrA->NNZ(), itrB->NNZ());
 
-            for(auto i=0; i<itrA->NNZ(); i++) {
+            for(std::size_t i=0; i<itrA->NNZ(); i++) {
                 ASSERT_EQ(itrA->data()[i].v, itrB->data()[i].v);
                 ASSERT_EQ(itrA->data()[i].l, itrB->data()[i].l);
             }

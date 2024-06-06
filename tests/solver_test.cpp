@@ -190,7 +190,7 @@ TEST(ELASolver,AdvectLabels) {
     for(int count=1; count<=100; count++) {
         // calculate volume
         double total[2] = {0,0};
-        double individual[2][maxLabel+1] = {0,0};
+        double individual[2][maxLabel+1] = {{0,0,0,0},{0,0,0,0}};
 
         for(auto i=-1; i<ela::dom->ni+1; ++i) {
         for(auto j=-1; j<ela::dom->nj+1; ++j) {
@@ -214,8 +214,8 @@ TEST(ELASolver,AdvectLabels) {
         }
 
         // calculate new volume
-        double total_new[2] = {0};
-        double individual_new[2][maxLabel+1] = {0};
+        double total_new[2] = {0,0};
+        double individual_new[2][maxLabel+1] = {{0,0,0,0},{0,0,0,0}};
 
         for(auto i=-1; i<ela::dom->ni+1; ++i) {
         for(auto j=-1; j<ela::dom->nj+1; ++j) {
