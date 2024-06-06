@@ -13,7 +13,7 @@ namespace svec {
  * Type used for storing label (index)
  */
 typedef unsigned int Label;
-
+// its assumed throughout that these cant be negative
 
 /**
  * Type used for value

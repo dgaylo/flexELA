@@ -20,7 +20,7 @@ gtest_discover_tests(${TEST_PGRM})
 
 if(ELA_USE_MPI)
 set(TEST_PGRM mpidomain_test)
-set(TEST_Name MPIDomainTests)
+set(TEST_Name DomainTests.MPI)
 
 option(MPIRUN_OVERSUBSCRIBE off)
 

@@ -47,8 +47,8 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
   if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # generate coverage reports with gcov
-    add_compile_options(-g -O0 --coverage)
-    link_libraries(--coverage)
+    add_compile_options(-g -O0 --coverage -DNDEBUG)
+    link_libraries(--coverage -DNDEBUG)
   endif()
 endif()
 
