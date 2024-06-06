@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.20)
 option(ELA_USE_MPI "Build an MPI version of the library" ON)
 option(FORTRAN_COMPATIBLE "Build the library to be called from FORTRAN" OFF)
 option(BUILD_TESTING "Build testing" ON)
+if(CMAKE_VERSION VERSION_LESS "3.24.0")
+option(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
+endif()
 
 set(PROJECT_NAME flexELA)
 project (${PROJECT_NAME} 
@@ -54,7 +57,7 @@ endif()
 
 # older cmake doesnt support COMPILE_WARNING_AS_ERROR
 if(CMAKE_VERSION VERSION_LESS "3.24.0")
-  if(COMPILE_WARNING_AS_ERROR)
+  if(CMAKE_COMPILE_WARNING_AS_ERROR)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
       add_compile_options(-Werror)
     else()
