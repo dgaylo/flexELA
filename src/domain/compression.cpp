@@ -20,10 +20,10 @@ void domain::compress(void* const buff, const fields::Helper<svec::SVector> &sli
         const auto& nnz= s.NNZ();
 
         // if there are non-zero elements, copy them into ptr
-        //if(nnz != 0) {
+        if(nnz != 0) {
             std::memcpy(ptr,s.data(),nnz*sizeof(svec::Element));
             ptr+=nnz;
-        //}
+        }
 
         // add an element at the end to indicate the end
         // TODO: could save some memory by only writing the label
