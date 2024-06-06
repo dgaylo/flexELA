@@ -117,9 +117,10 @@ void MPIDomain::updateGhost(const Face& recv)
         free(send_buff[index]);
 
         // wait for next
-        MPI_Waitany(nn, recv_req, &index, MPI_STATUS_IGNORE);
+        MPI_Waitany(nn, send_req, &index, MPI_STATUS_IGNORE);
     }
     delete[] send_buff;
+    delete[] send_req;
 
     delete[] send_len;
     delete[] recv_len;
