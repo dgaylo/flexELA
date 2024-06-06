@@ -34,8 +34,8 @@ void MPIDomain::updateGhost(const Face& recv)
     const Face send = getOppositeFace(recv);
 
     // Figure out how big each buffer needs to be
-    std::size_t send_len[nn];
-    std::size_t recv_len[nn];
+    std::size_t* send_len = new std::size_t[nn];
+    std::size_t* recv_len = new std::size_t[nn];
 
     if(hasNeighbor(send)) {
         for(auto n=0; n<nn; ++n) {
@@ -50,8 +50,8 @@ void MPIDomain::updateGhost(const Face& recv)
 
     
     // Receive compressed data
-    void* recv_buff[nn];
-    MPI_Request recv_req[nn];
+    void** recv_buff = new void*[nn];
+    MPI_Request* recv_req = new MPI_Request[nn];
 
     if(hasNeighbor(recv)) {
         for(auto n=0; n<nn; ++n) {
@@ -71,8 +71,8 @@ void MPIDomain::updateGhost(const Face& recv)
     }
 
     // Send compressed data
-    void* send_buff[nn];
-    MPI_Request send_req[nn];
+    void** send_buff = new void*[nn];
+    MPI_Request* send_req = new MPI_Request[nn];
     
     if(hasNeighbor(send)) {
         for(auto n=0; n<nn; ++n) {
@@ -107,6 +107,8 @@ void MPIDomain::updateGhost(const Face& recv)
         // wait for next
         MPI_Waitany(nn, recv_req, &index, MPI_STATUS_IGNORE);
     }
+    delete[] recv_buff;
+    delete[] recv_req;
 
     // Cleanup the send buffer
     MPI_Waitany(nn, send_req, &index, MPI_STATUS_IGNORE);
@@ -117,6 +119,10 @@ void MPIDomain::updateGhost(const Face& recv)
         // wait for next
         MPI_Waitany(nn, recv_req, &index, MPI_STATUS_IGNORE);
     }
+    delete[] send_buff;
+
+    delete[] send_len;
+    delete[] recv_len;
 }
 
 template<>

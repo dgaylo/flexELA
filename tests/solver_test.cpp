@@ -115,8 +115,7 @@ TEST(ELASolver,Normalize) {
                 ASSERT_EQ(s.NNZ(),0);
                 fItr++;
             } else {
-                if(ela::NORMALIZE_S)
-                    ASSERT_DOUBLE_EQ(sum,1.0-*fItr);
+                if(ela::NORMALIZE_S) { ASSERT_DOUBLE_EQ(sum,1.0-*fItr); }
                 fItr++;
             }
         }
@@ -152,8 +151,7 @@ TEST(ELASolver,FilterLabels) {
         auto fItr=fFeild.begin();
         for(auto& s : ela::dom->s[n]) {
             if(*fItr==0.0) {
-                if(s.NNZ()!=0)
-                    ASSERT_DOUBLE_EQ(s.sum(),1.0);
+                if(s.NNZ()!=0) { ASSERT_DOUBLE_EQ(s.sum(),1.0); }
             }
             if(*fItr==1.0) {
                 ASSERT_EQ(s.NNZ(),0);
@@ -167,7 +165,7 @@ TEST(ELASolver,FilterLabels) {
 }
 
 svec::Value getValue(const svec::SVector& s, const svec::Label& l) {
-    for(auto i=0; i<s.NNZ(); i++) {
+    for(std::size_t i=0; i<s.NNZ(); i++) {
         if(s.data()[i].l==l) return s.data()[i].v;
     }
     return 0.0;

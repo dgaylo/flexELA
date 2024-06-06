@@ -60,7 +60,7 @@ TEST(SVectorTests, MultiElementConstructor) {
 
     // create a buffer with two svectors in it
     svec::Element* buff = new svec::Element[length+1];
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         buff[i].l=i;
         buff[i].v=fRand(0.0,1.0);
     }
@@ -70,7 +70,7 @@ TEST(SVectorTests, MultiElementConstructor) {
 
     EXPECT_EQ(s.NNZ(),length);
 
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         EXPECT_EQ(buff[i].l,s.data()[i].l);
         EXPECT_EQ(buff[i].v,s.data()[i].v);
     }
@@ -85,7 +85,7 @@ TEST(SVectorTests, Iterator) {
     svec::Value sum = 0.0;
     svec::Value sum2 = 0.0;
 
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         buff[i].l=i;
         buff[i].v=fRand(0.0,1.0);
         sum+=buff[i].v;
@@ -114,7 +114,7 @@ TEST(SVectorTests, Sum) {
     svec::Element* buff = new svec::Element[length+1];
     svec::Value sum = 0.0;
 
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         buff[i].l=i;
         buff[i].v=fRand(0.0,1.0);
         sum+=buff[i].v;
@@ -185,7 +185,7 @@ TEST(SVectorTests, Normalize) {
     svec::Element* buff = new svec::Element[length+1];
     svec::Value sum = 0.0;
 
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         buff[i].l=i;
         buff[i].v=fRand(0.0,1.0);
         sum+=buff[i].v;
@@ -195,14 +195,14 @@ TEST(SVectorTests, Normalize) {
     svec::SVector s = svec::SVector(buff);
     s.normalize(0.3);
 
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         EXPECT_EQ(buff[i].l,s.data()[i].l);
         EXPECT_DOUBLE_EQ(buff[i].v*(0.3/sum),s.data()[i].v);
     }
 
     svec::SVector s2 = svec::normalize(svec::SVector(buff), 0.3);
     ASSERT_EQ(s.NNZ(), s2.NNZ());
-    for(auto i=0; i<length; i++) {
+    for(std::size_t i=0; i<length; i++) {
         EXPECT_EQ(s.data()[i].l,s2.data()[i].l);
         EXPECT_EQ(s.data()[i].v,s2.data()[i].v);
     }

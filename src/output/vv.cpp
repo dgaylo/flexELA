@@ -9,7 +9,7 @@ VolumeVector::VolumeVector(const int &rowCount, MPI_Comm comm_in) :
 VolumeVector::VolumeVector(const int &rowCount) :
 #endif
     rc(rowCount),
-    v(new Fp_BinType[rowCount])
+    v(new Fp_BinType[rc])
 {
     // set all volumes to zero
     std::fill(v, v+rowCount, 0);
@@ -55,7 +55,8 @@ void VolumeVector::write(const char* filename)
     std::ofstream outputFile(filename, std::ios::out | std::ios::binary | std::ios::trunc);
 
     // Write ROW_COUNT
-	outputFile.write(reinterpret_cast<const char*>(&(rc)), sizeof(Int_BinType));
+    Int_BinType ROW_COUNT = static_cast<Int_BinType>(rc);
+	outputFile.write(reinterpret_cast<const char*>(&(ROW_COUNT)), sizeof(Int_BinType));
 
     // Write VALUE
 	outputFile.write(reinterpret_cast<const char*>(v), sizeof(Fp_BinType) * rc);

@@ -12,7 +12,7 @@ VolumeTrackingMatrix::VolumeTrackingMatrix(const int &rowCount,
 VolumeTrackingMatrix::VolumeTrackingMatrix(const int &rowCount) :
 #endif
     rc(rowCount),
-    row(new svec::SVector[rowCount])
+    row(new svec::SVector[rc])
 {}
 
 VolumeTrackingMatrix::~VolumeTrackingMatrix()
@@ -22,7 +22,7 @@ VolumeTrackingMatrix::~VolumeTrackingMatrix()
 
 void VolumeTrackingMatrix::addCell(const Int_BinType &label, const svec::Value &volume, const svec::SVector &s)
 {
-    assert(label>0 && label<=rc);
+    assert(label>0 && label<=Int_BinType(rc));
 
     // TODO: need to later make sure we dont output column labels <= 0
     row[label - 1].add(s,volume);
@@ -125,7 +125,8 @@ void output::VolumeTrackingMatrix::write(const char *filename)
     std::ofstream outputFile(filename, std::ios::out | std::ios::binary | std::ios::trunc);
 
     // Write ROW_COUNT
-	outputFile.write(reinterpret_cast<const char*>(&(rc)), sizeof(Int_BinType));
+    Int_BinType ROW_COUNT = static_cast<Int_BinType>(rc);
+	outputFile.write(reinterpret_cast<const char*>(&(ROW_COUNT)), sizeof(Int_BinType));
 
     // Write NNZ
     outputFile.write(reinterpret_cast<const char*>(&(NNZ)), sizeof(Int_BinType));

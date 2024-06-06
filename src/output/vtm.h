@@ -22,12 +22,12 @@ public:
 
     void write(const char* filename);
 private:
-    svec::SVector* const row;
-    const Int_BinType rc;
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
     int rank;
 #endif
+    const int rc;
+    svec::SVector* const row;
 };
 
 }

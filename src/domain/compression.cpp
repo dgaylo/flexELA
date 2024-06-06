@@ -6,7 +6,7 @@ using namespace domain;
 
 std::size_t domain::getCompressedSize(const fields::Helper<svec::SVector> &slice) {
     std::size_t len = 0;
-    for(const svec::SVector s : slice) {
+    for(const svec::SVector& s : slice) {
         len += s.NNZ() + 1;
     }
     return len * sizeof(svec::Element);

@@ -110,9 +110,9 @@ public:
         T* ptr;
         difference_type index;
 
+        bool fwd;
         int n[3];
         int bounds[3];
-        bool fwd;
     };
     static_assert(std::forward_iterator<Iterator>);
 

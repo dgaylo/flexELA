@@ -22,12 +22,12 @@ public:
     void write(const char* filename);
     
 private:
-    Fp_BinType* const v;
-    const Int_BinType rc;
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
     int rank;
 #endif
+    const Int_BinType rc;
+    Fp_BinType* const v;
 };
 
 }

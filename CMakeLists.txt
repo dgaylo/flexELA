@@ -40,7 +40,7 @@ endif(BUILD_TESTING)
 ## Build Types
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   # add sanitizing
-  add_compile_options(-fsanitize=leak,address,undefined)
+  add_compile_options(-fsanitize=leak,address,undefined -Wpedantic -Wall)
   link_libraries(-fsanitize=leak,address,undefined)
 endif()
 
@@ -52,6 +52,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
   endif()
 endif()
 
+# older cmake doesnt support COMPILE_WARNING_AS_ERROR
+if(CMAKE_VERSION VERSION_LESS "3.24.0")
+  if(COMPILE_WARNING_AS_ERROR)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+      add_compile_options(-Werror)
+    else()
+      message(Unable to apply COMPILE_WARNING_AS_ERROR)
+    endif()
+  endif()
+endif()
 
 add_subdirectory(src)
 

@@ -41,7 +41,6 @@ svec::Element* generateRandomS() {
 Slice generateData() {
     auto out = Slice(n,pad);
 
-    int count=0;
     for(auto& s : out ) {
         svec::Element* buff = generateRandomS();
         s=svec::SVector(buff);
@@ -66,7 +65,7 @@ TEST(DomainTests, CompressionRoundTrip) {
     while(itrA!=in.end()) {
         ASSERT_EQ(itrA->NNZ(), itrB->NNZ());
 
-        for(auto i=0; i<itrA->NNZ(); i++) {
+        for(std::size_t i=0; i<itrA->NNZ(); i++) {
             ASSERT_EQ(itrA->data()[i].v, itrB->data()[i].v);
             ASSERT_EQ(itrA->data()[i].l, itrB->data()[i].l);
         }
