@@ -6,16 +6,24 @@ if(ELA_USE_MPI)
     set(TEST_Name Output.MPI)
     option(MPIRUN_OVERSUBSCRIBE off)
     if(MPIRUN_OVERSUBSCRIBE)
-        set(MPI_COMMAND mpirun -np 4 --oversubscribe ./${TEST_PGRM})
+        set(MPI_COMMAND 
+            ${MPIEXEC_EXECUTABLE}
+            ${MPIEXEC_NUMPROC_FLAG} 4 --oversubscribe
+            ./${TEST_PGRM}
+        )
     else()
-        set(MPI_COMMAND mpirun -np 4 ./${TEST_PGRM})   
+        set(MPI_COMMAND 
+            ${MPIEXEC_EXECUTABLE}
+            ${MPIEXEC_NUMPROC_FLAG} 4
+            ./${TEST_PGRM}
+        ) 
     endif()
 
     add_test(NAME ${TEST_Name} COMMAND ${MPI_COMMAND})
 
     # mpi is not leak free, turn off leak detection
     set_tests_properties(${TEST_Name} PROPERTIES ENVIRONMENT
-    ASAN_OPTIONS=detect_leaks=0
+        ASAN_OPTIONS=detect_leaks=0
     )
 else()
     gtest_discover_tests(${TEST_PGRM})
