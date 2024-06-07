@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <string.h>
 
+// Name of a volume vector file
 std::string getNameVVFileName(const char *folder, const int& t_num)
 {
     std::string t_numString = std::to_string(t_num);
@@ -19,6 +20,7 @@ std::string getNameVVFileName(const char *folder, const int& t_num)
         "." + VOLUME_VECTOR_FILENAME_EXT;
 }
 
+// Name of a volume tracking matrix file
 std::string getNameVTMFileName(const char *folder, const int& t_num)
 {
     std::string t_numString = std::to_string(t_num);
@@ -30,6 +32,14 @@ std::string getNameVTMFileName(const char *folder, const int& t_num)
         "." + TRACKING_MATRIX_FILENAME_EXT;
 }
 
+// Name of the volume tracking matrix log file
+std::string getNameVTMLogFileName(const char *folder)
+{
+    return
+        std::string(folder) + "/" +
+        std::string(TIMELOG_FILENAME) +
+        "." + TIMELOG_FILENAME_EXT;
+}
 
 void ELA_OutputWriteV(
     const double *vof_in, const int *labels, const double *dV_in, 
@@ -69,7 +79,7 @@ void ELA_OutputWriteV(
 
 void ELA_OutputWriteVTM(
     const int *labels, const double *dV_in, const int& num,
-    const int &t_num, const char *folder)
+    const int &t_num, const double& time, const char *folder)
 {
     auto dVField =  ela::wrapField<const double>(dV_in);
     auto labelField = ela::wrapField<const int>(labels);
@@ -101,4 +111,7 @@ void ELA_OutputWriteVTM(
 
     // write the volume vector file
     vtm.write(getNameVTMFileName(folder,t_num).c_str());
+
+    // append to the log file
+    vtm.writeToLog(getNameVTMLogFileName(folder).c_str(),time);
 }

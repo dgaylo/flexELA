@@ -13,7 +13,7 @@ void ELA_OutputWriteV(
 
 void ELA_OutputWriteVTM(
     const int *labels, const double *dV_in, const int& num,
-    const int &t_num, const char *folder);
+    const int &t_num, const double& time, const char *folder);
 
 #ifdef __cplusplus
 }

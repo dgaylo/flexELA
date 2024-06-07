@@ -21,6 +21,8 @@ public:
     void finalize();
 
     void write(const char* filename);
+
+    void writeToLog(const char *filename, const double& time);
 private:
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
@@ -28,6 +30,7 @@ private:
 #endif
     const int rc;
     svec::SVector* const row;
+    Int_BinType NNZ;
 };
 
 }
