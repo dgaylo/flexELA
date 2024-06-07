@@ -1,14 +1,10 @@
-/**
- * @brief Provides functions to setup ELA
- * 
- * @file
- */
-
 #ifndef ELA_H
 #define ELA_H
 
+/** @cond Doxygen_Suppress */
 #undef ELA_USE_MPI
 #cmakedefine ELA_USE_MPI
+/** @endcond */ 
 
 #ifdef ELA_USE_MPI
 #include <mpi.h>
@@ -18,6 +14,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/**
+ * @brief Provides functions to setup ELA
+ * 
+ * These calls setup the library and creat the initial vector source fraction feild(s).
+ * 
+ * @file
+ */
+
 
 #ifdef ELA_USE_MPI
 void ELA_Init(const int *N, const int *pad, const int& numELA, MPI_Comm cart_comm);

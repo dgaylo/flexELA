@@ -28,11 +28,7 @@ target_sources(${PROJECT_NAME} PUBLIC
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER 
-    "
-    ${CMAKE_CURRENT_BINARY_DIR}/ELA.h;
-    ${CMAKE_CURRENT_SOURCE_DIR}/ELA_Solver.h;
-    ${CMAKE_CURRENT_SOURCE_DIR}/ELA_Output.h;
-    "
+    "${CMAKE_CURRENT_BINARY_DIR}/ELA.h;${CMAKE_CURRENT_SOURCE_DIR}/ELA_Solver.h;${CMAKE_CURRENT_SOURCE_DIR}/ELA_Output.h;"
   )
 
 ## sub libraries
