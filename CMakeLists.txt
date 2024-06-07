@@ -11,9 +11,10 @@ project (${PROJECT_NAME}
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# enable fortran
+# Setup library to be called from fortran
 if(FORTRAN_COMPATIBLE)
-enable_language(C Fortran)
+  enable_language(C Fortran)
+  add_definitions(-DF_STYLE)
 endif()
 
 # Setup MPI

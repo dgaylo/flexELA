@@ -8,7 +8,6 @@ if(ELA_USE_MPI)
 endif(ELA_USE_MPI)
 
 if(FORTRAN_COMPATIBLE)
-    add_definitions(-DF_STYLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_f)
 endif(FORTRAN_COMPATIBLE)
 
