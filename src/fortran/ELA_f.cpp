@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #ifdef ELA_USE_MPI
-void F90_NAME(ela_init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA, MPI_Fint* cart_comm) {
+void F90_NAME(ela_init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA, F90_Comm cart_comm) {
     ELA_Init(
         F90_PassIntArray(N), 
         F90_PassIntArray(pad),
