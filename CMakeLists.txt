@@ -11,6 +11,11 @@ project (${PROJECT_NAME}
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# enable fortran
+if(FORTRAN_COMPATIBLE)
+enable_language(C Fortran)
+endif()
+
 # Setup MPI
 if(ELA_USE_MPI)
   find_package(MPI REQUIRED)

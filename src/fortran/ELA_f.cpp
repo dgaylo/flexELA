@@ -1,0 +1,51 @@
+#include <ELA.h>
+#include "fortran.h"
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifdef ELA_USE_MPI
+void F90_NAME(ela_init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA, MPI_Fint* cart_comm) {
+    ELA_Init(
+        F90_PassIntArray(N), 
+        F90_PassIntArray(pad),
+        F90_PassInt(numELA),
+        F90_PassComm(cart_comm)
+    );
+}
+#else
+void F90_NAME(ELA_Init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA) {
+    ELA_Init(
+        F90_PassIntArray(N), 
+        F90_PassIntArray(pad),
+        F90_PassInt(numELA)
+    );
+}
+#endif
+
+void F90_NAME(ela_deinit,ELA_DEINIT)() {
+    ELA_DeInit();
+}
+
+void F90_NAME(ela_initlabels,ELA_INITLABELS)(F90_RealArray vof, F90_Int num, F90_IntArray labels) {
+    ELA_InitLabels(
+        F90_PassRealArray(vof),
+        F90_PassInt(num),
+        F90_PassIntArray(labels)
+    );
+}
+
+void F90_NAME(ela_getlabel,ELA_GETLABEL)(F90_Int i, F90_Int j, F90_Int k, F90_Int n, F90_Int l) {
+    *l = ELA_GetLabel(
+        F90_PassInt(i),
+        F90_PassInt(j),
+        F90_PassInt(k),
+        F90_PassInt(l)
+    );
+}
+
+#ifdef __cplusplus
+}
+#endif
