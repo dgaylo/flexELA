@@ -70,8 +70,10 @@ void VolumeTrackingMatrix::finalize()
         for(const svec::SVector* s_ptr = row; s_ptr<row+rc; s_ptr++) {
             const auto& nnz= s_ptr->NNZ();
 
-            std::memcpy(ptr,s_ptr->data(),nnz*sizeof(svec::Element));
-            ptr+=nnz;
+            if(nnz!=0) {
+                std::memcpy(ptr,s_ptr->data(),nnz*sizeof(svec::Element));
+                ptr+=nnz;
+            }
 
             *ptr++ = svec::END_ELEMENT;   
         }
