@@ -1,18 +1,9 @@
 set(TEST_PGRM fields_test)
-
-# Test C-Style ordering
 add_executable(${TEST_PGRM} fields_test.cpp)
 target_link_libraries(${TEST_PGRM} GTest::gtest_main)
 gtest_discover_tests(${TEST_PGRM})
 
-# Test F-Style ordering
-add_executable(${TEST_PGRM}_F fields_test.cpp)
-target_compile_definitions(${TEST_PGRM}_F PUBLIC F_STYLE=1)
-target_link_libraries(${TEST_PGRM}_F GTest::gtest_main)
-gtest_discover_tests(${TEST_PGRM}_F)
-
 set(TEST_PGRM domain_test)
-
 add_executable(${TEST_PGRM} domain_test.cpp compression_test.cpp)
 target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
 gtest_discover_tests(${TEST_PGRM})

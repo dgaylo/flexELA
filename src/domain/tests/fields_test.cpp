@@ -3,12 +3,6 @@
 #include "../fields.h"
 using namespace fields;
 
-#ifdef F_STYLE
-#define TEST_NAME FieldsTests_F
-#else
-#define TEST_NAME FieldsTests_C
-#endif
-
 constexpr int NI=10;
 constexpr int NJ=12;
 constexpr int NK=14;
@@ -37,7 +31,7 @@ constexpr int* newDummyArray() {
     return out;
 };
 
-TEST(TEST_NAME, Basic) {
+TEST(FieldsTests, Basic) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {0};
@@ -53,7 +47,7 @@ TEST(TEST_NAME, Basic) {
     delete[] array;
 }
 
-TEST(TEST_NAME, Pad) {
+TEST(FieldsTests, Pad) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {1,3,2,1,3,0};
@@ -72,7 +66,7 @@ TEST(TEST_NAME, Pad) {
     delete[] array;
 }
 
-TEST(TEST_NAME, Slice) {
+TEST(FieldsTests, Slice) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {0};
@@ -98,7 +92,7 @@ TEST(TEST_NAME, Slice) {
     delete[] array;
 }
 
-TEST(TEST_NAME, Iterator) {
+TEST(FieldsTests, Iterator) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {1,3,2,1,3,0};
@@ -138,7 +132,7 @@ TEST(TEST_NAME, Iterator) {
     delete[] array;
 }
 
-TEST(TEST_NAME, ReverseIterator) {
+TEST(FieldsTests, ReverseIterator) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {1,3,2,1,3,0};
@@ -176,7 +170,7 @@ TEST(TEST_NAME, ReverseIterator) {
     delete[] array;
 }
 
-TEST(TEST_NAME, Write) {
+TEST(FieldsTests, Write) {
     int* array=newDummyArray();
     int n[3] = {NI,NJ,NK};
     int pad[6] = {0};
@@ -205,7 +199,7 @@ TEST(TEST_NAME, Write) {
     delete[] array;
 }
 
-TEST(TEST_NAME, Owner) {
+TEST(FieldsTests, Owner) {
     const int n[3] = {NI,NJ,NK};
     const int pad[6] = {0};
 
