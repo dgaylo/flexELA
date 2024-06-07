@@ -5,10 +5,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 ## Compiler flags
 if(ELA_USE_MPI)
   target_link_libraries(${PROJECT_NAME} PUBLIC  MPI::MPI_CXX)
-  add_definitions(-DELA_USE_MPI)
-  set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_mpi)
-else()
-  set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_serial)
 endif(ELA_USE_MPI)
 
 if(FORTRAN_COMPATIBLE)
