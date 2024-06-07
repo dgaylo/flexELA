@@ -1,3 +1,7 @@
+if(FORTRAN_COMPATIBLE)
+    add_subdirectory(fortran)
+endif()
+
 if(ELA_USE_MPI)
 else()
     set(TEST_PGRM init_test)
