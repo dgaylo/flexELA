@@ -13,8 +13,10 @@ extern "C" {
 // interface arguments and types
 // inspired by hypre https://github.com/hypre-space/hypre
 
+#ifdef ELA_USE_MPI
 typedef MPI_Fint* F90_Comm;
 #define F90_PassComm(arg)       (MPI_Comm_f2c((MPI_Fint) *arg))
+#endif
 
 typedef int* F90_Int;
 typedef int* F90_IntArray;

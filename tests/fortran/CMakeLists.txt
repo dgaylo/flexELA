@@ -38,5 +38,5 @@ if(ELA_USE_MPI)
         ASAN_OPTIONS=detect_leaks=0
     )
 else()
-    add_test(ELA_f.Init ${TEST_PGRM})
+    add_test(NAME ELA_f.Init COMMAND ./${TEST_PGRM})
 endif()
