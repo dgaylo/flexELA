@@ -68,9 +68,9 @@ int main(int argc, char* argv[])
 
 TEST(MPIDomainTests, Basic) {
     MPI_Comm comm_cart;
-    MPI_Cart_create(MPI_COMM_WORLD,3,dims,periods,true, &comm_cart);
+    ASSERT_EQ(MPI_Cart_create(MPI_COMM_WORLD,3,dims,periods,true, &comm_cart),MPI_SUCCESS);
 
-    MPI_Comm_rank(comm_cart, &count);
+    ASSERT_EQ(MPI_Comm_rank(comm_cart, &count),MPI_SUCCESS);
 
     domain::MPIDomain* d = new domain::MPIDomain(NI,NJ,NK,NN,comm_cart);
 
