@@ -44,7 +44,7 @@ void ELA_InitLabels(const double *vof, const int &num, const int *labels)
         // initialize s vector with single label
         sVector=svec::SVector(svec::Element{
             static_cast<svec::Label>(*(l++)), 
-            static_cast<svec::Value>(*(v++))
+            static_cast<svec::Value>(1.0-*(v++))
         });
     }
 }
