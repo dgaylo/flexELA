@@ -113,5 +113,5 @@ void ELA_OutputWriteVTM(
     vtm.write(getNameVTMFileName(folder,t_num).c_str());
 
     // append to the log file
-    vtm.writeToLog(getNameVTMLogFileName(folder).c_str(),time);
+    vtm.writeToLog(getNameVTMLogFileName(folder).c_str(),t_num,time);
 }
