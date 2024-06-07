@@ -208,7 +208,7 @@ TEST(ELASolver,AdvectLabels) {
         for(int d=0; d<3; d++) {
             const double* u = newRandomDoubleFeild(-0.2,0.2);
 
-            ELA_AdvectLabels(d,u,delta+d);
+            ELA_SolverAdvectLabels(d,u,delta+d);
 
             delete[] u;
         }

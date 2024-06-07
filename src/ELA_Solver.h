@@ -77,7 +77,7 @@ void ELA_SolverNormalizeLabel(const double* f);
  */
 void ELA_SolverFilterLabels(const double& tol, const double* f);
 
-void ELA_AdvectLabels(const int& d, const double* flux, const double* delta);
+void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta);
 
 #ifdef __cplusplus
 }

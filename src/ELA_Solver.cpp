@@ -149,7 +149,7 @@ void advectRow(
     }
 }
 
-void ELA_AdvectLabels(const int& d, const double* flux, const double* delta) {
+void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta) {
     if(d<0 || d>2) {
         throw std::invalid_argument("Direction d outside of 0, 1, or 2");
     }
