@@ -2,7 +2,7 @@
 #include <fenv.h>
 
 #include <ELA_Solver.h>
-#include "../src/globalVariables.h"
+#include "../../src/globalVariables.h"
 
 unsigned int count=0;
 
