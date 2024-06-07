@@ -26,7 +26,6 @@ extern "C" {
 
 #ifdef ELA_USE_MPI
 void ELA_Init(const int *N, const int *pad, const int& numELA, MPI_Comm cart_comm);
-void ELA_Init_F(const int *N, const int *pad, const int& numELA, MPI_Fint cart_comm_f);
 #else
 void ELA_Init(const int *N, const int *pad, const int& numELA);
 #endif

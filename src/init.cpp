@@ -15,11 +15,6 @@ void ELA_Init(const int *N, const int *pad, const int& numELA, MPI_Comm cart_com
     std::copy(pad, pad+6, ela::inputPad);
     ela::dom = new ela::DomainType(N[0],N[1],N[2],numELA,cart_comm);
 }
-
-void ELA_Init_F(const int *N, const int *pad, const int& numELA, MPI_Fint cart_comm_f) 
-{
-    ELA_Init(N,pad,numELA,MPI_Comm_f2c(cart_comm_f));
-}
 #else
 void ELA_Init(const int *N, const int *pad, const int& numELA)
 {
