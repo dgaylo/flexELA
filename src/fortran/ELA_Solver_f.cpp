@@ -38,7 +38,7 @@ void F90_NAME(ela_solverfilterlabels, ELA_SOLVERFILTERLABELS)(F90_Real tol, F90_
 
 void F90_NAME(ela_solveradvectlabels, ELA_SOLVERADVECTLABELS)(F90_Int d, F90_RealArray flux, F90_RealArray delta) {
     ELA_SolverAdvectLabels(
-        F90_PassInt(d),
+        F90_PassInt(d)-1,
         F90_PassRealArray(flux),
         F90_PassRealArray(delta)
     );

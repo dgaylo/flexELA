@@ -26,7 +26,7 @@ void F90_NAME(ela_outputwritevtm, ELA_OUTPUTWRITEVTM)(
     ELA_OutputWriteVTM(
         F90_PassIntArray(labels),
         F90_PassRealArray(dV),
-        F90_PassInt(num),
+        F90_PassInt(num)-1,
         F90_PassInt(t_num),
         F90_PassReal(time),
         F90_PassCharArray(folder)

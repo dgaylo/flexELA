@@ -32,17 +32,17 @@ void F90_NAME(ela_deinit,ELA_DEINIT)() {
 void F90_NAME(ela_initlabels,ELA_INITLABELS)(F90_RealArray vof, F90_Int num, F90_IntArray labels) {
     ELA_InitLabels(
         F90_PassRealArray(vof),
-        F90_PassInt(num),
+        F90_PassInt(num)-1,
         F90_PassIntArray(labels)
     );
 }
 
 void F90_NAME(ela_getlabel,ELA_GETLABEL)(F90_Int i, F90_Int j, F90_Int k, F90_Int n, F90_Int l) {
     *l = ELA_GetLabel(
-        F90_PassInt(i),
-        F90_PassInt(j),
-        F90_PassInt(k),
-        F90_PassInt(l)
+        F90_PassInt(i)-1,
+        F90_PassInt(j)-1,
+        F90_PassInt(k)-1,
+        F90_PassInt(n)-1
     );
 }
 
