@@ -31,17 +31,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER
     "${CMAKE_CURRENT_BINARY_DIR}/ELA.h;${CMAKE_CURRENT_SOURCE_DIR}/ELA_Solver.h;${CMAKE_CURRENT_SOURCE_DIR}/ELA_Output.h;"
   )
 
-## sub libraries
-add_subdirectory(svector)
-target_link_libraries(${PROJECT_NAME} PRIVATE svector)
-
-add_subdirectory(domain)
-target_link_libraries(${PROJECT_NAME} PRIVATE domain)
-
-add_subdirectory(output)
-target_link_libraries(${PROJECT_NAME} PRIVATE output)
-
 ## source files
+add_subdirectory(svector)
+add_subdirectory(domain)
+add_subdirectory(output)
+
 target_sources(${PROJECT_NAME} PRIVATE 
     globalVariables.h
     init.cpp 

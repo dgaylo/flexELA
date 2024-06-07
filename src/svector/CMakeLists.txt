@@ -1,5 +1,5 @@
-set(LIBRARY_NAME svector)
-add_library(${LIBRARY_NAME} STATIC)
+#set(LIBRARY_NAME svector)
+#add_library(${LIBRARY_NAME} STATIC)
 
 set(HDRS
     svector.h
@@ -12,7 +12,7 @@ set(SRCS
 )
 
 
-target_sources(${LIBRARY_NAME}
+target_sources(${PROJECT_NAME}
     PRIVATE ${SRCS}
             ${HDRS}
 )

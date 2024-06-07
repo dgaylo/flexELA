@@ -14,7 +14,7 @@ gtest_discover_tests(${TEST_PGRM}_F)
 set(TEST_PGRM domain_test)
 
 add_executable(${TEST_PGRM} domain_test.cpp compression_test.cpp)
-target_link_libraries(${TEST_PGRM} GTest::gtest_main ${LIBRARY_NAME})
+target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
 gtest_discover_tests(${TEST_PGRM})
 
 
@@ -25,7 +25,7 @@ set(TEST_Name DomainTests.MPI)
 option(MPIRUN_OVERSUBSCRIBE off)
 
 add_executable(${TEST_PGRM} mpi_test.cpp)
-target_link_libraries(${TEST_PGRM} GTest::gtest_main ${LIBRARY_NAME})
+target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
 
 
 if(MPIRUN_OVERSUBSCRIBE)
