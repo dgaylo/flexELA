@@ -134,3 +134,12 @@ unsigned int MPIDomain::getMax(const unsigned int &in) const
 
     return out;
 }
+
+template<>
+int MPIDomain::getMax(const int &in) const
+{
+    int out=in;
+    MPI_Allreduce(MPI_IN_PLACE, &out, 1, MPI_INT, MPI_MAX,comm_cart);
+
+    return out;
+}
