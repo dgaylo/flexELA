@@ -1,4 +1,9 @@
 if(ELA_USE_MPI)
+    add_compile_options(${MPI_CXX_COMPILE_OPTIONS})
+    link_libraries(${MPI_CXX_LINK_FLAGS})
+
+    # TODO: mpi tests
+
 else()
     set(TEST_PGRM init_test)
     add_executable(${TEST_PGRM} init_test.cpp)

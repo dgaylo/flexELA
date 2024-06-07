@@ -21,7 +21,6 @@ endif()
 if(ELA_USE_MPI)
   find_package(MPI REQUIRED)
   include_directories(SYSTEM ${MPI_INCLUDE_PATH})
-  link_libraries(${MPI_CXX_LINK_FLAGS})
 
   add_definitions(-DELA_USE_MPI)
 endif(ELA_USE_MPI)
