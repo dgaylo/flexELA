@@ -124,11 +124,12 @@ SVector svec::fma(const SVector &lhs, const Value& C, const SVector &rhs)
     
     // merge sort
     while(itrL!=vecL.cend() && itrR!=vecR.cend()) {
-        auto res = (itrL->l <=> itrR->l);
+        const svec::Label& labelL = itrL->l;
+        const svec::Label&  labelR = itrR->l;
 
-        if (res < 0)
+        if (labelL < labelR)
             out.vec.emplace_back( (*itrL++)*C );
-        else if (res > 0)
+        else if (labelL > labelR)
             out.vec.emplace_back( (*itrR++) );
         else
             out.vec.emplace_back( fma(*itrL++,C,*itrR++) );
