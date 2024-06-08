@@ -38,6 +38,10 @@ TEST(ELA,Init) {
     
     ELA_Init(N,pad,NN);
 
+    // Should get a label of zero if we try to call 
+    // ELA_GetLabel() before ELA_InitLabels()
+    ASSERT_EQ(ELA_GetLabel(2,3,4,0),0);
+
     int* labels= newDummyArray();
     double* vol = new double[NI*NJ*NK];
     std::fill_n(vol, NI*NJ*NK, 1.0);

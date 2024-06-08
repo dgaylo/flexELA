@@ -1,16 +1,5 @@
 if(FORTRAN_COMPATIBLE)
-    add_definitions(-DF_STYLE)
-endif(FORTRAN_COMPATIBLE)
-
-if(ELA_USE_MPI)
-else()
-    set(TEST_PGRM init_test)
-    add_executable(${TEST_PGRM} init_test.cpp)
-    target_link_libraries(${TEST_PGRM} GTest::gtest_main flexELA)
-    gtest_discover_tests(${TEST_PGRM})
-
-    set(TEST_PGRM solver_test)
-    add_executable(${TEST_PGRM} solver_test.cpp)
-    target_link_libraries(${TEST_PGRM} GTest::gtest_main flexELA)
-    gtest_discover_tests(${TEST_PGRM})
+    add_subdirectory(fortran)
 endif()
+
+add_subdirectory(cpp)

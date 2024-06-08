@@ -10,13 +10,11 @@ public:
     virtual void SetUp() {
         char** argv;
         int argc = 0;
-        int mpiError = MPI_Init(&argc, &argv);
-        ASSERT_FALSE(mpiError);
+        ASSERT_EQ(MPI_Init(&argc, &argv),MPI_SUCCESS);
     }
 
     virtual void TearDown() {
-        int mpiError = MPI_Finalize();
-        ASSERT_FALSE(mpiError);
+        ASSERT_EQ(MPI_Finalize(),MPI_SUCCESS);
     }
 
     virtual ~MPIEnvironment() {}
@@ -144,9 +142,9 @@ TEST(Output,VolumeTrackingMatrix) {
 
     vtm.finalize();
 
-    if(RankEqual(0)) {
-        vtm.write("temp_a.bin");
+    vtm.write("temp_a.bin");
 
+    if(RankEqual(0)) {
         std::ifstream input( "temp_a.bin", std::ios::binary );
 
         uint32_t RC;

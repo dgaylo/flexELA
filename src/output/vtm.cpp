@@ -70,8 +70,10 @@ void VolumeTrackingMatrix::finalize()
         for(const svec::SVector* s_ptr = row; s_ptr<row+rc; s_ptr++) {
             const auto& nnz= s_ptr->NNZ();
 
-            std::memcpy(ptr,s_ptr->data(),nnz*sizeof(svec::Element));
-            ptr+=nnz;
+            if(nnz!=0) {
+                std::memcpy(ptr,s_ptr->data(),nnz*sizeof(svec::Element));
+                ptr+=nnz;
+            }
 
             *ptr++ = svec::END_ELEMENT;   
         }
@@ -117,8 +119,8 @@ void output::VolumeTrackingMatrix::write(const char *filename)
         ROW_INDEX[i+1]=ROW_INDEX[i]+row[i].NNZ();
     }
 
-    // total number of non-zeros, NNZ (saved for the log)
-    NNZ = ROW_INDEX[rc]; 
+    // total number of non-zeros
+    const Int_BinType& NNZ = ROW_INDEX[rc]; 
 
 
     // Open file
@@ -156,21 +158,21 @@ void output::VolumeTrackingMatrix::write(const char *filename)
     outputFile.close();
 }
 
-void output::VolumeTrackingMatrix::writeToLog(const char *filename, const double& time)
+void output::VolumeTrackingMatrix::writeToLog(const char *filename, const double& t_num, const double& time)
 {
     #ifdef ELA_USE_MPI
     // Only rank==0 does anything
     if(rank != 0) return;
     #endif
 
-    // NNZ is already saved from write()
-    Fp_BinType T = static_cast<Fp_BinType>(time);
+    Int_BinType T_NUM = static_cast<Int_BinType>(t_num);
     Int_BinType ROW_COUNT = static_cast<Int_BinType>(rc);
+    Fp_BinType T = static_cast<Fp_BinType>(time);
 
     // Open file, note that this is in append mode
     std::ofstream outputFile(filename, std::ios::out | std::ios::binary | std::ios::app);
 
-    outputFile.write(reinterpret_cast<const char*>(&(NNZ)), sizeof(Int_BinType));
+    outputFile.write(reinterpret_cast<const char*>(&(T_NUM)), sizeof(Int_BinType));
 	outputFile.write(reinterpret_cast<const char*>(&(ROW_COUNT)), sizeof(Int_BinType));
 	outputFile.write(reinterpret_cast<const char*>(&(T)), sizeof(Fp_BinType));
 
