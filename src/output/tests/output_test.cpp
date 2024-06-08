@@ -142,9 +142,9 @@ TEST(Output,VolumeTrackingMatrix) {
 
     vtm.finalize();
 
-    if(RankEqual(0)) {
-        vtm.write("temp_a.bin");
+    vtm.write("temp_a.bin");
 
+    if(RankEqual(0)) {
         std::ifstream input( "temp_a.bin", std::ios::binary );
 
         uint32_t RC;
