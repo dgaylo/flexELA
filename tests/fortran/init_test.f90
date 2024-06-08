@@ -11,7 +11,10 @@ integer, parameter :: pad(6)=(/0,0,0,0,0,0/)
 
 integer, dimension(N(1)+pad(1)+pad(2),N(2)+pad(3)+pad(4),N(3)+pad(5)+pad(6)) :: labels
 real(8), dimension(N(1)+pad(1)+pad(2),N(2)+pad(3)+pad(4),N(3)+pad(5)+pad(6)) :: vol
-integer :: i,j,k,ierr,l
+integer :: i,j,k,l
+#ifdef ELA_USE_MPI
+integer :: ierr
+#endif
 
 #ifdef ELA_USE_MPI
 call MPI_Init(ierr)

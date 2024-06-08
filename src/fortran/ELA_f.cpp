@@ -16,7 +16,7 @@ void F90_NAME(ela_init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numEL
     );
 }
 #else
-void F90_NAME(ELA_Init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA) {
+void F90_NAME(ela_init,ELA_INIT)(F90_IntArray N, F90_IntArray pad, F90_Int numELA) {
     ELA_Init(
         F90_PassIntArray(N), 
         F90_PassIntArray(pad),
