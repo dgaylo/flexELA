@@ -47,6 +47,11 @@ if(BUILD_TESTING)
 endif(BUILD_TESTING)
 
 ## Build Types
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   # add sanitizing
   add_compile_options(-fsanitize=leak,address,undefined -Wpedantic -Wall)
@@ -59,6 +64,14 @@ if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
     add_compile_options(-g -O0 --coverage -DNDEBUG)
     link_libraries(--coverage -DNDEBUG)
   endif()
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  add_compile_options(-O3 -DNDEBUG)
+  link_libraries(-DNDEBUG)
+
+  # Turn on IPO
+  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
 # older cmake doesnt support COMPILE_WARNING_AS_ERROR
