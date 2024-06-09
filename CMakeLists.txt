@@ -75,6 +75,20 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
   link_libraries(-DNDEBUG)
 endif()
 
+if(CMAKE_BUILD_TYPE STREQUAL "Profile")
+  # options from forge docs
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    add_compile_options(-debug minimal -O3 -fno-inline -no-ip -no-ipo -fno-omit-frame-pointer -fno-optimize-sibling-calls)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-g1 -O3 -fno-inline -fno-optimize-sibling-calls)
+  else()
+    message(Unable to apply Profile options)
+  endif()
+
+  add_compile_options(-DNDEBUG)
+  link_libraries(-DNDEBUG)
+endif()
+
 # older cmake doesnt support COMPILE_WARNING_AS_ERROR
 if(CMAKE_VERSION VERSION_LESS "3.24.0")
   option(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
