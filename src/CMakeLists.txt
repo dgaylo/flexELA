@@ -32,6 +32,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER
 add_subdirectory(svector)
 add_subdirectory(domain)
 add_subdirectory(output)
+add_subdirectory(checkpoint)
+
 if(FORTRAN_COMPATIBLE)
   add_subdirectory(fortran)
 endif()
