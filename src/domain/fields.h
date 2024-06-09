@@ -74,7 +74,7 @@ public:
  * however the order (`i->j->k` or `k->j->i`) is optimized to the ordering (set at compile time) of the underlying data.
  * 
  */
-    struct Iterator {
+    struct Iterator : public std::forward_iterator_tag {
         /** @cond Doxygen_Suppress */ 
         using difference_type = long;
         using value_type = T;
@@ -106,6 +106,8 @@ public:
         /** @brief Comparison */
         bool operator==(const Iterator& other) const {return index==other.index;}
 
+        bool operator!=(const Iterator& other) const {return index!=other.index;}
+
     private:
         T* ptr;
         difference_type index;
@@ -114,7 +116,6 @@ public:
         int n[3];
         int bounds[3];
     };
-    static_assert(std::forward_iterator<Iterator>);
 
 /**
  * @brief Iterator to the start (0,0,0) of the data

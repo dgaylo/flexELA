@@ -11,7 +11,7 @@ constexpr int DummyFunction(int i, int j, int k) {
     return i+j*NI+k*NI*NJ;
     //return i+j*NI+k*NI*NJ;
 }
-constexpr int* newDummyArray() {
+int* newDummyArray() {
     int* out = new int[NI*NJ*NK];
 
     int* itr=out;

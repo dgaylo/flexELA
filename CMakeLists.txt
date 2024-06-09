@@ -8,7 +8,7 @@ set(PROJECT_NAME flexELA)
 project (${PROJECT_NAME} 
     LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Setup library to be called from fortran
@@ -44,6 +44,10 @@ if(BUILD_TESTING)
 
   include(GoogleTest)
   include (CTest)
+
+  if(FORTRAN_COMPATIBLE)
+    option(BUILD_Fortran_TESTING "Build Fortran interface testing" ON)
+  endif()
 endif(BUILD_TESTING)
 
 ## Build Types
