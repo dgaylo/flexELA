@@ -69,9 +69,6 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(-O3 -DNDEBUG)
   link_libraries(-DNDEBUG)
-
-  # Turn on IPO
-  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
 # older cmake doesnt support COMPILE_WARNING_AS_ERROR
@@ -87,6 +84,13 @@ if(CMAKE_VERSION VERSION_LESS "3.24.0")
 endif()
 
 add_subdirectory(src)
+
+# Extra build options only for the library (not testing)
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  # Turn on IPO
+  set_property(TARGET ${PROJECT} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+endif()
+
 
 if(BUILD_TESTING)
 add_subdirectory(tests)

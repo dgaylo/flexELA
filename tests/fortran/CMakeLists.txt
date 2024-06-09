@@ -11,6 +11,7 @@ set_source_files_properties(
 
 set(TEST_PGRM init_test_f)
 add_executable(${TEST_PGRM} init_test.f90)
+set_property(TARGET ${TEST_PGRM} PROPERTY LINKER_LANGUAGE Fortran)
 target_link_libraries(${TEST_PGRM} flexELA)
 
 if(ELA_USE_MPI)
