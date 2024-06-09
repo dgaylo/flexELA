@@ -44,6 +44,10 @@ if(BUILD_TESTING)
 
   include(GoogleTest)
   include (CTest)
+
+  if(FORTRAN_COMPATIBLE)
+    option(BUILD_Fortran_TESTING "Build Fortran interface testing" ON)
+  endif()
 endif(BUILD_TESTING)
 
 ## Build Types
