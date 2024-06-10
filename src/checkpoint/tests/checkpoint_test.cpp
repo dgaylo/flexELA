@@ -59,5 +59,15 @@ TEST(Checkpoint, Roundtrip) {
             ++s2;
         }
     }
-        
+}
+
+TEST(Checkpoint, Exceptions) {
+    domain::Domain dom = domain::Domain(5,6,9,3);
+    checkpoint::create("exceptions.bin",dom);
+
+    domain::Domain dom_wrongN = domain::Domain(5+1,6,9,3);
+    EXPECT_THROW(checkpoint::load("exceptions.bin",dom_wrongN), std::invalid_argument);
+
+    domain::Domain dom_wrongNN = domain::Domain(5,6,9,3-1);
+    EXPECT_THROW(checkpoint::load("exceptions.bin",dom_wrongNN), std::invalid_argument);
 }
