@@ -61,12 +61,12 @@ int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n)
     }
 }
 
-inline void ELA_CreateCheckpoint(const char* filename) {
+void ELA_CreateCheckpoint(const char* filename) {
     assert(ela::dom!=nullptr);
     checkpoint::create(filename, *ela::dom);
 }
 
-inline void ELA_LoadCheckpoint(const char* filename) {
+void ELA_LoadCheckpoint(const char* filename) {
     assert(ela::dom!=nullptr);
     checkpoint::load(filename, *ela::dom);
 }

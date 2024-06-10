@@ -46,6 +46,18 @@ void F90_NAME(ela_getlabel,ELA_GETLABEL)(F90_Int i, F90_Int j, F90_Int k, F90_In
     );
 }
 
+void F90_NAME(ela_createcheckpoint,ELA_CREATECHECKPOINT)(F90_CharArray filename) {
+    ELA_CreateCheckpoint(
+        F90_PassCharArray(filename)
+    );
+}
+
+void F90_NAME(ela_loadcheckpoint,ELA_LOADCHECKPOINT)(F90_CharArray filename) {
+    ELA_LoadCheckpoint(
+        F90_PassCharArray(filename)
+    );
+}
+
 #ifdef __cplusplus
 }
 #endif
