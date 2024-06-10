@@ -33,6 +33,19 @@ void F90_NAME(ela_outputwritevtm, ELA_OUTPUTWRITEVTM)(
     );
 }
 
+void F90_NAME(ela_outputlog,ELA_OUTPUTLOG)(
+    F90_RealArray f, F90_RealArray dV, F90_Int num,
+    F90_Real time,  F90_CharArray folder)
+{
+    ELA_OutputLog(
+        F90_PassRealArray(f),
+        F90_PassRealArray(dV),
+        F90_PassInt(num)-1,
+        F90_PassReal(time),
+        F90_PassCharArray(folder)
+    );
+}
+
 
 #ifdef __cplusplus
 }
