@@ -4,6 +4,7 @@
 
 #include "output/vv.h"
 #include "output/vtm.h"
+#include "output/asciilog.h"
 
 #include <algorithm>
 #include <string.h>
@@ -39,6 +40,13 @@ std::string getNameVTMLogFileName(const char *folder)
         std::string(folder) + "/" +
         std::string(TIMELOG_FILENAME) +
         "." + TIMELOG_FILENAME_EXT;
+}
+
+// Name of the ASCII log file
+std::string getNameASCIILogFileName(const char *folder) {
+    return
+        std::string(folder) + "/" +
+        "tracking.log";
 }
 
 void ELA_OutputWriteV(
@@ -114,4 +122,28 @@ void ELA_OutputWriteVTM(
 
     // append to the log file
     vtm.writeToLog(getNameVTMLogFileName(folder).c_str(),t_num,time);
+}
+
+void ELA_OutputLog(const double *vof_in, const double *dV_in, const int &num, const double &time, const char *folder)
+{
+
+    auto vofField = ela::wrapField<const double>(vof_in);
+    auto dVField =  ela::wrapField<const double>(dV_in);
+    auto& sField = ela::dom->s[num];
+
+    #ifdef ELA_USE_MPI
+    output::ASCIILog log = output::ASCIILog(ela::dom->getMPIComm());
+    #else
+    output::ASCIILog log = output::ASCIILog();
+    #endif
+
+    auto dV=dVField.begin();
+    auto f=vofField.begin();
+    for(const auto& s : sField) {
+        log.addCell(s, *(dV++), *(f++));
+    }
+
+    log.finalize();
+
+    log.write(getNameASCIILogFileName(folder).c_str(), time);
 }

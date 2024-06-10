@@ -2,11 +2,13 @@ set(HDRS
     output.h
     vv.h
     vtm.h
+    asciilog.h
 )
 
 set(SRCS
     vv.cpp
     vtm.cpp
+    asciilog.cpp
 )
 
 target_sources(${PROJECT_NAME}

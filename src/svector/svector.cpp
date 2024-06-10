@@ -50,6 +50,13 @@ Value SVector::getMaxValue() const
     return maximum;
 }
 
+Label svec::SVector::getMaxLabel() const
+{
+    if(vec.empty()) return 0;
+
+    return vec.back().l;
+}
+
 void SVector::add(const SVector &a, const Value &C)
 {
     // quick exit
