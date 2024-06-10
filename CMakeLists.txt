@@ -109,6 +109,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
   set_property(TARGET ${PROJECT} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
+# record version number using git
+find_package(Git)
+if(Git_FOUND)
+  message("Git found: ${GIT_EXECUTABLE}")
+  add_custom_target(version.txt ALL
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMAND ${GIT_EXECUTABLE} describe --tags --long > ${CMAKE_CURRENT_BINARY_DIR}/version.txt
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/.git/index ${CMAKE_CURRENT_SOURCE_DIR}/.git/HEAD
+  )
+endif()
 
 if(BUILD_TESTING)
 add_subdirectory(tests)
@@ -116,3 +126,6 @@ endif(BUILD_TESTING)
 
 # Install
 install(TARGETS ${PROJECT_NAME})
+if(Git_FOUND)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/version.txt DESTINATION include)
+endif()
