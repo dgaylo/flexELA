@@ -140,7 +140,7 @@ void ELA_OutputLog(const double *vof_in, const double *dV_in, const int &num, co
     auto dV=dVField.begin();
     auto f=vofField.begin();
     for(const auto& s : sField) {
-        log.addCell(s, *(dV++), *(f++));
+        log.addCell(s, *(dV++), 1.0-*(f++));
     }
 
     log.finalize();
