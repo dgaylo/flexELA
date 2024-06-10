@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <string.h>
+#include <limits>
 
 // Name of a volume vector file
 std::string getNameVVFileName(const char *folder, const int& t_num)
@@ -114,4 +115,37 @@ void ELA_OutputWriteVTM(
 
     // append to the log file
     vtm.writeToLog(getNameVTMLogFileName(folder).c_str(),t_num,time);
+}
+
+void ELA_OutputLog(const double *vof_in, const double *dV_in, const int &num, const double &time, const char *folder)
+{
+    auto vofField = ela::wrapField<const double>(vof_in);
+    auto dVField =  ela::wrapField<const double>(dV_in);
+    auto& sField = ela::dom->s[num];
+
+    svec::Label maxLabel = 0;
+    svec::Value maxValue = 0;
+    svec::Value minValue =  std::numeric_limits<svec::Value>::max();
+    double maxVolError = 0;
+    double maxVolErrorRel = 0;
+    std::size_t maxNNZ = 0;
+
+    auto dV=dVField.begin();
+    auto f=vofField.begin();
+    for(const auto& s : sField) {
+        maxLabel = std::max(maxLabel, s.getMaxLabel());
+        maxValue = std::max(maxValue, s.getMaxValue());
+        minValue = std::min(minValue, s.getMinValue());
+
+        double volError = (*dV) * (s.sum() - (*f));
+        maxVolError = std::max(maxVolError, volError);
+
+        double volErrorRel = volError / ((*dV) * (*f));
+        maxVolErrorRel = std::max(maxVolErrorRel, volErrorRel);
+
+        ++f;
+        ++dV;
+    }
+
+    
 }

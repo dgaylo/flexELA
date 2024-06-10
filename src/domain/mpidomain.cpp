@@ -143,3 +143,12 @@ int MPIDomain::getMax(const int &in) const
 
     return out;
 }
+
+template<>
+double MPIDomain::getMax(const double &in) const
+{
+    int out=in;
+    MPI_Allreduce(MPI_IN_PLACE, &out, 1, MPI_DOUBLE, MPI_MAX,comm_cart);
+
+    return out;
+}

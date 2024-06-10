@@ -15,6 +15,10 @@ void ELA_OutputWriteVTM(
     const int *labels, const double *dV, const int& num,
     const int &t_num, const double& time, const char *folder);
 
+void ELA_OutputLog(
+    const double* f, const double *dV, const int& num,
+    const double& time, const char *folder);
+
 #ifdef __cplusplus
 }
 #endif

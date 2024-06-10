@@ -86,6 +86,15 @@ public:
     Value getMaxValue() const;
 
 /**
+ * @brief Get the maximum label
+ * 
+ * Returns zero if NNZ()==0
+ * 
+ * @return Label 
+ */
+    Label getMaxLabel() const;
+
+/**
  * @brief Directly access the non-zero elements
  * 
  * Returns a direct pointer to the memory array used by the underlying `std::vector<Element>`
