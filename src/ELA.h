@@ -51,6 +51,22 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels);
  */
 int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n);
 
+/**
+ * @brief Create a checkpoint file
+ * 
+ * @param filename 
+ */
+void ELA_CreateCheckpoint(const char* filename);
+
+/**
+ * @brief Load a checkpoint
+ * 
+ * @note Cannot be called before ELA_Init()
+ * 
+ * @param filename 
+ */
+void ELA_LoadCheckpoint(const char* filename);
+
 #ifdef __cplusplus
 }
 #endif

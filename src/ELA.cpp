@@ -1,5 +1,6 @@
 #include <ELA.h>
 #include "globalVariables.h"
+#include "checkpoint/checkpoint.h"
 
 // define global variables
 namespace ela {
@@ -58,4 +59,14 @@ int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n)
     } else {
         return sVector.data()[0].l;
     }
+}
+
+inline void ELA_CreateCheckpoint(const char* filename) {
+    assert(ela::dom!=nullptr);
+    checkpoint::create(filename, *ela::dom);
+}
+
+inline void ELA_LoadCheckpoint(const char* filename) {
+    assert(ela::dom!=nullptr);
+    checkpoint::load(filename, *ela::dom);
 }
