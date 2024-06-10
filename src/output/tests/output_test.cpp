@@ -1,6 +1,10 @@
 #include <gtest/gtest.h>
+
+#include <stdio.h>
+
 #include "../vv.h"
 #include "../vtm.h"
+#include "../asciilog.h"
 
 #ifdef ELA_USE_MPI
 // adapted from https://bbanerjee.github.io/ParSim/mpi/c++/mpi-unit-testing-googletests-cmake/
@@ -187,4 +191,110 @@ TEST(Output,VolumeTrackingMatrix) {
 
         input.close();
     }
+}
+
+TEST(Output,ASCIILog) {
+    typedef svec::SVector S;
+    typedef svec::Element E;
+
+#ifdef ELA_USE_MPI
+    output::ASCIILog log = output::ASCIILog(MPI_COMM_WORLD);
+#else
+    output::ASCIILog log = output::ASCIILog();
+#endif
+    double vofVol=0;
+
+    S s;
+    if(RankEqual(0)) {
+        // add 5.0*2.0 to [1,1]
+        // add 5.0*2.0 to [1,2]
+        s = S(E{1,2.0});
+        s.add(S(E{2,2.0}));
+        log.addCell(s, 5.0, (2+2));
+    }
+    vofVol+=5*(2+2);
+
+    if(RankEqual(1)) {
+        // add 10.0*1.0 to [1,2]
+        log.addCell(S(E{2,1.0}), 10, (1));
+
+        // add 10*3.0 to [3,4]
+        s = S(E{4,3.0});
+        log.addCell(S(E{4,3.0}),10.0, (3));
+    }
+    vofVol+=10*1+10*(3);
+
+    if(RankEqual(2)) {
+        // add 10*3.0 to [2,2]
+        // add 10*4.0 to [2,4]
+        s =   S(E{2,3.0});
+        s.add(S(E{4,4.0}));
+        log.addCell(s,10, (3+4));
+
+        // add 10*5.0 to [3,3]
+        // add 10*3.0 to [3,4]
+        // add 10*7.0 to [3,5]
+        // add 10*0.5 to [3,0] should not ignore zeros
+        s =   S(E{3,5.0});
+        s.add(S(E{4,3.0}));
+        s.add(S(E{5,7.0}));
+        s.add(S(E{0,0.5}));
+        log.addCell(s,10, (0.5+5+3+7));
+
+        // add 0.8*100 to [4,6]
+        s = S(E{6,100.0});
+        log.addCell(s,0.8, 100);
+    }
+    vofVol+=10*(3+4)+10*(0.5+5+3+7)+0.8*100;
+
+    if(RankEqual(3)) {
+        // add 0.8*5 to [1,0] should not ignore zeros
+        log.addCell(S(E{0,5.0}), 0.8, 5.0);
+
+        // add an error to volume
+        log.addCell(S(E{2,1}), 2, 0.5);
+    }
+    vofVol+=0.8*(5)+2*(0.5);
+
+    log.finalize();
+
+    if(RankEqual(0)) {
+        std::remove("tracking.log");
+    }
+
+    log.write("tracking.log",0.5);
+
+    if(RankEqual(0)) {
+        float time;
+        svec::Label maxLabel;
+        float minValue;
+        float maxValue;
+        float volError;
+        float volErrorRel;
+        std::size_t maxNNZ;
+
+        FILE* f = std::fopen("tracking.log", "r");
+        fscanf(f,
+            "%15E%18u%18E%18E%18E%18E%9lu",
+            &time,
+            &maxLabel,
+            &maxValue,
+            &minValue,
+            &volError,
+            &volErrorRel,
+            &maxNNZ
+        );
+        maxValue=1.0-maxValue;
+
+        ASSERT_FLOAT_EQ(time,0.5);
+        ASSERT_EQ(maxLabel,6);
+        ASSERT_FLOAT_EQ(maxValue, 100);
+        ASSERT_FLOAT_EQ(minValue, 0.5);
+        ASSERT_FLOAT_EQ(volError, 1.0);
+        ASSERT_FLOAT_EQ(volErrorRel, 1.0/vofVol);
+        ASSERT_EQ(maxNNZ,4);
+
+        fclose(f);
+    }
+
 }
