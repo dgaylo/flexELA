@@ -45,6 +45,19 @@ TEST(Checkpoint, Roundtrip) {
     domain::Domain dom2 = domain::Domain(5,6,9,3);
     checkpoint::load("roundtrip.bin",dom2);
 
-    
+    for(auto n=0; n<dom1.nn; ++n) {
+        auto s1 = dom1.s[n].begin();
+        auto s2 = dom2.s[n].begin();
+
+        while(s1!=dom1.s[n].end()) {
+            ASSERT_EQ(s1->NNZ(), s2->NNZ());
+            for(std::size_t i=0; i<s1->NNZ(); ++i) {
+                ASSERT_EQ(s1->data()[i].l, s2->data()[i].l);
+                ASSERT_EQ(s1->data()[i].v, s2->data()[i].v);
+            }
+            ++s1;
+            ++s2;
+        }
+    }
         
 }
