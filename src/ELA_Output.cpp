@@ -131,7 +131,11 @@ void ELA_OutputLog(const double *vof_in, const double *dV_in, const int &num, co
     auto dVField =  ela::wrapField<const double>(dV_in);
     auto& sField = ela::dom->s[num];
 
-    output::ASCIILog log = output::ASCIILog(); 
+    #ifdef ELA_USE_MPI
+    output::ASCIILog log = output::ASCIILog(ela::dom->getMPIComm());
+    #else
+    output::ASCIILog log = output::ASCIILog();
+    #endif
 
     auto dV=dVField.begin();
     auto f=vofField.begin();
