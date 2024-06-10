@@ -40,7 +40,7 @@ endif()
 
 target_sources(${PROJECT_NAME} PRIVATE 
     globalVariables.h
-    init.cpp 
+    ELA.cpp 
     ELA_Solver.cpp
     ELA_Output.cpp
 )
