@@ -58,8 +58,8 @@ endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   # add sanitizing
-  add_compile_options(-fsanitize=leak,address,undefined -Wpedantic -Wall)
-  link_libraries(-fsanitize=leak,address,undefined)
+  add_compile_options(-g -fsanitize=leak,address,undefined -Wpedantic -Wall)
+  link_libraries(-g -fsanitize=leak,address,undefined)
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
