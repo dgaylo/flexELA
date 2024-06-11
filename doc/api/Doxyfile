@@ -1,7 +1,11 @@
 PROJECT_NAME = "FlexELA"
 GENERATE_LATEX = NO
 
-INPUT = "../../src" "../../README.md" "../OutputFiles.md"
+INPUT = "../../src" \
+    "../../README.md" \
+    "../OutputFiles.md" \
+    "../Building.md"
+
 FILE_PATTERNS  = "ELA*.h"
 
 CITE_BIB_FILES = "../refs.bib"
