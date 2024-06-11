@@ -1,7 +1,7 @@
 PROJECT_NAME = "FlexELA"
 GENERATE_LATEX = NO
 
-INPUT = "../src" "../README.md" "OutputFiles.md"
+INPUT = "../../src" "../../README.md" "../OutputFiles.md"
 INCLUDE_PATTERNS = ".h"
 EXCLUDE_PATTERNS = "*/tests/*" "*.cpp"
 
