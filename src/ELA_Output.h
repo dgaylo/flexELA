@@ -10,6 +10,8 @@ extern "C" {
 /**
  * @brief Provides functions to write ELA output to files
  * 
+ * For more information on the formating of these files, see [Output Files](OutputFiles.html).
+ * 
  * @file
  */
 
@@ -24,6 +26,8 @@ extern "C" {
  * for \f$ l \in 1\dots M^{n} \f$. Cells belonging to the blob \f$ l =0 \f$ are ignored.
  * Which blob \f$ l \f$ a cell \f$\Omega_{ijk}\f$ is in is determined by the label feild \p labels.
  * The number of blobs \f$ M^{n} \f$ is determined based on \p labels provided.
+ * 
+ * @see  [Volume Vector](OutputFiles.html#volumevector)
  * 
  * @warning It is assumed the \p folder exists
  * 
@@ -58,6 +62,8 @@ void ELA_OutputWriteV(
  * 
  * @warning It is assumed the \p folder exists
  * 
+ * @see  [Volume Tracking Matrix](OutputFiles.html#volumetrackingmatrix) and [timelog.bin](OutputFiles.html#timelogbin)
+ * 
  * @param labels The label feild
  * @param dV Cell volume \f$ \Delta \Omega \f$
  * @param num The ELA instance
@@ -71,6 +77,8 @@ void ELA_OutputWriteVTM(
 
 /**
  * @brief Calculates metrics for monitoring the performance of ELA
+ * 
+ * @see  [`tracking.log`](OutputFiles.html#trackinglog)
  * 
  * @warning It is assumed the \p folder exists
  * 
