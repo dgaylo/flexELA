@@ -38,7 +38,7 @@ extern "C" {
  * @param folder The folder to create the volume vector file in
  */
 void ELA_OutputWriteV(
-    const double *f, const int *labels, const double *dV, const int &t_num, const char *folder
+    const double* f, const int* labels, const double* dV, const int& t_num, const char* folder
 );
 
 /**
@@ -75,8 +75,8 @@ void ELA_OutputWriteV(
  * @param folder The folder to create the volume tracking matrix file in
  */
 void ELA_OutputWriteVTM(
-    const int *labels, const double *dV, const int &num, const int &t_num, const double &time,
-    const char *folder
+    const int* labels, const double* dV, const int& num, const int& t_num, const double& time,
+    const char* folder
 );
 
 /**
@@ -93,7 +93,7 @@ void ELA_OutputWriteVTM(
  * @param folder The folder to create the log file in
  */
 void ELA_OutputLog(
-    const double *f, const double *dV, const int &num, const double &time, const char *folder
+    const double* f, const double* dV, const int& num, const double& time, const char* folder
 );
 
 #ifdef __cplusplus

@@ -2,7 +2,7 @@
 #include "domain/domain.h"
 #include "globalVariables.h"
 
-void ELA_SolverSaveDilation(const double *c_in, const double *vof_in)
+void ELA_SolverSaveDilation(const double* c_in, const double* vof_in)
 {
     // wrap input fields
     auto cField = ela::wrapField<const double>(c_in);
@@ -14,7 +14,7 @@ void ELA_SolverSaveDilation(const double *c_in, const double *vof_in)
         auto v = vofField.begin();
         auto sVector = ela::dom->s[n].begin();
 
-        for (auto &cVector : ela::dom->c[n]) {
+        for (auto& cVector : ela::dom->c[n]) {
             if (*c_scalar == 0) {
                 cVector = *sVector / (1 - *v);
             }
@@ -33,7 +33,7 @@ void ELA_SolverClearDilation()
     // do nothing
 }
 
-void ELA_SolverDilateLabels(const double *u_div)
+void ELA_SolverDilateLabels(const double* u_div)
 {
     // wrap input fields
     auto uField = ela::wrapField<const double>(u_div);
@@ -43,14 +43,14 @@ void ELA_SolverDilateLabels(const double *u_div)
         auto u = uField.begin();
         auto cVector = ela::dom->c[n].begin();
 
-        for (auto &sVector : ela::dom->s[n]) {
+        for (auto& sVector : ela::dom->s[n]) {
             // s=s+c*u
             sVector.add(*(cVector++), *(u++));
         }
     }
 }
 
-void ELA_SolverNormalizeLabel(const double *vof_in)
+void ELA_SolverNormalizeLabel(const double* vof_in)
 {
     // wrap input fields
     auto vofField = ela::wrapField<const double>(vof_in);
@@ -59,7 +59,7 @@ void ELA_SolverNormalizeLabel(const double *vof_in)
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto f = vofField.begin();
 
-        for (auto &sVector : ela::dom->s[n]) {
+        for (auto& sVector : ela::dom->s[n]) {
             // ensure there are no negative values
             sVector.chop();
 
@@ -76,7 +76,7 @@ void ELA_SolverNormalizeLabel(const double *vof_in)
     }
 }
 
-void ELA_SolverFilterLabels(const double &tol, const double *vof_in)
+void ELA_SolverFilterLabels(const double& tol, const double* vof_in)
 {
     // wrap input fields
     auto vofField = ela::wrapField<const double>(vof_in);
@@ -84,7 +84,7 @@ void ELA_SolverFilterLabels(const double &tol, const double *vof_in)
     // loop through all ELA instances
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto v = vofField.begin();
-        for (auto &sVector : ela::dom->s[n]) {
+        for (auto& sVector : ela::dom->s[n]) {
             // f_air=1-f_water
             if (*v <= tol) sVector.normalize();
 
@@ -96,8 +96,8 @@ void ELA_SolverFilterLabels(const double &tol, const double *vof_in)
 }
 
 void advectRow(
-    const fields::Helper<svec::SVector> &sRow, const fields::Helper<const double> &fluxRow,
-    const fields::Helper<const double> &deltaRow
+    const fields::Helper<svec::SVector>& sRow, const fields::Helper<const double>& fluxRow,
+    const fields::Helper<const double>& deltaRow
 )
 {
     auto f = fluxRow.rbegin();
@@ -109,17 +109,17 @@ void advectRow(
 
     while (true) {
         // scalar flux on positive face, F_{d+1/2}
-        const double &flux_loc = *(++f);
+        const double& flux_loc = *(++f);
 
         // s_{d+1}
-        svec::SVector &s_p = *(s);
+        svec::SVector& s_p = *(s);
         // delta_{d+1}
-        const double &del_p = *(del);
+        const double& del_p = *(del);
 
         // s_{d}
-        svec::SVector &s_0 = *(++s);
+        svec::SVector& s_0 = *(++s);
         // delta_{d}
-        const double &del_0 = *(++del);
+        const double& del_0 = *(++del);
 
         if (s == sRow.rend()) break;
 
@@ -129,7 +129,7 @@ void advectRow(
             continue;
         }
 
-        const svec::SVector &s_upwind =
+        const svec::SVector& s_upwind =
             (flux_loc > 0.0 ? s_temp : // F_{d+1/2}>0, s_{d+1} is upwind
                  s_0                   // F_{d+1/2}<0, s_{d} is upwind
             );
@@ -148,7 +148,7 @@ void advectRow(
     }
 }
 
-void ELA_SolverAdvectLabels(const int &d, const double *flux, const double *delta)
+void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta)
 {
     if (d < 0 || d > 2) {
         throw std::invalid_argument("Direction d outside of 0, 1, or 2");
@@ -167,13 +167,13 @@ void ELA_SolverAdvectLabels(const int &d, const double *flux, const double *delt
 #endif
 
     // for convience, create references to domain size
-    auto &ni = ela::dom->ni;
-    auto &nj = ela::dom->nj;
-    auto &nk = ela::dom->nk;
-    auto &nn = ela::dom->nn;
+    auto& ni = ela::dom->ni;
+    auto& nj = ela::dom->nj;
+    auto& nk = ela::dom->nk;
+    auto& nn = ela::dom->nn;
 
     for (auto n = 0; n < nn; ++n) {
-        auto &sField = ela::dom->s[n];
+        auto& sField = ela::dom->s[n];
 
         switch (d) {
         case 0:

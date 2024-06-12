@@ -34,7 +34,7 @@ extern "C" {
  * @param c The scalar dilation term \f$\tilde{c}\f$
  * @param f The volume fraction \f$f\f$
  */
-void ELA_SolverSaveDilation(const double *c, const double *f);
+void ELA_SolverSaveDilation(const double* c, const double* f);
 
 /**
  * @brief Cleanup after ELA_SolverClearDilation()
@@ -57,9 +57,9 @@ void ELA_SolverClearDilation();
  * @param u_div The velocity divergence, scaled by the timestep, \f$ \Delta t \frac{\partial
  * u_d}{\partial x_d}\f$
  */
-void ELA_SolverDilateLabels(const double *u_div);
+void ELA_SolverDilateLabels(const double* u_div);
 
-void ELA_SolverNormalizeLabel(const double *f);
+void ELA_SolverNormalizeLabel(const double* f);
 
 /**
  * @brief Apply the filter from @cite Gaylo2022, Eq. 30
@@ -80,9 +80,9 @@ void ELA_SolverNormalizeLabel(const double *f);
  * @param tol The tolerance \f$ \epsilon \f$.
  * @param f The volume fraction \f$ f \f$.
  */
-void ELA_SolverFilterLabels(const double &tol, const double *f);
+void ELA_SolverFilterLabels(const double& tol, const double* f);
 
-void ELA_SolverAdvectLabels(const int &d, const double *flux, const double *delta);
+void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta);
 
 #ifdef __cplusplus
 }

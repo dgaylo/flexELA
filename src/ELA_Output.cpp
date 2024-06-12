@@ -10,7 +10,7 @@
 #include <string.h>
 
 // Name of a volume vector file
-std::string getNameVVFileName(const char *folder, const int &t_num)
+std::string getNameVVFileName(const char* folder, const int& t_num)
 {
     std::string t_numString = std::to_string(t_num);
 
@@ -20,7 +20,7 @@ std::string getNameVVFileName(const char *folder, const int &t_num)
 }
 
 // Name of a volume tracking matrix file
-std::string getNameVTMFileName(const char *folder, const int &t_num)
+std::string getNameVTMFileName(const char* folder, const int& t_num)
 {
     std::string t_numString = std::to_string(t_num);
 
@@ -30,20 +30,20 @@ std::string getNameVTMFileName(const char *folder, const int &t_num)
 }
 
 // Name of the volume tracking matrix log file
-std::string getNameVTMLogFileName(const char *folder)
+std::string getNameVTMLogFileName(const char* folder)
 {
     return std::string(folder) + "/" + std::string(TIMELOG_FILENAME) + "." + TIMELOG_FILENAME_EXT;
 }
 
 // Name of the ASCII log file
-std::string getNameASCIILogFileName(const char *folder)
+std::string getNameASCIILogFileName(const char* folder)
 {
     return std::string(folder) + "/" + "tracking.log";
 }
 
 void ELA_OutputWriteV(
-    const double *vof_in, const int *labels, const double *dV_in, const int &t_num,
-    const char *folder
+    const double* vof_in, const int* labels, const double* dV_in, const int& t_num,
+    const char* folder
 )
 {
     auto vofField = ela::wrapField<const double>(vof_in);
@@ -77,13 +77,13 @@ void ELA_OutputWriteV(
 }
 
 void ELA_OutputWriteVTM(
-    const int *labels, const double *dV_in, const int &num, const int &t_num, const double &time,
-    const char *folder
+    const int* labels, const double* dV_in, const int& num, const int& t_num, const double& time,
+    const char* folder
 )
 {
     auto dVField = ela::wrapField<const double>(dV_in);
     auto labelField = ela::wrapField<const int>(labels);
-    auto &sField = ela::dom->s[num];
+    auto& sField = ela::dom->s[num];
 
     // calculate the number of rows (i=1..max(label))
     int maxLabel = ela::dom->getMax<int>(*std::max_element(labelField.begin(), labelField.end()));
@@ -116,14 +116,14 @@ void ELA_OutputWriteVTM(
 }
 
 void ELA_OutputLog(
-    const double *vof_in, const double *dV_in, const int &num, const double &time,
-    const char *folder
+    const double* vof_in, const double* dV_in, const int& num, const double& time,
+    const char* folder
 )
 {
 
     auto vofField = ela::wrapField<const double>(vof_in);
     auto dVField = ela::wrapField<const double>(dV_in);
-    auto &sField = ela::dom->s[num];
+    auto& sField = ela::dom->s[num];
 
 #ifdef ELA_USE_MPI
     output::ASCIILog log = output::ASCIILog(ela::dom->getMPIComm());
@@ -133,7 +133,7 @@ void ELA_OutputLog(
 
     auto dV = dVField.begin();
     auto f = vofField.begin();
-    for (const auto &s : sField) {
+    for (const auto& s : sField) {
         log.addCell(s, *(dV++), 1.0 - *(f++));
     }
 
