@@ -9,11 +9,11 @@
 #include "../domain/domain.h"
 
 namespace checkpoint {
-    constexpr std::uint8_t CURRENT_CHECKPOINT_VERSION_NUMBER=1;
+constexpr std::uint8_t CURRENT_CHECKPOINT_VERSION_NUMBER = 1;
 
-    void create(const char* filename, const domain::Domain& dom);
+void create(const char* filename, const domain::Domain& dom);
 
-    void load(const char* filename, const domain::Domain& dom);
-}
+void load(const char* filename, const domain::Domain& dom);
+} // namespace checkpoint
 
 #endif
