@@ -1,5 +1,6 @@
 #ifndef FORTRAN_H
 #define FORTRAN_H
+#include <ELA.h>
 
 #ifdef __cplusplus
 extern "C" {
