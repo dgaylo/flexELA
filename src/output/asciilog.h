@@ -1,21 +1,21 @@
 #ifndef ASCII_LOG_H
 #define ASCII_LOG_H
 
-#include "output.h"
 #include "../svector/svector.h"
+#include "output.h"
 
-#include <limits>
 #include <cstdio>
+#include <limits>
 
 namespace output {
 
 class ASCIILog {
-public:
-    #ifdef ELA_USE_MPI
+  public:
+#ifdef ELA_USE_MPI
     ASCIILog(MPI_Comm comm);
-    #else
+#else
     ASCIILog();
-    #endif
+#endif
 
     void addCell(const svec::SVector& s, const double dV, const double f);
 
@@ -23,7 +23,7 @@ public:
 
     void write(const char* filename, const double& time);
 
-private:
+  private:
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
     int rank;
@@ -48,7 +48,6 @@ private:
     double volVOF;
 };
 
-}
-
+} // namespace output
 
 #endif

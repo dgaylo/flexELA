@@ -1,18 +1,18 @@
 #ifndef VTM_H
 #define VTM_H
 
-#include "output.h"
 #include "../svector/svector.h"
+#include "output.h"
 
 namespace output {
 
 class VolumeTrackingMatrix {
-public:
-    #ifdef ELA_USE_MPI
+  public:
+#ifdef ELA_USE_MPI
     VolumeTrackingMatrix(const int& rowCount, MPI_Comm comm);
-    #else
+#else
     VolumeTrackingMatrix(const int& rowCount);
-    #endif
+#endif
 
     ~VolumeTrackingMatrix();
 
@@ -22,8 +22,9 @@ public:
 
     void write(const char* filename);
 
-    void writeToLog(const char *filename, const double& t_num, const double& time);
-private:
+    void writeToLog(const char* filename, const double& t_num, const double& time);
+
+  private:
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
     int rank;
@@ -32,6 +33,6 @@ private:
     svec::SVector* const row;
 };
 
-}
+} // namespace output
 
 #endif
