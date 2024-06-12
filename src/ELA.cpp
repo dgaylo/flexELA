@@ -1,26 +1,25 @@
-#include <ELA.h>
-#include "globalVariables.h"
 #include "checkpoint/checkpoint.h"
+#include "globalVariables.h"
+#include <ELA.h>
 
 // define global variables
 namespace ela {
-    DomainType* dom;
-    int inputPad[6];
-    bool NORMALIZE_S = true;
-}
-
+DomainType *dom;
+int inputPad[6];
+bool NORMALIZE_S = true;
+} // namespace ela
 
 #ifdef ELA_USE_MPI
-void ELA_Init(const int *N, const int *pad, const int& numELA, MPI_Comm cart_comm)
+void ELA_Init(const int *N, const int *pad, const int &numELA, MPI_Comm cart_comm)
 {
-    std::copy(pad, pad+6, ela::inputPad);
-    ela::dom = new ela::DomainType(N[0],N[1],N[2],numELA,cart_comm);
+    std::copy(pad, pad + 6, ela::inputPad);
+    ela::dom = new ela::DomainType(N[0], N[1], N[2], numELA, cart_comm);
 }
 #else
-void ELA_Init(const int *N, const int *pad, const int& numELA)
+void ELA_Init(const int *N, const int *pad, const int &numELA)
 {
-    std::copy(pad, pad+6, ela::inputPad);
-    ela::dom = new ela::DomainType(N[0],N[1],N[2],numELA);
+    std::copy(pad, pad + 6, ela::inputPad);
+    ela::dom = new ela::DomainType(N[0], N[1], N[2], numELA);
 }
 #endif
 
@@ -32,41 +31,39 @@ void ELA_DeInit()
 void ELA_InitLabels(const double *vof, const int &num, const int *labels)
 {
     // wrap input fields
-    auto labelFeild = fields::Helper<const int>(
-        labels, ela::dom->n, ela::inputPad);
+    auto labelFeild = fields::Helper<const int>(labels, ela::dom->n, ela::inputPad);
 
-    auto vofFeild = fields::Helper<const double>(
-        vof, ela::dom->n, ela::inputPad);
+    auto vofFeild = fields::Helper<const double>(vof, ela::dom->n, ela::inputPad);
 
-
-    auto l=labelFeild.begin();
-    auto v=vofFeild.begin();
-    for(auto& sVector : ela::dom->s[num]) {
+    auto l = labelFeild.begin();
+    auto v = vofFeild.begin();
+    for (auto &sVector : ela::dom->s[num]) {
         // initialize s vector with single label
-        sVector=svec::SVector(svec::Element{
-            static_cast<svec::Label>(*(l++)), 
-            static_cast<svec::Value>(1.0-*(v++))
-        });
+        sVector = svec::SVector(svec::Element{
+            static_cast<svec::Label>(*(l++)), static_cast<svec::Value>(1.0 - *(v++))});
     }
 }
 
 int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n)
 {
-    auto sVector = ela::dom->s[n].at(i,j,k);
+    auto sVector = ela::dom->s[n].at(i, j, k);
 
-    if(sVector.isEmpty()) {
+    if (sVector.isEmpty()) {
         return 0;
-    } else {
+    }
+    else {
         return sVector.data()[0].l;
     }
 }
 
-void ELA_CreateCheckpoint(const char* filename) {
-    assert(ela::dom!=nullptr);
+void ELA_CreateCheckpoint(const char *filename)
+{
+    assert(ela::dom != nullptr);
     checkpoint::create(filename, *ela::dom);
 }
 
-void ELA_LoadCheckpoint(const char* filename) {
-    assert(ela::dom!=nullptr);
+void ELA_LoadCheckpoint(const char *filename)
+{
+    assert(ela::dom != nullptr);
     checkpoint::load(filename, *ela::dom);
 }
