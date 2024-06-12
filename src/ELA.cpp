@@ -4,19 +4,19 @@
 
 // define global variables
 namespace ela {
-DomainType *dom;
+DomainType* dom;
 int inputPad[6];
 bool NORMALIZE_S = true;
 } // namespace ela
 
 #ifdef ELA_USE_MPI
-void ELA_Init(const int *N, const int *pad, const int &numELA, MPI_Comm cart_comm)
+void ELA_Init(const int* N, const int* pad, const int& numELA, MPI_Comm cart_comm)
 {
     std::copy(pad, pad + 6, ela::inputPad);
     ela::dom = new ela::DomainType(N[0], N[1], N[2], numELA, cart_comm);
 }
 #else
-void ELA_Init(const int *N, const int *pad, const int &numELA)
+void ELA_Init(const int* N, const int* pad, const int& numELA)
 {
     std::copy(pad, pad + 6, ela::inputPad);
     ela::dom = new ela::DomainType(N[0], N[1], N[2], numELA);
@@ -28,7 +28,7 @@ void ELA_DeInit()
     delete ela::dom;
 }
 
-void ELA_InitLabels(const double *vof, const int &num, const int *labels)
+void ELA_InitLabels(const double* vof, const int& num, const int* labels)
 {
     // wrap input fields
     auto labelFeild = fields::Helper<const int>(labels, ela::dom->n, ela::inputPad);
@@ -37,14 +37,14 @@ void ELA_InitLabels(const double *vof, const int &num, const int *labels)
 
     auto l = labelFeild.begin();
     auto v = vofFeild.begin();
-    for (auto &sVector : ela::dom->s[num]) {
+    for (auto& sVector : ela::dom->s[num]) {
         // initialize s vector with single label
         sVector = svec::SVector(svec::Element{
             static_cast<svec::Label>(*(l++)), static_cast<svec::Value>(1.0 - *(v++))});
     }
 }
 
-int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n)
+int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n)
 {
     auto sVector = ela::dom->s[n].at(i, j, k);
 
@@ -56,13 +56,13 @@ int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n)
     }
 }
 
-void ELA_CreateCheckpoint(const char *filename)
+void ELA_CreateCheckpoint(const char* filename)
 {
     assert(ela::dom != nullptr);
     checkpoint::create(filename, *ela::dom);
 }
 
-void ELA_LoadCheckpoint(const char *filename)
+void ELA_LoadCheckpoint(const char* filename)
 {
     assert(ela::dom != nullptr);
     checkpoint::load(filename, *ela::dom);

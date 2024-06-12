@@ -23,9 +23,9 @@ extern "C" {
  */
 
 #ifdef ELA_USE_MPI
-void ELA_Init(const int *N, const int *pad, const int &numELA, MPI_Comm cart_comm);
+void ELA_Init(const int* N, const int* pad, const int& numELA, MPI_Comm cart_comm);
 #else
-void ELA_Init(const int *N, const int *pad, const int &numELA);
+void ELA_Init(const int* N, const int* pad, const int& numELA);
 #endif
 
 /**
@@ -36,7 +36,7 @@ void ELA_Init(const int *N, const int *pad, const int &numELA);
  */
 void ELA_DeInit();
 
-void ELA_InitLabels(const double *vof, const int &num, const int *labels);
+void ELA_InitLabels(const double* vof, const int& num, const int* labels);
 
 /**
  * @brief Get the first label at (\p i, \p j, \p k) for ELA instance \p n
@@ -47,14 +47,14 @@ void ELA_InitLabels(const double *vof, const int &num, const int *labels);
  * @param n
  * @return int
  */
-int ELA_GetLabel(const int &i, const int &j, const int &k, const int &n);
+int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n);
 
 /**
  * @brief Create a checkpoint file
  *
  * @param filename
  */
-void ELA_CreateCheckpoint(const char *filename);
+void ELA_CreateCheckpoint(const char* filename);
 
 /**
  * @brief Load a checkpoint
@@ -63,7 +63,7 @@ void ELA_CreateCheckpoint(const char *filename);
  *
  * @param filename
  */
-void ELA_LoadCheckpoint(const char *filename);
+void ELA_LoadCheckpoint(const char* filename);
 
 #ifdef __cplusplus
 }

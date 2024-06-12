@@ -14,11 +14,11 @@ constexpr int DummyFunction(int i, int j, int k)
     return i + j * NI + k * NI * NJ;
     // return i+j*NI+k*NI*NJ;
 }
-int *newDummyArray()
+int* newDummyArray()
 {
-    int *out = new int[NI * NJ * NK];
+    int* out = new int[NI * NJ * NK];
 
-    int *itr = out;
+    int* itr = out;
 #ifdef F_STYLE
     for (int k = 0; k < NK; k++) {
         for (int j = 0; j < NJ; j++) {
@@ -47,8 +47,8 @@ TEST(ELA, Init)
     // ELA_GetLabel() before ELA_InitLabels()
     ASSERT_EQ(ELA_GetLabel(2, 3, 4, 0), 0);
 
-    int *labels = newDummyArray();
-    double *vol = new double[NI * NJ * NK];
+    int* labels = newDummyArray();
+    double* vol = new double[NI * NJ * NK];
     std::fill_n(vol, NI * NJ * NK, 1.0);
 
     ELA_InitLabels(vol, 0, labels);

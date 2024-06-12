@@ -7,9 +7,9 @@
 unsigned int count = 0;
 
 constexpr int N[3] = {10, 12, 14};
-const int &NI = N[0];
-const int &NJ = N[1];
-const int &NK = N[2];
+const int& NI = N[0];
+const int& NJ = N[1];
+const int& NK = N[2];
 const int NN = 2;
 
 constexpr int pad[6] = {1, 1, 1, 1, 1, 1};
@@ -19,7 +19,7 @@ std::size_t getFieldSize()
     return (N[0] + pad[0] + pad[1]) * (N[1] + pad[2] + pad[3]) * (N[2] + pad[4] + pad[5]);
 }
 
-double fRand(const double &fMin, const double &fMax)
+double fRand(const double& fMin, const double& fMax)
 {
     count++;
 
@@ -35,22 +35,22 @@ double fRand(const double &fMin, const double &fMax)
     return fMin + f * (fMax - fMin);
 }
 
-double *newRandomDoubleFeild(const double &fmin, const double &fmax)
+double* newRandomDoubleFeild(const double& fmin, const double& fmax)
 {
-    double *out = new double[getFieldSize()];
+    double* out = new double[getFieldSize()];
 
-    for (double *ptr = out; ptr != out + getFieldSize(); ++ptr) {
+    for (double* ptr = out; ptr != out + getFieldSize(); ++ptr) {
         *ptr = fRand(fmin, fmax);
     }
 
     return out;
 }
 
-int *newRandomLabelFeild(const int &maxLabel)
+int* newRandomLabelFeild(const int& maxLabel)
 {
-    int *out = new int[getFieldSize()];
+    int* out = new int[getFieldSize()];
 
-    for (int *ptr = out; ptr != out + getFieldSize(); ++ptr) {
+    for (int* ptr = out; ptr != out + getFieldSize(); ++ptr) {
         *ptr = ++count % (maxLabel + 1);
     }
 
@@ -74,7 +74,7 @@ class ELAEnvironment : public ::testing::Environment {
     }
 };
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new ELAEnvironment);
@@ -86,14 +86,14 @@ int main(int argc, char *argv[])
 TEST(ELASolver, Normalize)
 {
     for (auto n = 0; n < NN; ++n) {
-        const int *labels = newRandomLabelFeild(3);
-        const double *vol = newRandomDoubleFeild(-0.1, 3.0);
+        const int* labels = newRandomLabelFeild(3);
+        const double* vol = newRandomDoubleFeild(-0.1, 3.0);
         ELA_InitLabels(vol, n, labels);
         delete[] labels;
         delete[] vol;
     }
 
-    const double *f = newRandomDoubleFeild(0.0, 1.0);
+    const double* f = newRandomDoubleFeild(0.0, 1.0);
     auto fFeild = ela::wrapField(f);
 
     ELA_SolverNormalizeLabel(f);
@@ -101,10 +101,10 @@ TEST(ELASolver, Normalize)
     for (auto n = 0; n < NN; ++n) {
 
         auto fItr = fFeild.begin();
-        for (auto &s : ela::dom->s[n]) {
+        for (auto& s : ela::dom->s[n]) {
             // ensure all volumes >= 0;
-            const svec::Element *elm = s.data();
-            const svec::Element *const end = elm + s.NNZ();
+            const svec::Element* elm = s.data();
+            const svec::Element* const end = elm + s.NNZ();
             while (elm != end) {
                 ASSERT_GE((elm++)->v, 0.0);
             };
@@ -130,20 +130,20 @@ TEST(ELASolver, Normalize)
 TEST(ELASolver, FilterLabels)
 {
     for (auto n = 0; n < ela::dom->nn; ++n) {
-        const int *labels = newRandomLabelFeild(3);
-        const double *vol = newRandomDoubleFeild(-0.1, 3.0);
+        const int* labels = newRandomLabelFeild(3);
+        const double* vol = newRandomDoubleFeild(-0.1, 3.0);
         ELA_InitLabels(vol, n, labels);
         delete[] labels;
         delete[] vol;
     }
 
-    double *f = newRandomDoubleFeild(0.0, 1.0);
+    double* f = newRandomDoubleFeild(0.0, 1.0);
     auto fFeild = ela::wrapField(f);
 
     constexpr double tol = 0.1;
     ELA_SolverFilterLabels(tol, f);
 
-    for (auto &f_loc : fFeild) {
+    for (auto& f_loc : fFeild) {
         if (f_loc <= tol) f_loc = 0.0;
         if ((1 - f_loc) <= tol) f_loc = 1.0;
     }
@@ -151,7 +151,7 @@ TEST(ELASolver, FilterLabels)
     for (auto n = 0; n < ela::dom->nn; ++n) {
 
         auto fItr = fFeild.begin();
-        for (auto &s : ela::dom->s[n]) {
+        for (auto& s : ela::dom->s[n]) {
             if (*fItr == 0.0) {
                 if (s.NNZ() != 0) {
                     ASSERT_DOUBLE_EQ(s.sum(), 1.0);
@@ -168,7 +168,7 @@ TEST(ELASolver, FilterLabels)
     delete[] f;
 }
 
-svec::Value getValue(const svec::SVector &s, const svec::Label &l)
+svec::Value getValue(const svec::SVector& s, const svec::Label& l)
 {
     for (std::size_t i = 0; i < s.NNZ(); i++) {
         if (s.data()[i].l == l) return s.data()[i].v;
@@ -181,14 +181,14 @@ TEST(ELASolver, AdvectLabels)
     constexpr int maxLabel = 3;
 
     for (auto n = 0; n < ela::dom->nn; ++n) {
-        const int *labels = newRandomLabelFeild(maxLabel);
-        const double *vol = newRandomDoubleFeild(0.0, 1.0);
+        const int* labels = newRandomLabelFeild(maxLabel);
+        const double* vol = newRandomDoubleFeild(0.0, 1.0);
         ELA_InitLabels(vol, n, labels);
         delete[] labels;
         delete[] vol;
     }
 
-    double *delta = new double[20];
+    double* delta = new double[20];
     for (int i = 0; i < 20; i++) {
         delta[i] = fRand(0.9, 1.1);
     }
@@ -202,8 +202,8 @@ TEST(ELASolver, AdvectLabels)
             for (auto j = -1; j < ela::dom->nj + 1; ++j) {
                 for (auto k = -1; k < ela::dom->nk + 1; ++k) {
                     for (auto n = 0; n < ela::dom->nn; ++n) {
-                        const svec::SVector &s = ela::dom->s[n].at(i, j, k);
-                        const double &vol = delta[i + 1] * delta[j + 2] * delta[k + 3];
+                        const svec::SVector& s = ela::dom->s[n].at(i, j, k);
+                        const double& vol = delta[i + 1] * delta[j + 2] * delta[k + 3];
 
                         total[n] += s.sum() * vol;
                         for (auto l = 0; l <= maxLabel; l++) {
@@ -215,7 +215,7 @@ TEST(ELASolver, AdvectLabels)
         }
 
         for (int d = 0; d < 3; d++) {
-            const double *u = newRandomDoubleFeild(-0.2, 0.2);
+            const double* u = newRandomDoubleFeild(-0.2, 0.2);
 
             ELA_SolverAdvectLabels(d, u, delta + d);
 
@@ -230,8 +230,8 @@ TEST(ELASolver, AdvectLabels)
             for (auto j = -1; j < ela::dom->nj + 1; ++j) {
                 for (auto k = -1; k < ela::dom->nk + 1; ++k) {
                     for (auto n = 0; n < ela::dom->nn; ++n) {
-                        const svec::SVector &s = ela::dom->s[n].at(i, j, k);
-                        const double &vol = delta[i + 1] * delta[j + 2] * delta[k + 3];
+                        const svec::SVector& s = ela::dom->s[n].at(i, j, k);
+                        const double& vol = delta[i + 1] * delta[j + 2] * delta[k + 3];
 
                         total_new[n] += s.sum() * vol;
                         for (auto l = 0; l <= maxLabel; l++) {
@@ -261,7 +261,7 @@ TEST(ELASolver, AdvectLabels)
             for (auto j = -1; j < ela::dom->nj + 1; ++j) {
                 for (auto k = -1; k < ela::dom->nk + 1; ++k) {
                     for (auto n = 0; n < ela::dom->nn; ++n) {
-                        svec::SVector &s = ela::dom->s[n].at(i, j, k);
+                        svec::SVector& s = ela::dom->s[n].at(i, j, k);
 
                         s.chop();
                     }
