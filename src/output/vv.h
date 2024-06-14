@@ -6,12 +6,12 @@
 namespace output {
 
 class VolumeVector {
-public:
-    #ifdef ELA_USE_MPI
+  public:
+#ifdef ELA_USE_MPI
     VolumeVector(const int& rowCount, MPI_Comm comm);
-    #else
+#else
     VolumeVector(const int& rowCount);
-    #endif
+#endif
 
     ~VolumeVector();
 
@@ -20,8 +20,8 @@ public:
     void finalize();
 
     void write(const char* filename);
-    
-private:
+
+  private:
 #ifdef ELA_USE_MPI
     const MPI_Comm comm;
     int rank;
@@ -30,6 +30,6 @@ private:
     Fp_BinType* const v;
 };
 
-}
+} // namespace output
 
 #endif

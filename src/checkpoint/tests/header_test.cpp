@@ -1,18 +1,17 @@
-#include <gtest/gtest.h>
 #include "../header.h"
+#include <gtest/gtest.h>
 
 using namespace checkpoint;
 
-const Header current=makeHeader();
+const Header current = makeHeader();
 
-TEST(Checkpoint, HeaderVersion) {
-    ASSERT_EQ(
-        getVersionNumber(current),
-        CURRENT_CHECKPOINT_VERSION_NUMBER
-    );
+TEST(Checkpoint, HeaderVersion)
+{
+    ASSERT_EQ(getVersionNumber(current), CURRENT_CHECKPOINT_VERSION_NUMBER);
 }
 
-TEST(Checkpoint, HeaderFortran) {
+TEST(Checkpoint, HeaderFortran)
+{
 #ifdef F_STYLE
     ASSERT_TRUE(isFortranBuild(current));
 #else
@@ -20,7 +19,8 @@ TEST(Checkpoint, HeaderFortran) {
 #endif
 }
 
-TEST(Checkpoint, HeaderMPI) {
+TEST(Checkpoint, HeaderMPI)
+{
 #ifdef ELA_USE_MPI
     ASSERT_TRUE(isMPIBuild(current));
 #else

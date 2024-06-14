@@ -1,8 +1,8 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
 
-#include <cstdint>
 #include <cassert>
+#include <cstdint>
 #include <fstream>
 #ifdef ELA_USE_MPI
 #include <mpi.h>
@@ -23,6 +23,6 @@ typedef uint32_t Int_BinType;
 #define MPI_INT_BINTYPE MPI_UINT32_T
 #endif
 
-}
+} // namespace output
 
 #endif

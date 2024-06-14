@@ -1,5 +1,6 @@
 #ifndef FORTRAN_H
 #define FORTRAN_H
+#include <ELA.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,6 +13,7 @@ extern "C" {
 
 // interface arguments and types
 // inspired by hypre https://github.com/hypre-space/hypre
+// clang-format off
 
 #ifdef ELA_USE_MPI
 typedef MPI_Fint* F90_Comm;
@@ -31,6 +33,7 @@ typedef double* F90_RealArray;
 typedef char* F90_CharArray;
 #define F90_PassCharArray(arg)  ((char*) arg)
 
+// clang-format on
 
 #ifdef __cplusplus
 }

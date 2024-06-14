@@ -1,13 +1,13 @@
 /*
 Settings for binary tracking data output files
 ----------------------------------------------
-	Name Format: {TRACKING_MATRIX_FILENAME}[{t_num}].{TRACKING_MATRIX_FILENAME_EXT}
-	Name Format: {VOLUME_VECTOR_FILENAME}[{t_num}].{VOLUME_VECTOR_FILENAME_EXT}
-	Name Format: {TIMELOG_FILENAME}.{TIMELOG_FILENAME_EXT}
+    Name Format: {TRACKING_MATRIX_FILENAME}[{t_num}].{TRACKING_MATRIX_FILENAME_EXT}
+    Name Format: {VOLUME_VECTOR_FILENAME}[{t_num}].{VOLUME_VECTOR_FILENAME_EXT}
+    Name Format: {TIMELOG_FILENAME}.{TIMELOG_FILENAME_EXT}
 
 Settings for ascii tracking data output files
 ---------------------------------------------
-	Name Format: {TRACKING_LOG_FILENAME}
+    Name Format: {TRACKING_LOG_FILENAME}
 */
 #ifndef T_NUM_DIGITS
 #define T_NUM_DIGITS 6

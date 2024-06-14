@@ -3,7 +3,7 @@
 
 /**
  * @brief Define types used be svec namespace
- * 
+ *
  * @file
  */
 
@@ -20,7 +20,6 @@ typedef unsigned int Label;
  */
 typedef double Value;
 
-
-};
+}; // namespace svec
 
 #endif
