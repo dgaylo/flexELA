@@ -100,7 +100,7 @@ void advectRow(
     const fields::Helper<const double>& deltaRow
 )
 {
-    auto f = fluxRow.rbegin();
+    auto f = ++fluxRow.rbegin();
     auto del = deltaRow.rbegin();
     auto s = sRow.rbegin();
 
@@ -109,7 +109,9 @@ void advectRow(
 
     while (true) {
         // scalar flux on positive face, F_{d+1/2}
-        const double& flux_loc = *(++f);
+        const double& flux_loc = *(f++);
+        // flux term for next iteration (or zero if on the last iteration)
+        const double& flux_next = (f == fluxRow.end() ? 0 : *(f));
 
         // s_{d+1}
         svec::SVector& s_p = *(s);
@@ -125,7 +127,11 @@ void advectRow(
 
         // continue if flux is zero
         if (flux_loc == 0.0) {
-            s_temp = s_0;
+            if (flux_next > 0.0) {
+                // store store s_{d}^{(d-1)}
+                s_temp = s_0;
+            }
+
             continue;
         }
 
@@ -137,8 +143,10 @@ void advectRow(
         // calculate vector flux term on positive face
         const svec::SVector F = svec::normalize(s_upwind, flux_loc);
 
-        // store store s_{d}^{(d-1)}
-        s_temp = s_0;
+        if (flux_next > 0.0) {
+            // store store s_{d}^{(d-1)}
+            s_temp = s_0;
+        }
 
         // update s_{d+1}^{(d)} (subtraction)
         s_p.add(F, -1.0 / del_p);
