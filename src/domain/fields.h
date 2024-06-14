@@ -318,28 +318,49 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool 
 template <class T>
 inline typename Helper<T>::Iterator& Helper<T>::Iterator::operator++()
 {
-    ptr += (fwd ? 1 : -1);
-    if (fwd) ++index[0];
+    if (fwd) {
+        ++ptr;
+        ++index[0];
 
-    if (!(index[0] % n[0])) {
-        ptr += (fwd ? 1 : -1) * jump[0];
-        if (fwd) ++index[1];
+        if (index[0] == n[0]) {
+            index[0] = 0;
 
-        if (!(index[1] % n[1])) {
-            ptr += (fwd ? 1 : -1) * jump[1];
-            if (fwd) ++index[2];
+            ptr += jump[0];
+            ++index[1];
 
-            if (!(index[2] % n[2])) {
-                ptr += (fwd ? 1 : -1) * jump[2];
+            if (index[1] == n[1]) {
+                index[1] = 0;
+
+                ptr += jump[1];
+                ++index[2];
+
+                if (index[2] == n[2]) {
+                    index[2] = 0;
+                    ptr += jump[2];
+                }
             }
-
-            if (!fwd) --index[2];
         }
-
-        if (!fwd) --index[1];
     }
+    else {
+        if (index[0] == 0) {
+            index[0] = n[0];
 
-    if (!fwd) --index[0];
+            if (index[1] == 0) {
+                index[1] = n[1];
+
+                if (index[2] == 0) {
+                    index[2] = n[0];
+                    ptr -= jump[2];
+                }
+                ptr -= jump[1];
+                --index[2];
+            }
+            ptr -= jump[0];
+            --index[1];
+        }
+        --ptr;
+        --index[0];
+    }
 
     return *this;
 }
