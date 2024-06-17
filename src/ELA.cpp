@@ -46,14 +46,9 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels)
 
 int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n)
 {
-    auto sVector = ela::dom->s[n].at(i, j, k);
+    const auto& sVector = ela::dom->s[n].at(i, j, k);
 
-    if (sVector.isEmpty()) {
-        return 0;
-    }
-    else {
-        return sVector.data()[0].l;
-    }
+    return (sVector.isEmpty() ? 0 : sVector.data()[0].l);
 }
 
 void ELA_CreateCheckpoint(const char* filename)

@@ -41,11 +41,14 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels);
 /**
  * @brief Get the first label at (\p i, \p j, \p k) for ELA instance \p n
  *
- * @param i
- * @param j
- * @param k
- * @param n
- * @return int
+ * @param i First index
+ * @param j Second index
+ * @param k Third index
+ * @param n The ELA instance
+ * @return int The label \p l
+ *
+ * @note For calling from Fortran, use `ELA_GetLabel(i,j,k,l)` where \p l is the return value
+ *
  */
 int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n);
 
