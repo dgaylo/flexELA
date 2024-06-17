@@ -133,11 +133,11 @@ TEST(FieldsTests, Iterator)
     };
     ASSERT_EQ(itr, a.end());
 
-    Helper<const int> b = a.slice(2, 3, 0, n[1], 4, 5);
+    Helper<const int> b = a.slice(2, 3, -1, n[1], 4, 5);
 
     itr = b.begin();
-    for (int j = 0; j < n[1]; j++) {
-        ASSERT_EQ(*itr, b.at(0, j, 0));
+    for (int j = -1; j < n[1]; j++) {
+        ASSERT_EQ(*itr, b.at(0, j + 1, 0));
         itr++;
     }
     ASSERT_EQ(itr, b.end());
@@ -174,11 +174,11 @@ TEST(FieldsTests, ReverseIterator)
     };
     EXPECT_EQ(itr, a.rend());
 
-    Helper<const int> b = a.slice(2, 3, 0, n[1], 4, 5);
+    Helper<const int> b = a.slice(2, 3, -1, n[1], 4, 5);
 
     itr = b.rbegin();
-    for (int j = n[1] - 1; j >= 0; j--) {
-        ASSERT_EQ(*itr, b.at(0, j, 0));
+    for (int j = n[1] - 1; j >= -1; j--) {
+        ASSERT_EQ(*itr, b.at(0, j + 1, 0));
         itr++;
     }
     ASSERT_EQ(itr, b.rend());
