@@ -31,13 +31,12 @@ extern "C" {
  * \f]
  * and stored internally, where the normalized vector source fraction is computed
  * \f[
- * \hat{\mathbf{s}} = \frac{\mathbf{s}}{1-f}.
+ * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
  * \f]
  *
  * @param c The scalar dilation term \f$\tilde{c}\f$
- * @param f The volume fraction \f$f\f$
  */
-void ELA_SolverSaveDilation(const double* c, const double* f);
+void ELA_SolverSaveDilation(const double* c);
 
 /**
  * @brief Cleanup after ELA_SolverClearDilation()
