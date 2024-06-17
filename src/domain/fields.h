@@ -124,21 +124,20 @@ class Helper {
         /** @brief Comparison */
         bool operator==(const Iterator& other) const
         {
-            return index == other.index;
+            return ptr == other.ptr;
         }
 
         bool operator!=(const Iterator& other) const
         {
-            return index != other.index;
+            return ptr != other.ptr;
         }
 
       private:
         T* ptr;
-        difference_type index;
-
         bool fwd;
+        int index[3];
         int n[3];
-        int bounds[3];
+        int jump[3];
     };
 
     /**
@@ -294,23 +293,23 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool 
     : fwd(fwd),
 // clang-format off
 #ifdef F_STYLE
+    index{i,j,k},
     n{array.n[0], array.n[1], array.n[2]},
-    bounds{
-        array.n[0]+array.pad[0]+array.pad[1],
-        array.n[1]+array.pad[2]+array.pad[3],
-        array.n[2]+array.pad[4]+array.pad[5]
+    jump{
+        (array.pad[0]+array.pad[1]),
+        (array.pad[2]+array.pad[3]) * (array.n[0]+array.pad[0]+array.pad[1]), 
+        (array.pad[4]+array.pad[5]) * (array.n[0]+array.pad[0]+array.pad[1]) * (array.n[1]+array.pad[2]+array.pad[3])
     }
 {
-    index=i+n[0]*(j+n[1]*k);
 #else
+    index{k,j,i},
     n{array.n[2], array.n[1], array.n[0]},
-    bounds{
-        array.n[2]+array.pad[4]+array.pad[5],
-        array.n[1]+array.pad[2]+array.pad[3],
-        array.n[0]+array.pad[0]+array.pad[1]
+    jump{
+        (array.pad[4]+array.pad[5]),
+        (array.pad[2]+array.pad[3]) * (array.n[2]+array.pad[4]+array.pad[5]), 
+        (array.pad[0]+array.pad[1]) * (array.n[2]+array.pad[4]+array.pad[5]) * (array.n[1]+array.pad[2]+array.pad[3])
     }
 {
-    index=k+n[0]*(j+n[1]*i);
 #endif
     ptr=array.basePtr+array.getIndex(i,j,k);
 }
@@ -319,22 +318,49 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool 
 template <class T>
 inline typename Helper<T>::Iterator& Helper<T>::Iterator::operator++()
 {
-    ptr += (fwd ? 1 : -1);
-    if (fwd) index++;
+    if (fwd) {
+        ++ptr;
+        ++index[0];
 
-    if (!(index % n[0])) {
-        ptr += (fwd ? 1 : -1) * (bounds[0] - n[0]);
+        if (index[0] == n[0]) {
+            index[0] = 0;
 
-        if (!((index / n[0]) % n[1])) {
-            ptr += (fwd ? 1 : -1) * (bounds[1] - n[1]) * bounds[0];
+            ptr += jump[0];
+            ++index[1];
 
-            if (!((index / (n[0] * n[1])) % n[2])) {
-                ptr += (fwd ? 1 : -1) * (bounds[2] - n[2]) * bounds[0] * bounds[1];
+            if (index[1] == n[1]) {
+                index[1] = 0;
+
+                ptr += jump[1];
+                ++index[2];
+
+                if (index[2] == n[2]) {
+                    index[2] = 0;
+                    ptr += jump[2];
+                }
             }
         }
     }
+    else {
+        if (index[0] == 0) {
+            index[0] = n[0];
 
-    if (!fwd) index--;
+            if (index[1] == 0) {
+                index[1] = n[1];
+
+                if (index[2] == 0) {
+                    index[2] = n[0];
+                    ptr -= jump[2];
+                }
+                ptr -= jump[1];
+                --index[2];
+            }
+            ptr -= jump[0];
+            --index[1];
+        }
+        --ptr;
+        --index[0];
+    }
 
     return *this;
 }
