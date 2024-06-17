@@ -24,17 +24,16 @@ extern "C" {
  * source fraction is \f$\mathbf{s}^{(0)}\f$. The vector dilation term \f$\tilde{\mathbf{c}}\f$ is
  * calculated
  * \f[
- * \tilde{\mathbf{c}} \gets \tilde{c} \hat{\mathbf{s}},
+ * \tilde{\mathbf{c}} \gets (1-\tilde{c}) \; \hat{\mathbf{s}},
  * \f]
  * and stored internally, where the normalized vector source fraction is computed
  * \f[
- * \hat{\mathbf{s}} = \frac{\mathbf{s}}{1-f}.
+ * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
  * \f]
  *
  * @param c The scalar dilation term \f$\tilde{c}\f$
- * @param f The volume fraction \f$f\f$
  */
-void ELA_SolverSaveDilation(const double* c, const double* f);
+void ELA_SolverSaveDilation(const double* c);
 
 /**
  * @brief Cleanup after ELA_SolverClearDilation()

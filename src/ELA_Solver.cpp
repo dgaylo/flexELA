@@ -2,27 +2,25 @@
 #include "domain/domain.h"
 #include "globalVariables.h"
 
-void ELA_SolverSaveDilation(const double* c_in, const double* vof_in)
+void ELA_SolverSaveDilation(const double* c_in)
 {
-    // wrap input fields
+    // wrap input field
     auto cField = ela::wrapField<const double>(c_in);
-    auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto c_scalar = cField.begin();
-        auto v = vofField.begin();
         auto sVector = ela::dom->s[n].begin();
 
         for (auto& cVector : ela::dom->c[n]) {
-            if (*c_scalar == 0) {
-                cVector = *sVector / (1 - *v);
+            if (*c_scalar != 1.0) {
+                cVector = *sVector;
+                cVector.normalize(1.0 - *c_scalar);
             }
             else {
                 cVector.clear();
             }
             ++c_scalar;
-            ++v;
             ++sVector;
         }
     }

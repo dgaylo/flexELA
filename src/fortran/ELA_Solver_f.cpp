@@ -6,11 +6,10 @@ extern "C" {
 #endif
 // clang-format off
 
-void F90_NAME(ela_solversavedilation,ELA_SOLVERSAVEDILATION)(F90_RealArray c, F90_RealArray f)
+void F90_NAME(ela_solversavedilation,ELA_SOLVERSAVEDILATION)(F90_RealArray c)
 {
     ELA_SolverSaveDilation(
-        F90_PassRealArray(c),
-        F90_PassRealArray(f)
+        F90_PassRealArray(c)
     );
 }
 
