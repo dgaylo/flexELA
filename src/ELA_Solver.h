@@ -24,10 +24,7 @@ extern "C" {
  * source fraction is \f$\mathbf{s}^{(0)}\f$. The vector dilation term \f$\tilde{\mathbf{c}}\f$ is
  * calculated
  * \f[
- * \tilde{\mathbf{c}} \gets \begin{cases}
- * \hat{\mathbf{s}} & \text{if} \quad \tilde{c}=0 \\
- * \mathbf{0} & \text{otherwise}
- * \end{cases},
+ * \tilde{\mathbf{c}} \gets (1-\tilde{c}) \; \hat{\mathbf{s}},
  * \f]
  * and stored internally, where the normalized vector source fraction is computed
  * \f[

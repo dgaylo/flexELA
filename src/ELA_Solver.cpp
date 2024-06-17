@@ -13,9 +13,9 @@ void ELA_SolverSaveDilation(const double* c_in)
         auto sVector = ela::dom->s[n].begin();
 
         for (auto& cVector : ela::dom->c[n]) {
-            if (*c_scalar == 0) {
+            if (*c_scalar != 1.0) {
                 cVector = *sVector;
-                cVector.normalize();
+                cVector.normalize(1.0 - *c_scalar);
             }
             else {
                 cVector.clear();
