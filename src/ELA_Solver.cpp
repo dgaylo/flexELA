@@ -114,7 +114,9 @@ void advectRow(
         // scalar flux on positive face, F_{d+1/2}
         const double flux_loc = flux_next;
         // flux term for next iteration (or zero if on the last iteration)
-        flux_next = (++f == fluxRow.rend() ? 0 : *(f));
+        if (f != fluxRow.rend()) {
+            flux_next = (++f == fluxRow.rend() ? 0 : *(f));
+        }
 
         // s_{d+1}
         svec::SVector& s_p = *(s);
