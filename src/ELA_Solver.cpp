@@ -61,15 +61,9 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
             // ensure there are no negative values
             sVector.chop();
 
-            if (ela::NORMALIZE_S) {
-                // ensure sum(s)=1-f
-                // ELA paper eq. 47
-                sVector.normalize(1.0 - *(f++));
-            }
-            else {
-                // avoid the possibility of divide by zero due to precision limitations
-                if (sVector.sum() == 0.0) sVector.clear();
-            }
+            // ensure sum(s)=1-f
+            // ELA paper eq. 47
+            sVector.normalize(1.0 - *(f++));
         }
     }
 }

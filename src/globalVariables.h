@@ -19,8 +19,6 @@ extern DomainType* dom;
 
 extern int inputPad[6];
 
-extern bool NORMALIZE_S;
-
 template <class T>
 fields::Helper<T> wrapField(T* in)
 {
