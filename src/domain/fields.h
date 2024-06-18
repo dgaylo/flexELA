@@ -90,7 +90,7 @@ class Helper {
          * @brief Construct a new Iterator object at (i,j,k)
          *
          */
-        Iterator(Helper<T> array, int i, int j, int k, bool fwd);
+        Iterator(Helper<T> array, int i, int j, int k);
 
         /** @brief Get reference */
         T& operator*() const
@@ -110,17 +110,6 @@ class Helper {
             return ptr;
         }
 
-        /** @brief Prefix forward increment */
-        Iterator& operator++();
-
-        /** @brief Postfix forward increment */
-        Iterator operator++(int)
-        {
-            Iterator tmp = *this;
-            ++(*this);
-            return tmp;
-        }
-
         /** @brief Comparison */
         bool operator==(const Iterator& other) const
         {
@@ -132,12 +121,41 @@ class Helper {
             return ptr != other.ptr;
         }
 
-      private:
+      protected:
         T* ptr;
-        bool fwd;
-        int index[3];
-        int n[3];
-        int jump[3];
+        int index[2];
+        int n[2];
+        int jump[2];
+    };
+
+    struct forward_Iterator : public Iterator {
+        forward_Iterator(Helper<T> array, int i, int j, int k) : Iterator(array, i, j, k){};
+
+        /** @brief Prefix forward increment */
+        forward_Iterator& operator++();
+
+        /** @brief Postfix forward increment */
+        forward_Iterator operator++(int)
+        {
+            forward_Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
+    };
+
+    struct reverse_Iterator : public Iterator {
+        reverse_Iterator(Helper<T> array, int i, int j, int k) : Iterator(array, i, j, k){};
+
+        /** @brief Prefix forward increment */
+        reverse_Iterator& operator++();
+
+        /** @brief Postfix forward increment */
+        reverse_Iterator operator++(int)
+        {
+            reverse_Iterator tmp = *this;
+            ++(*this);
+            return tmp;
+        }
     };
 
     /**
@@ -145,7 +163,7 @@ class Helper {
      *
      * @return Iterator
      */
-    Iterator begin() const
+    forward_Iterator begin() const
     {
         return _begin;
     }
@@ -155,7 +173,7 @@ class Helper {
      *
      * @return Iterator
      */
-    Iterator end() const
+    forward_Iterator end() const
     {
         return _end;
     }
@@ -165,7 +183,7 @@ class Helper {
      *
      * @return Iterator
      */
-    Iterator rbegin() const
+    reverse_Iterator rbegin() const
     {
         return _rbegin;
     }
@@ -175,7 +193,7 @@ class Helper {
      *
      * @return Iterator
      */
-    Iterator rend() const
+    reverse_Iterator rend() const
     {
         return _rend;
     }
@@ -200,11 +218,11 @@ class Helper {
   private:
     constexpr std::ptrdiff_t getIndex(int i, int j, int k) const;
 
-    const Iterator _begin = Iterator(*this, 0, 0, 0, true);
-    const Iterator _end = ++Iterator(*this, n[0] - 1, n[1] - 1, n[2] - 1, true);
+    const forward_Iterator _begin = forward_Iterator(*this, 0, 0, 0);
+    const forward_Iterator _end = ++forward_Iterator(*this, n[0] - 1, n[1] - 1, n[2] - 1);
 
-    const Iterator _rend = ++Iterator(*this, 0, 0, 0, false);
-    const Iterator _rbegin = Iterator(*this, n[0] - 1, n[1] - 1, n[2] - 1, false);
+    const reverse_Iterator _rend = ++reverse_Iterator(*this, 0, 0, 0);
+    const reverse_Iterator _rbegin = reverse_Iterator(*this, n[0] - 1, n[1] - 1, n[2] - 1);
 };
 
 /**
@@ -289,25 +307,23 @@ constexpr std::ptrdiff_t Helper<T>::getIndex(int i, int j, int k) const
 }
 
 template <class T>
-inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool fwd)
-    : fwd(fwd),
+inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k)
+    :
 // clang-format off
 #ifdef F_STYLE
-    index{i,j,k},
-    n{array.n[0], array.n[1], array.n[2]},
+    index{i,j},
+    n{array.n[0], array.n[1]},
     jump{
         (array.pad[0]+array.pad[1]),
-        (array.pad[2]+array.pad[3]) * (array.n[0]+array.pad[0]+array.pad[1]), 
-        (array.pad[4]+array.pad[5]) * (array.n[0]+array.pad[0]+array.pad[1]) * (array.n[1]+array.pad[2]+array.pad[3])
+        (array.pad[2]+array.pad[3]) * (array.n[0]+array.pad[0]+array.pad[1])
     }
 {
 #else
-    index{k,j,i},
-    n{array.n[2], array.n[1], array.n[0]},
+    index{k,j},
+    n{array.n[2], array.n[1]},
     jump{
         (array.pad[4]+array.pad[5]),
-        (array.pad[2]+array.pad[3]) * (array.n[2]+array.pad[4]+array.pad[5]), 
-        (array.pad[0]+array.pad[1]) * (array.n[2]+array.pad[4]+array.pad[5]) * (array.n[1]+array.pad[2]+array.pad[3])
+        (array.pad[2]+array.pad[3]) * (array.n[2]+array.pad[4]+array.pad[5])
     }
 {
 #endif
@@ -316,51 +332,44 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k, bool 
 // clang-format on
 
 template <class T>
-inline typename Helper<T>::Iterator& Helper<T>::Iterator::operator++()
+inline typename Helper<T>::forward_Iterator& Helper<T>::forward_Iterator::operator++()
 {
-    if (fwd) {
-        ++ptr;
-        ++index[0];
+    ++Iterator::ptr;
+    ++Iterator::index[0];
 
-        if (index[0] == n[0]) {
-            index[0] = 0;
+    if (Iterator::index[0] == Iterator::n[0]) {
+        Iterator::index[0] = 0;
 
-            ptr += jump[0];
-            ++index[1];
+        Iterator::ptr += Iterator::jump[0];
+        ++Iterator::index[1];
 
-            if (index[1] == n[1]) {
-                index[1] = 0;
+        if (Iterator::index[1] == Iterator::n[1]) {
+            Iterator::index[1] = 0;
 
-                ptr += jump[1];
-                ++index[2];
-
-                if (index[2] == n[2]) {
-                    index[2] = 0;
-                    ptr += jump[2];
-                }
-            }
+            Iterator::ptr += Iterator::jump[1];
         }
     }
-    else {
-        if (index[0] == 0) {
-            index[0] = n[0];
 
-            if (index[1] == 0) {
-                index[1] = n[1];
+    return *this;
+}
 
-                if (index[2] == 0) {
-                    index[2] = n[0];
-                    ptr -= jump[2];
-                }
-                ptr -= jump[1];
-                --index[2];
-            }
-            ptr -= jump[0];
-            --index[1];
+template <class T>
+inline typename Helper<T>::reverse_Iterator& Helper<T>::reverse_Iterator::operator++()
+{
+    if (Iterator::index[0] == 0) {
+        Iterator::index[0] = Iterator::n[0];
+
+        if (Iterator::index[1] == 0) {
+            Iterator::index[1] = Iterator::n[1];
+
+            Iterator::ptr -= Iterator::jump[1];
         }
-        --ptr;
-        --index[0];
+        Iterator::ptr -= Iterator::jump[0];
+        --Iterator::index[1];
     }
+
+    --Iterator::ptr;
+    --Iterator::index[0];
 
     return *this;
 }
