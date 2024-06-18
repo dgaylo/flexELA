@@ -116,9 +116,7 @@ TEST(ELASolver, Normalize)
                 fItr++;
             }
             else {
-                if (ela::NORMALIZE_S) {
-                    ASSERT_DOUBLE_EQ(sum, 1.0 - *fItr);
-                }
+                ASSERT_DOUBLE_EQ(sum, 1.0 - *fItr);
                 fItr++;
             }
         }
