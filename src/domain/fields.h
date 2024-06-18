@@ -123,9 +123,9 @@ class Helper {
 
       protected:
         T* ptr;
-        int index[3];
-        int n[3];
-        int jump[3];
+        int index[2];
+        int n[2];
+        int jump[2];
     };
 
     struct forward_Iterator : public Iterator {
@@ -311,21 +311,19 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k)
     :
 // clang-format off
 #ifdef F_STYLE
-    index{i,j,k},
-    n{array.n[0], array.n[1], array.n[2]},
+    index{i,j},
+    n{array.n[0], array.n[1]},
     jump{
         (array.pad[0]+array.pad[1]),
-        (array.pad[2]+array.pad[3]) * (array.n[0]+array.pad[0]+array.pad[1]), 
-        (array.pad[4]+array.pad[5]) * (array.n[0]+array.pad[0]+array.pad[1]) * (array.n[1]+array.pad[2]+array.pad[3])
+        (array.pad[2]+array.pad[3]) * (array.n[0]+array.pad[0]+array.pad[1])
     }
 {
 #else
-    index{k,j,i},
-    n{array.n[2], array.n[1], array.n[0]},
+    index{k,j},
+    n{array.n[2], array.n[1]},
     jump{
         (array.pad[4]+array.pad[5]),
-        (array.pad[2]+array.pad[3]) * (array.n[2]+array.pad[4]+array.pad[5]), 
-        (array.pad[0]+array.pad[1]) * (array.n[2]+array.pad[4]+array.pad[5]) * (array.n[1]+array.pad[2]+array.pad[3])
+        (array.pad[2]+array.pad[3]) * (array.n[2]+array.pad[4]+array.pad[5])
     }
 {
 #endif
@@ -336,7 +334,6 @@ inline Helper<T>::Iterator::Iterator(Helper<T> array, int i, int j, int k)
 template <class T>
 inline typename Helper<T>::forward_Iterator& Helper<T>::forward_Iterator::operator++()
 {
-
     ++Iterator::ptr;
     ++Iterator::index[0];
 
@@ -350,12 +347,6 @@ inline typename Helper<T>::forward_Iterator& Helper<T>::forward_Iterator::operat
             Iterator::index[1] = 0;
 
             Iterator::ptr += Iterator::jump[1];
-            ++Iterator::index[2];
-
-            if (Iterator::index[2] == Iterator::n[2]) {
-                Iterator::index[2] = 0;
-                Iterator::ptr += Iterator::jump[2];
-            }
         }
     }
 
@@ -371,16 +362,12 @@ inline typename Helper<T>::reverse_Iterator& Helper<T>::reverse_Iterator::operat
         if (Iterator::index[1] == 0) {
             Iterator::index[1] = Iterator::n[1];
 
-            if (Iterator::index[2] == 0) {
-                Iterator::index[2] = Iterator::n[0];
-                Iterator::ptr -= Iterator::jump[2];
-            }
             Iterator::ptr -= Iterator::jump[1];
-            --Iterator::index[2];
         }
         Iterator::ptr -= Iterator::jump[0];
         --Iterator::index[1];
     }
+
     --Iterator::ptr;
     --Iterator::index[0];
 
