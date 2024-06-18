@@ -145,7 +145,7 @@ class SVector {
     void normalize(const Value& total = 1.0);
 
     /**
-     * @brief Remove any values <= 0
+     * @brief set any values less than zero to zero
      *
      */
     void chop();
