@@ -20,7 +20,6 @@ TEST(DomainTests, Basic)
 
     for (auto n = 0; n < NN; n++) {
         auto& sourceVectorField = d->s[n];
-        auto& dilationVectorField = d->c[n];
 
         auto FullSourceVectorField = sourceVectorField.slice(-1, NI + 1, -1, NJ + 1, -1, NK + 1);
 
@@ -28,24 +27,14 @@ TEST(DomainTests, Basic)
         for (auto s : FullSourceVectorField) {
             ASSERT_TRUE(s.isEmpty());
         }
-        for (auto c : dilationVectorField) {
-            ASSERT_TRUE(c.isEmpty());
-        }
 
         // ensure all vectors are writable
         for (auto& s : sourceVectorField) {
             s = svec::SVector({1, 0.3});
         }
-        for (auto& c : dilationVectorField) {
-            c = svec::SVector({2, 0.5});
-        }
         for (auto s : sourceVectorField) {
             ASSERT_EQ(s.NNZ(), 1);
             ASSERT_EQ(s.sum(), 0.3);
-        }
-        for (auto c : dilationVectorField) {
-            ASSERT_EQ(c.NNZ(), 1);
-            ASSERT_EQ(c.sum(), 0.5);
         }
     }
 

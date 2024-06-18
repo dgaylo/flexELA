@@ -78,15 +78,6 @@ struct Domain {
     std::vector<fields::Owner<svec::SVector>> s;
 
     /**
-     * @brief Vector dilation field
-     *
-     * For each ELA instance, `n` in `0` to \ref nn -1, the corresponding vector dilation field is
-     * accessed through `c[n]`.
-     *
-     */
-    std::vector<fields::Owner<svec::SVector>> c;
-
-    /**
      * @brief From \ref s `[n]`, returns ghost cells immediately adjacent to \ref Face \p f
      *
      * @param f The Face

@@ -5,15 +5,12 @@ using namespace domain;
 Domain::Domain(const int& ni_in, const int& nj_in, const int& nk_in, const int& nn_in)
     : n{ni_in, nj_in, nk_in}, nn(nn_in)
 {
-    const int pad_s[6] = {1, 1, 1, 1, 1, 1}; // require one ghost cell for ela data
-    const int pad_c[6] = {0, 0, 0, 0, 0, 0}; // do not need ghost cells for dilation
+    const int pad[6] = {1, 1, 1, 1, 1, 1}; // require one ghost cell for ela data
 
     s.reserve(nn);
-    c.reserve(nn);
 
     for (auto i = 0; i < nn; i++) {
-        s.emplace_back(n, pad_s);
-        c.emplace_back(n, pad_c);
+        s.emplace_back(n, pad);
     }
 }
 

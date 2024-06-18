@@ -2,33 +2,41 @@
 #include "domain/domain.h"
 #include "globalVariables.h"
 
+/**
+ * @brief Vector dilation field
+ */
+std::vector<svec::SVector> vectorC;
+
 void ELA_SolverSaveDilation(const double* c_in)
 {
+    const auto& dom = *ela::dom;
+
     // wrap input field
     auto cField = ela::wrapField<const double>(c_in);
+
+    // reserve space
+    vectorC.reserve(dom.nn * dom.ni * dom.nj * dom.nk);
 
     // loop through all ELA instances
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto c_scalar = cField.begin();
-        auto sVector = ela::dom->s[n].begin();
 
-        for (auto& cVector : ela::dom->c[n]) {
+        for (const auto& s : dom.s[n]) {
             if (*c_scalar != 1.0) {
-                cVector = *sVector;
-                cVector.normalize(1.0 - *c_scalar);
+                vectorC.emplace_back(svec::normalize(s, 1.0 - *c_scalar));
             }
             else {
-                cVector.clear();
+                vectorC.emplace_back();
             }
+
             ++c_scalar;
-            ++sVector;
         }
     }
 }
 
 void ELA_SolverClearDilation()
 {
-    // do nothing
+    vectorC.clear();
 }
 
 void ELA_SolverDilateLabels(const double* u_div)
@@ -36,14 +44,16 @@ void ELA_SolverDilateLabels(const double* u_div)
     // wrap input fields
     auto uField = ela::wrapField<const double>(u_div);
 
+    // iterator to vector dilation
+    auto c_vector = vectorC.begin();
+
     // loop through all ELA instances
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto u = uField.begin();
-        auto cVector = ela::dom->c[n].begin();
 
         for (auto& sVector : ela::dom->s[n]) {
             // s=s+c*u
-            sVector.add(*(cVector++), *(u++));
+            sVector.add(*(c_vector++), *(u++));
         }
     }
 }
