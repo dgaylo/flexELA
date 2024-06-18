@@ -58,6 +58,22 @@ void ELA_SolverClearDilation();
  */
 void ELA_SolverDilateLabels(const double* u_div);
 
+/**
+ * @brief Cleanup machine precision related errors, including @cite Gaylo2022, Eq. 47
+ *
+ * This function does two cleanup operations.
+ * First, it sets any \f$s_l<0\f$ to \f$s_l=0\f$.
+ * Second, it performs the normalization (@cite Gaylo2022, Eq. 47):
+ * \f[
+ * \mathbf{s} \gets (1-f) \; \hat{\mathbf{s}},
+ * \f]
+ * where the normalized vector source fraction is computed
+ * \f[
+ * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
+ * \f]
+ *
+ * @param f The volume fraction \f$ f \f$.
+ */
 void ELA_SolverNormalizeLabel(const double* f);
 
 /**
