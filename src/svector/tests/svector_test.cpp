@@ -174,7 +174,7 @@ TEST(SVectorTests, Chop)
 
     s.chop();
 
-    EXPECT_EQ(s.NNZ(), 5);
+    EXPECT_EQ(s.NNZ(), 3);
     EXPECT_DOUBLE_EQ(s.sum(), 5 + 0.2 + 0.8);
 }
 
