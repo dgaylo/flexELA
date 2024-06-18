@@ -167,6 +167,17 @@ TEST(SVectorTests, Add)
     }
 }
 
+TEST(SVectorTests, Chop)
+{
+    svec::Element buff[6] = {{0, 5}, {1, -0.1}, {3, 0.2}, {4, 0.8}, {8, -5}, svec::END_ELEMENT};
+    svec::SVector s = svec::SVector(buff);
+
+    s.chop();
+
+    EXPECT_EQ(s.NNZ(), 5);
+    EXPECT_DOUBLE_EQ(s.sum(), 5 + 0.2 + 0.8);
+}
+
 TEST(SVectorTests, Normalize)
 {
     constexpr size_t length = 5;

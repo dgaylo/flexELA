@@ -237,7 +237,7 @@ inline std::size_t SVector::NNZ() const noexcept
 
 inline bool SVector::isEmpty() const noexcept
 {
-    return NNZ() == 0;
+    return vec.empty();
 }
 
 inline const Element* SVector::data() const noexcept

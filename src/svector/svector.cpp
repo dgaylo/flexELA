@@ -25,7 +25,7 @@ SVector::SVector(const Element* const buff)
 Value SVector::sum() const
 {
     Value sum = 0.0;
-    for (auto elm : vec) {
+    for (const auto& elm : vec) {
         sum += elm.v;
     }
     return sum;
@@ -34,7 +34,7 @@ Value SVector::sum() const
 Value SVector::getMinValue() const
 {
     Value minimum = std::numeric_limits<Value>::max();
-    for (auto elm : vec) {
+    for (const auto& elm : vec) {
         if (elm.v < minimum) minimum = elm.v;
     }
     return minimum;
@@ -43,7 +43,7 @@ Value SVector::getMinValue() const
 Value SVector::getMaxValue() const
 {
     Value maximum = std::numeric_limits<Value>::min();
-    for (auto elm : vec) {
+    for (const auto& elm : vec) {
         if (elm.v > maximum) maximum = elm.v;
     }
     return maximum;
@@ -51,9 +51,7 @@ Value SVector::getMaxValue() const
 
 Label svec::SVector::getMaxLabel() const
 {
-    if (vec.empty()) return 0;
-
-    return vec.back().l;
+    return (vec.empty() ? 0 : vec.back().l);
 }
 
 void SVector::add(const SVector& a, const Value& C)
