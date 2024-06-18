@@ -6,7 +6,6 @@
 namespace ela {
 DomainType* dom;
 int inputPad[6];
-bool NORMALIZE_S = true;
 } // namespace ela
 
 #ifdef ELA_USE_MPI
