@@ -10,6 +10,7 @@ FILE_PATTERNS  = "ELA*.h"
 
 CITE_BIB_FILES = "../refs.bib"
 USE_MDFILE_AS_MAINPAGE = ../../README.md
+HTML_FOOTER = ../footer.html
 
 RECURSIVE = NO
 IMAGE_PATH="../figures"
@@ -18,4 +19,3 @@ STRIP_FROM_PATH = "../../src"
 # extensions
 HAVE_DOT = "no"
 USE_MATHJAX = "yes"
-

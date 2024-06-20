@@ -11,6 +11,7 @@ EXCLUDE_PATTERNS = "*/tests/*" "*.cpp"
 
 CITE_BIB_FILES = "refs.bib"
 USE_MDFILE_AS_MAINPAGE = README.md
+HTML_FOOTER = ../footer.html
 
 RECURSIVE = YES
 IMAGE_PATH="./figures"
