@@ -124,12 +124,13 @@ void advectRow(
 
         // continue if flux is zero
         if (flux_loc == 0.0) {
-            // store store s_{d}^{(d-1)}
+            // store store s_{d} (will be s_{d+1} next iteration)
             if (flux_next > 0.0) s_temp = s_0;
 
             continue;
         }
 
+        // dont forget that a negative velocity corresponds to a positive F
         const svec::SVector& s_upwind =
             (flux_loc > 0.0 ? s_temp : // F_{d+1/2}>0, s_{d+1} is upwind
                  s_0                   // F_{d+1/2}<0, s_{d} is upwind
@@ -138,13 +139,13 @@ void advectRow(
         // calculate vector flux term on positive face
         const svec::SVector F = svec::normalize(s_upwind, flux_loc);
 
-        // store store s_{d}^{(d-1)}
+        // store store s_{d} (will be s_{d+1} next iteration)
         if (flux_next > 0.0) s_temp = s_0;
 
-        // update s_{d+1}^{(d)} (subtraction)
+        // update s_{d+1} (subtraction)
         s_p.add(F, -1.0 / del_p);
 
-        // update s_{d}^{(d)} (addition)
+        // update s_{d} (addition)
         s_0.add(F, +1.0 / del_0);
     }
 }

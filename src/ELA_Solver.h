@@ -123,7 +123,9 @@ void ELA_SolverFilterLabels(const double& tol, const double* f);
  * one layer of padding cells on the negative face of the domain to be defined.
  *
  * @param d The flux direction, `0`, `1`, or `2`
- * @param flux The scalar flux scaled by the timestep, \f$ \Delta t F \f$
+ * @param flux The scalar flux scaled by the timestep, \f$ \Delta t F \f$. NOTE: \f$ F > 0 \f$
+ * corresponds to volume moving from the cell \f$ d+1 \f$ to the cell \f$ d \f$, which is typically
+ * a negative velocity.
  * @param delta The size of the cell in direction \p d, \f$ \Delta x_d \f$
  *
  * @note When calling from Fortran, \p d should be `1`, `2`, or `3`
