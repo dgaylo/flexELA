@@ -35,6 +35,9 @@ extern "C" {
  *
  * @note The assumed ordering of the data (`[i][j][k]` or `[k][j][i]`) is set at compile time.
  *
+ * @note For the flux term in ELA_SolverAdvectLabels() to work correctly there must be atleast one
+ * layer of negative padding, \f$ n_{i-} \ge 1\f$
+ *
  * @param N The number of cells in each direction, \f$\left[N_{i},N_{j},N_{k}\right]\f$
  * @param pad The number of ghost cells in each direction,
  * \f$\left[n_{i-},n_{i+},n_{j-},n_{j+},n_{k-},n_{k+}\right]\f$

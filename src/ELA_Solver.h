@@ -97,6 +97,38 @@ void ELA_SolverNormalizeLabel(const double* f);
  */
 void ELA_SolverFilterLabels(const double& tol, const double* f);
 
+/**
+ * @brief Apply the convection terms from @cite Gaylo2022, Eq. 22
+ *
+ * This term is called each step \f$ d \f$ of an operator split advection scheme, and performs
+ * \f[
+ * \mathbf{s} \gets \mathbf{s} + \frac{1}{\Delta x_d} \left[ \left(\Delta t
+ * \mathbf{F}\right)_{d+1/2} - \left(\Delta t \mathbf{F}\right)_{d-1/2} \right]
+ * \f]
+ * where the vector flux terms are found by upwinding:
+ * \f[
+ * \left(\Delta t \mathbf{F}\right)_{d+1/2} = \left(\Delta t F\right)_{d+1/2} \times
+ * \begin{cases}
+ * \hat{\mathbf{s}}_{d+1} & \text{if} \quad \left(\Delta t F\right)_{d+1/2} > 0 \\
+ * \hat{\mathbf{s}}_{d} & \text{if} \quad \left(\Delta t F\right)_{d+1/2} < 0
+ * \end{cases}
+ * \f]
+ * with
+ * \f[
+ * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
+ * \f]
+ *
+ * It is assumed that the feild \p flux is such that the value at `(i, j, k)` defines the flux on
+ * the positive face. This routine requires that the flux on all faces is provided. This requires
+ * one layer of padding cells on the negative face of the domain to be defined.
+ *
+ * @param d The flux direction, `0`, `1`, or `2`
+ * @param flux The scalar flux scaled by the timestep, \f$ \Delta t F \f$
+ * @param delta The size of the cell in direction \p d, \f$ \Delta x_d \f$
+ *
+ * @note When calling from Fortran, \p d should be `1`, `2`, or `3`
+ *
+ */
 void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta);
 
 #ifdef __cplusplus
