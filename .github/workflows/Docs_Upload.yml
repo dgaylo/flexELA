@@ -1,0 +1,61 @@
+name: Deploy Documentation Website
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Doxygen
+        run: sudo apt-get install doxygen -y
+        shell: bash
+
+      - name: Build API pages
+        working-directory: ./doc/api
+        run: doxygen
+
+      - name: Build Dev pages
+        working-directory: ./doc/dev
+        run: doxygen
+
+      - name: Build website
+        run: |
+          mkdir www
+          mv doc/dev/html www/dev
+          mv doc/api/html www/api
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-www
+          path: www
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+    
+    steps:
+      - name: Get Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docs-www
+          path: www
+
+      - name: Display structure of downloaded files
+        run: ls -R www
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1.5.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: flexela-docs
+          directory: www
+          # Optional: Enable this if you want to have GitHub Deployments triggered
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
