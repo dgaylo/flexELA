@@ -16,6 +16,11 @@ RECURSIVE = NO
 IMAGE_PATH="../figures"
 STRIP_FROM_PATH = "../../src"
 
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
+PREDEFINED             = ELA_USE_MPI
+
 # extensions
 HAVE_DOT = "no"
 USE_MATHJAX = "yes"
