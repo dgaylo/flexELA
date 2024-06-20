@@ -23,6 +23,24 @@ extern "C" {
  */
 
 #ifdef ELA_USE_MPI
+/**
+ * @brief Initialize the ELA library
+ *
+ * The ELA library assumes all fields passed to it have the size and padding set here.
+ * The domain size is defined by the padding in
+ * each direction (\f$ n_{i-} \f$, \f$ n_{i+} \f$) and the number of cell in the domain in each
+ * direction (\f$N_i\f$). Below is a 2D example.
+ * @image html domain.svg "Example (2D) Processor Domain"
+ *
+ *
+ * @note The assumed ordering of the data (`[i][j][k]` or `[k][j][i]`) is set at compile time.
+ *
+ * @param N The number of cells in each direction, \f$\left[N_{i},N_{j},N_{k}\right]\f$
+ * @param pad The number of ghost cells in each direction,
+ * \f$\left[n_{i-},n_{i+},n_{j-},n_{j+},n_{k-},n_{k+}\right]\f$
+ * @param numELA The number of ELA instances
+ * @param cart_comm The MPI cartesian communicator (only if built with `ELA_USE_MPI=on`)
+ */
 void ELA_Init(const int* N, const int* pad, const int& numELA, MPI_Comm cart_comm);
 #else
 void ELA_Init(const int* N, const int* pad, const int& numELA);
