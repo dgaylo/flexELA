@@ -65,7 +65,7 @@ int ELA_ContainsNaNs()
     u_char result = constainsNaNsLocally();
 
 #ifdef ELA_USE_MPI
-    MPI_Allreduce(MPI_IN_PLACE, result, 1, MPI_UNSIGNED_CHAR, MPI_BOR, ela::dom->comm_cart());
+    MPI_Allreduce(MPI_IN_PLACE, &result, 1, MPI_UNSIGNED_CHAR, MPI_BOR, ela::dom->getMPIComm());
 #endif
 
     return result;
