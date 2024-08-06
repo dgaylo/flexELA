@@ -1,6 +1,7 @@
 #include "svector.h"
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
 #include <utility>
 
@@ -52,6 +53,15 @@ Value SVector::getMaxValue() const
 Label svec::SVector::getMaxLabel() const
 {
     return (vec.empty() ? 0 : vec.back().l);
+}
+
+bool SVector::containsNaN() const
+{
+    for (const auto& elm : vec) {
+        if (std::isnan(elm.v)) return true;
+    }
+
+    return false;
 }
 
 void SVector::add(const SVector& a, const Value& C)

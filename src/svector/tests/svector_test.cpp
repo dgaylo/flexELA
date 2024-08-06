@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include <cstdlib>
+#include <limits>
 
 constexpr svec::Label TEST_LABEL_A = 23;
 constexpr svec::Value TEST_VALUE_A = 0.1;
@@ -287,4 +288,17 @@ TEST(SVectorTests, zeroEntry)
         EXPECT_EQ(s.data()[i].l, buff[i + 1].l);
         EXPECT_EQ(s.data()[i].v, buff[i + 1].v);
     }
+}
+
+TEST(SVectorTests, ContainsNaN)
+{
+    svec::Element buff1[4] = {
+        {0, 0.1}, {1, std::numeric_limits<svec::Value>::quiet_NaN()}, {3, 0.2}, svec::END_ELEMENT};
+    svec::SVector s1 = svec::SVector(buff1);
+
+    svec::Element buff2[4] = {{0, 0.1}, {1, 0.1}, {3, 0.2}, svec::END_ELEMENT};
+    svec::SVector s2 = svec::SVector(buff2);
+
+    EXPECT_TRUE(s1.containsNaN());
+    EXPECT_FALSE(s2.containsNaN());
 }
