@@ -50,6 +50,27 @@ int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n)
     return (sVector.isEmpty() ? 0 : sVector.data()[0].l);
 }
 
+u_char constainsNaNsLocally()
+{
+    for (auto n = 0; n < ela::dom->nn; ++n) {
+        for (const auto& s : ela::dom->s[n]) {
+            if (s.containsNaN()) return 0x1; // true
+        }
+    }
+    return 0x0; // false
+}
+
+int ELA_ContainsNaNs()
+{
+    u_char result = constainsNaNsLocally();
+
+#ifdef ELA_USE_MPI
+    MPI_Allreduce(MPI_IN_PLACE, result, 1, MPI_UNSIGNED_CHAR, MPI_BOR, ela::dom->comm_cart());
+#endif
+
+    return result;
+}
+
 void ELA_CreateCheckpoint(const char* filename)
 {
     assert(ela::dom != nullptr);
