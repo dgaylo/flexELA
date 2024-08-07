@@ -1,6 +1,8 @@
 #include "ELA_Solver.h"
+
 #include "domain/domain.h"
 #include "globalVariables.h"
+#include <cmath>
 
 void ELA_SolverSaveDilation(const double* c_in)
 {
@@ -179,6 +181,11 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
         (d == 0 ? -1 : 0), (d == 0 ? ni + 1 : 1), (d == 1 ? -1 : 0), (d == 1 ? nj + 1 : 1),
         (d == 2 ? -1 : 0), (d == 2 ? nk + 1 : 1)
     );
+
+    // confirm the cell sizes are valid
+    for (const auto& delta : deltaRowSlice) {
+        if (!std::isnormal(delta)) throw std::invalid_argument("Cell size delta is not normal");
+    }
 
     for (auto n = 0; n < nn; ++n) {
         auto& sField = ela::dom->s[n];
