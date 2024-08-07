@@ -42,6 +42,7 @@ TEST(ELA, Init)
     const int pad[6] = {0};
 
     ELA_Init(N, pad, NN);
+    ASSERT_FALSE(ELA_ContainsNaNs());
 
     // Should get a label of zero if we try to call
     // ELA_GetLabel() before ELA_InitLabels()
@@ -52,6 +53,7 @@ TEST(ELA, Init)
     std::fill_n(vol, NI * NJ * NK, 1.0);
 
     ELA_InitLabels(vol, 0, labels);
+    ASSERT_FALSE(ELA_ContainsNaNs());
 
     for (int k = 0; k < NK; k++) {
         for (int j = 0; j < NJ; j++) {
@@ -63,6 +65,11 @@ TEST(ELA, Init)
             }
         }
     }
+
+    // test ELA_ContainsNaNs
+    vol[20] = std::numeric_limits<double>::quiet_NaN();
+    ELA_InitLabels(vol, 0, labels);
+    ASSERT_TRUE(ELA_ContainsNaNs());
 
     ELA_DeInit();
     delete[] labels;

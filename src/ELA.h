@@ -95,6 +95,17 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels);
 int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n);
 
 /**
+ * @brief Check if any values are NaN
+ *
+ * @return int 0 if no values are NaN
+ * @return int 1 if one or more values are NaN
+ *
+ * @note For calling from Fortran, use `ELA_ContainsNaNs(out)` where \p out is the return value
+ *
+ */
+int ELA_ContainsNaNs();
+
+/**
  * @brief Create a checkpoint file
  *
  * @param filename

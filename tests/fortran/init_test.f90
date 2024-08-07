@@ -11,7 +11,7 @@ integer, parameter :: pad(6)=(/0,0,0,0,0,0/)
 
 integer, dimension(N(1)+pad(1)+pad(2),N(2)+pad(3)+pad(4),N(3)+pad(5)+pad(6)) :: labels
 real(8), dimension(N(1)+pad(1)+pad(2),N(2)+pad(3)+pad(4),N(3)+pad(5)+pad(6)) :: vol
-integer :: i,j,k,l
+integer :: i,j,k,l,out
 #ifdef ELA_USE_MPI
 integer :: ierr
 #endif
@@ -27,6 +27,8 @@ if(ierr.ne.MPI_SUCCESS) error stop
 #else
     call ELA_Init(N,pad,NN)
 #endif
+call ELA_ContainsNans(out)
+if(out==1) error stop 'NaNs after ELA_Init()'
 
 do concurrent(i=1:N(1),j=1:N(2),k=1:N(3))
     labels(i+pad(1),j+pad(2),k+pad(3))=i+j*N(1)+k*N(1)*N(2)
@@ -34,6 +36,8 @@ do concurrent(i=1:N(1),j=1:N(2),k=1:N(3))
 end do
 
 call ELA_InitLabels(vol,1,labels)
+call ELA_ContainsNans(out)
+if(out==1) error stop 'NaNs after ELA_InitLabels()'
 
 do i=1,N(1)
 do j=1,N(2)

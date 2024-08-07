@@ -103,6 +103,14 @@ class SVector {
     const Element* data() const noexcept;
 
     /**
+     * @brief Check if any elements have a NaN value
+     *
+     * @return true if any non-zero elements has a value of NaN
+     * @return false otherwise
+     */
+    bool containsNaN() const;
+
+    /**
      * @brief Start of the non-zero elements
      *
      * Returns the (constant) beginning iterator for the underlying `std::vector<Element>`

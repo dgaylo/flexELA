@@ -51,6 +51,12 @@ void F90_NAME(ela_initlabels,ELA_INITLABELS)(
     );
 }
 
+void F90_NAME(ela_containsnans,ELA_CONTAINSNANS)(
+    F90_Int out)
+{
+    *out = ELA_ContainsNaNs();
+}
+
 void F90_NAME(ela_getlabel,ELA_GETLABEL)(
     F90_Int i, 
     F90_Int j, 
