@@ -157,12 +157,12 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
     }
 
     // wrap input fields
-    auto fluxField = ela::wrapField<const double>(flux);
-    auto deltaRow = ela::wrapRow<const double>(delta, d);
+    const auto fluxField = ela::wrapField<const double>(flux);
+    const auto deltaRow = ela::wrapRow<const double>(delta, d);
 
 #ifdef ELA_USE_MPI
     // update ghost cells in each direction
-    domain::Face face = static_cast<domain::Face>(d);
+    const domain::Face face = static_cast<domain::Face>(d);
 
     ela::dom->updateGhost(face);
     ela::dom->updateGhost(getOppositeFace(face));
