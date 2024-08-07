@@ -1,6 +1,8 @@
 #include "ELA_Solver.h"
+
 #include "domain/domain.h"
 #include "globalVariables.h"
+#include <cmath>
 
 void ELA_SolverSaveDilation(const double* c_in)
 {
@@ -157,12 +159,12 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
     }
 
     // wrap input fields
-    auto fluxField = ela::wrapField<const double>(flux);
-    auto deltaRow = ela::wrapRow<const double>(delta, d);
+    const auto fluxField = ela::wrapField<const double>(flux);
+    const auto deltaRow = ela::wrapRow<const double>(delta, d);
 
 #ifdef ELA_USE_MPI
     // update ghost cells in each direction
-    domain::Face face = static_cast<domain::Face>(d);
+    const domain::Face face = static_cast<domain::Face>(d);
 
     ela::dom->updateGhost(face);
     ela::dom->updateGhost(getOppositeFace(face));
@@ -173,6 +175,17 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
     auto& nj = ela::dom->nj;
     auto& nk = ela::dom->nk;
     auto& nn = ela::dom->nn;
+
+    // the slice of deltaRow is the same every iteration
+    const auto deltaRowSlice = deltaRow.slice(
+        (d == 0 ? -1 : 0), (d == 0 ? ni + 1 : 1), (d == 1 ? -1 : 0), (d == 1 ? nj + 1 : 1),
+        (d == 2 ? -1 : 0), (d == 2 ? nk + 1 : 1)
+    );
+
+    // confirm the cell sizes are valid
+    for (const auto& delta : deltaRowSlice) {
+        if (!std::isnormal(delta)) throw std::invalid_argument("Cell size delta is not normal");
+    }
 
     for (auto n = 0; n < nn; ++n) {
         auto& sField = ela::dom->s[n];
@@ -188,8 +201,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(-1, ni + 1, j, j + 1, k, k + 1),
-                        fluxField.slice(-1, ni + 1, j, j + 1, k, k + 1),
-                        deltaRow.slice(-1, ni + 1, 0, 1, 0, 1)
+                        fluxField.slice(-1, ni + 1, j, j + 1, k, k + 1), deltaRowSlice
                     );
                 }
             }
@@ -205,8 +217,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(i, i + 1, -1, nj + 1, k, k + 1),
-                        fluxField.slice(i, i + 1, -1, nj + 1, k, k + 1),
-                        deltaRow.slice(0, 1, -1, nj + 1, 0, 1)
+                        fluxField.slice(i, i + 1, -1, nj + 1, k, k + 1), deltaRowSlice
                     );
                 }
             }
@@ -222,8 +233,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(i, i + 1, j, j + 1, -1, nk + 1),
-                        fluxField.slice(i, i + 1, j, j + 1, -1, nk + 1),
-                        deltaRow.slice(0, 1, 0, 1, -1, nk + 1)
+                        fluxField.slice(i, i + 1, j, j + 1, -1, nk + 1), deltaRowSlice
                     );
                 }
             }
