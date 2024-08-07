@@ -174,6 +174,12 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
     auto& nk = ela::dom->nk;
     auto& nn = ela::dom->nn;
 
+    // the slice of deltaRow is the same every iteration
+    const auto deltaRowSlice = deltaRow.slice(
+        (d == 0 ? -1 : 0), (d == 0 ? ni + 1 : 1), (d == 1 ? -1 : 0), (d == 1 ? nj + 1 : 1),
+        (d == 2 ? -1 : 0), (d == 2 ? nk + 1 : 1)
+    );
+
     for (auto n = 0; n < nn; ++n) {
         auto& sField = ela::dom->s[n];
 
@@ -188,8 +194,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(-1, ni + 1, j, j + 1, k, k + 1),
-                        fluxField.slice(-1, ni + 1, j, j + 1, k, k + 1),
-                        deltaRow.slice(-1, ni + 1, 0, 1, 0, 1)
+                        fluxField.slice(-1, ni + 1, j, j + 1, k, k + 1), deltaRowSlice
                     );
                 }
             }
@@ -205,8 +210,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(i, i + 1, -1, nj + 1, k, k + 1),
-                        fluxField.slice(i, i + 1, -1, nj + 1, k, k + 1),
-                        deltaRow.slice(0, 1, -1, nj + 1, 0, 1)
+                        fluxField.slice(i, i + 1, -1, nj + 1, k, k + 1), deltaRowSlice
                     );
                 }
             }
@@ -222,8 +226,7 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
 #endif
                     advectRow(
                         sField.slice(i, i + 1, j, j + 1, -1, nk + 1),
-                        fluxField.slice(i, i + 1, j, j + 1, -1, nk + 1),
-                        deltaRow.slice(0, 1, 0, 1, -1, nk + 1)
+                        fluxField.slice(i, i + 1, j, j + 1, -1, nk + 1), deltaRowSlice
                     );
                 }
             }
