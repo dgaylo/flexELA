@@ -90,6 +90,8 @@ void SVector::normalize(const Value& total)
 
     // normalize each value so sum(s)=total;
     const Value factor = total / s;
+    assert(std::isfinite(factor));
+
     for (auto& elm : vec) {
         elm *= factor;
     }
@@ -185,5 +187,8 @@ SVector svec::normalize(const SVector& a, const Value& total)
         return SVector();
     }
 
-    return a * (total / s);
+    const Value factor = total / s;
+    assert(std::isfinite(factor));
+
+    return a * factor;
 }
