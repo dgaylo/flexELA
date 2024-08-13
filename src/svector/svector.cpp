@@ -83,7 +83,9 @@ void SVector::normalize(const Value& total)
 
     // if normalizing to zero, empty vector
     // empty vector rather than divide by zero
-    if (total == 0 || s == 0.0) {
+    //
+    // total/s will give inf if s/total is subnormal
+    if (total == 0 || s == 0 || std::abs(s / total) < std::numeric_limits<Value>::min()) {
         clear();
         return;
     }
@@ -183,7 +185,9 @@ SVector svec::normalize(const SVector& a, const Value& total)
 
     // if normalizing to zero, empty vector
     // empty vector rather than divide by zero
-    if (total == 0.0 || s == 0.0) {
+    //
+    // total/s will give inf if s/total is subnormal
+    if (total == 0 || s == 0 || std::abs(s / total) < std::numeric_limits<Value>::min()) {
         return SVector();
     }
 
