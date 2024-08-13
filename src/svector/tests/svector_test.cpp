@@ -241,8 +241,11 @@ TEST(SVectorTests, Normalize)
     svec::Element buff2[3] = {
         {0, std::numeric_limits<svec::Value>::min() / 100.0}, {1, 0}, svec::END_ELEMENT};
     s = svec::SVector(buff2);
+
     s.normalize(2.0);
     EXPECT_EQ(s.sum(), 0.0);
+
+    EXPECT_EQ(svec::normalize(svec::SVector(buff2), 2.0).sum(), 0.0);
 }
 
 TEST(SVectorTests, FMA)
