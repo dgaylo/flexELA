@@ -46,6 +46,9 @@ void ELA_SolverDilateLabels(const double* u_div)
         for (auto& sVector : ela::dom->s[n]) {
             // s=s+c*u
             sVector.add(*(cVector++), *(u++));
+#ifndef NDEBUG
+            if (sVector.containsNaN()) throw std::runtime_error("NaN detected during dilation");
+#endif
         }
     }
 }
