@@ -149,6 +149,11 @@ void advectRow(
 
         // update s_{d} (addition)
         s_0.add(F, +1.0 / del_0);
+
+#ifndef NDEBUG
+        if (s_p.containsNaN() || s_0.containsNaN())
+            throw std::runtime_error("NaN detected during advection");
+#endif
     }
 }
 
