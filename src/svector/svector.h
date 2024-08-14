@@ -146,7 +146,7 @@ class SVector {
     /**
      * @brief s=s/sum(s) * total
      *
-     * If sum(s) is zero, will do nothing
+     * If sum(s) is zero or sum(s)/total is subnormal, \f$\mathbf{s}\gets\mathbf{0}\f$.
      *
      * @param total
      */
