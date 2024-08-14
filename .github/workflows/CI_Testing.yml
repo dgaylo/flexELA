@@ -115,5 +115,6 @@ jobs:
       uses: codecov/codecov-action@v4.5.0
       with:
         file: ${{ steps.strings.outputs.build-output-dir }}/coverage.info
+        fail_ci_if_error: true
         verbose: true
         token: ${{ secrets.CODECOV_TOKEN }}
