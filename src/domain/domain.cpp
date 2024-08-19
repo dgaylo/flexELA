@@ -31,7 +31,7 @@ fields::Helper<svec::SVector> domain::Domain::getGhost(const Face& f, const int&
         return s[n].slice(0, ni, 0, nj, -1, 0);
 
     case Face::iPlus:
-        return s[n].slice(nj, nj + 1, 0, nj, 0, nk);
+        return s[n].slice(ni, ni + 1, 0, nj, 0, nk);
     case Face::jPlus:
         return s[n].slice(0, ni, nj, nj + 1, 0, nk);
     case Face::kPlus:
@@ -57,7 +57,7 @@ fields::Helper<svec::SVector> domain::Domain::getEdge(const Face& f, const int& 
         return s[n].slice(0, ni, 0, nj, 0, 1);
 
     case Face::iPlus:
-        return s[n].slice(nj - 1, nj, 0, nj, 0, nk);
+        return s[n].slice(ni - 1, ni, 0, nj, 0, nk);
     case Face::jPlus:
         return s[n].slice(0, ni, nj - 1, nj, 0, nk);
     case Face::kPlus:
