@@ -145,12 +145,12 @@ void SVector::normalize(const Value& total)
 
 void SVector::chop()
 {
-    // set any value less than zero to zero
-    for (auto& elm : vec) {
-        if (elm.v < 0.0) {
-            elm.v = 0.0;
-        }
-    }
+    // remove any values <= 0
+    auto itr = std::remove_if(vec.begin(), vec.end(), [](const svec::Element& elm) {
+        return elm.v <= 0.0;
+    });
+
+    vec.erase(itr, vec.end());
 }
 
 void svec::SVector::zeroEntry(const Label& l)
