@@ -64,14 +64,47 @@ bool SVector::containsNaN() const
     return false;
 }
 
+// Simple version using temporary variable
+/*
 void SVector::add(const SVector& a, const Value& C)
 {
     // quick exit
     if (a.isEmpty() || C == 0.0) return;
 
-    // Could be more memory efficient, but using a temporay variable for now
     SVector tmp = fma(a, C, *this);
     this->vec = std::move(tmp.vec);
+}
+*/
+
+// More complicated version without using temporary variable
+void SVector::add(const SVector& a, const Value& C)
+{
+    // quick exit
+    if (a.isEmpty() || C == 0.0) return;
+
+    // references to the underlying vector
+    const std::vector<Element>& vecL = a.vec;
+
+    auto itrL = vecL.cbegin();
+    auto itrR = vec.begin();
+
+    // merge sort
+    while (itrL != vecL.cend() && itrR != vec.cend()) {
+        const svec::Label& labelL = itrL->l;
+        const svec::Label& labelR = itrR->l;
+
+        if (labelL < labelR) {
+            itrR = vec.insert(itrR, (*itrL++) * C);
+        }
+        else if (labelL == labelR) {
+            itrR->v = std::fma((itrL++)->v, C, itrR->v);
+        }
+
+        ++itrR;
+    }
+    while (itrL != vecL.cend()) {
+        vec.emplace_back((*itrL++) * C);
+    }
 }
 
 void SVector::normalize(const Value& total)
