@@ -77,6 +77,11 @@ void SVector::add(const SVector& a, const Value& C)
 */
 
 // More complicated version without using temporary variable
+/*
+On complexity ...
+For random vectors of length N the use of insert makes this O(N^2). In practice it is rare for the
+input svector `a` to have many elements not in this svector, so insert is rarely called
+*/
 void SVector::add(const SVector& a, const Value& C)
 {
     // quick exit
