@@ -57,11 +57,9 @@ Label svec::SVector::getMaxLabel() const
 
 bool SVector::containsNaN() const
 {
-    for (const auto& elm : vec) {
-        if (std::isnan(elm.v)) return true;
-    }
-
-    return false;
+    return std::any_of(vec.cbegin(), vec.cend(), [](svec::Element elm) {
+        return std::isnan(elm.v);
+    });
 }
 
 // Simple version using temporary variable
