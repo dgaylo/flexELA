@@ -8,6 +8,8 @@
 //! For sparse vector containers and operations
 namespace svec {
 
+class NormalizedSVector;
+
 /**
  * @brief A container for sparse vectors
  *
@@ -45,6 +47,12 @@ class SVector {
      * @param buff A sequence of elements, ending in END_ELEMENT
      */
     SVector(const Element* const buff);
+
+    /**
+     * @brief Construct a new SVector using a NormalizedSVector
+     *
+     */
+    SVector(NormalizedSVector&& s);
 
     // Get Functions
 
@@ -142,6 +150,7 @@ class SVector {
      * @param C Value, \f$C\f$
      */
     void add(const SVector& a, const Value& C = 1.0);
+    void add(const NormalizedSVector& a, const Value& C = 1.0);
 
     /**
      * @brief s=s/sum(s) * total
@@ -183,10 +192,25 @@ class SVector {
     friend SVector fma(const SVector& a, const Value& C, const SVector& b);
     friend SVector operator/(const SVector& a, const Value& C);
     friend SVector operator*(const SVector& a, const Value& C);
-    friend SVector normalize(const SVector& a, const Value& total);
 
   private:
     std::vector<Element> vec;
+};
+
+/**
+ * @brief A wrapper for a SVector who's data has not yet been normalized
+ *
+ */
+class NormalizedSVector {
+  public:
+    NormalizedSVector(const SVector& a, const Value& total = 1.0);
+
+    friend void SVector::add(const NormalizedSVector& a, const Value& C);
+    friend SVector::SVector(NormalizedSVector&& s);
+
+  private:
+    SVector base;
+    Value factor;
 };
 
 /**
@@ -231,8 +255,6 @@ SVector operator/(const SVector& a, const Value& C);
  * @return SVector
  */
 SVector operator*(const SVector& a, const Value& C);
-
-SVector normalize(const SVector& a, const Value& total = 1.0);
 
 inline SVector::SVector(const Element& elm) : vec(1, elm)
 {

@@ -23,6 +23,14 @@ SVector::SVector(const Element* const buff)
     vec.assign(buff, itr);
 }
 
+svec::SVector::SVector(NormalizedSVector&& s)
+{
+    vec = std::move(s.base.vec);
+    for (auto& elm : vec) {
+        elm *= s.factor;
+    }
+}
+
 Value SVector::sum() const
 {
     Value sum = 0.0;
@@ -121,6 +129,11 @@ void SVector::add(const SVector& a, const Value& C)
             vec.emplace_back((*itrL++) * C);
         }
     }
+}
+
+void SVector::add(const NormalizedSVector& a, const Value& C)
+{
+    add(a.base, C * a.factor);
 }
 
 void SVector::normalize(const Value& total)
@@ -228,7 +241,7 @@ SVector svec::operator*(const SVector& a, const Value& C)
     return out;
 }
 
-SVector svec::normalize(const SVector& a, const Value& total)
+NormalizedSVector::NormalizedSVector(const SVector& a, const Value& total)
 {
     const Value s = a.sum();
 
@@ -237,11 +250,11 @@ SVector svec::normalize(const SVector& a, const Value& total)
     //
     // total/s will give inf if s/total is subnormal
     if (total == 0 || s == 0 || std::abs(s / total) < std::numeric_limits<Value>::min()) {
-        return SVector();
+        factor = 0;
     }
-
-    const Value factor = total / s;
-    assert(std::isfinite(factor));
-
-    return a * factor;
+    else {
+        base = a;
+        factor = total / s;
+        assert(std::isfinite(factor));
+    }
 }

@@ -139,7 +139,7 @@ void advectRow(
             );
 
         // calculate vector flux term on positive face
-        const svec::SVector F = svec::normalize(s_upwind, flux_loc);
+        const auto F = svec::NormalizedSVector(s_upwind, flux_loc);
 
         // store store s_{d} (will be s_{d+1} next iteration)
         if (flux_next > 0.0) s_temp = s_0;
