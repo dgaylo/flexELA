@@ -93,11 +93,11 @@ void SVector::add(const SVector& a, const Value& C)
         const svec::Label& labelL = itrL->l;
         const svec::Label& labelR = itrR->l;
 
-        if (labelL < labelR) {
-            itrR = vec.insert(itrR, (*itrL++) * C);
-        }
-        else if (labelL == labelR) {
+        if (labelL == labelR) {
             itrR->v = std::fma((itrL++)->v, C, itrR->v);
+        }
+        else if (labelL < labelR) {
+            itrR = vec.insert(itrR, (*itrL++) * C);
         }
 
         ++itrR;
