@@ -31,6 +31,14 @@ svec::SVector::SVector(NormalizedSVector&& s)
     }
 }
 
+svec::SVector::SVector(const NormalizedSVector& s)
+{
+    vec = s.base.vec;
+    for (auto& elm : vec) {
+        elm *= s.factor;
+    }
+}
+
 Value SVector::sum() const
 {
     Value sum = 0.0;

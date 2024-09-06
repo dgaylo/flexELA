@@ -49,10 +49,16 @@ class SVector {
     SVector(const Element* const buff);
 
     /**
-     * @brief Construct a new SVector using a NormalizedSVector
+     * @brief Construct a new SVector moving data from a NormalizedSVector
      *
      */
     SVector(NormalizedSVector&& s);
+
+    /**
+     * @brief Construct a new SVector by copying a NormalizedSVector
+     *
+     */
+    SVector(const NormalizedSVector& s);
 
     // Get Functions
 
@@ -203,9 +209,21 @@ class SVector {
  */
 class NormalizedSVector {
   public:
+    NormalizedSVector()
+    {
+        factor = 0;
+    };
     NormalizedSVector(const SVector& a, const Value& total = 1.0);
 
+    inline void clear() noexcept
+    {
+        base.clear();
+        factor = 0;
+    }
+
     friend void SVector::add(const NormalizedSVector& a, const Value& C);
+
+    friend SVector::SVector(const NormalizedSVector& s);
     friend SVector::SVector(NormalizedSVector&& s);
 
   private:
