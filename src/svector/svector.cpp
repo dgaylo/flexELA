@@ -102,8 +102,14 @@ void SVector::add(const SVector& a, const Value& C)
 
         ++itrR;
     }
-    while (itrL != vecL.cend()) {
-        vec.emplace_back((*itrL++) * C);
+
+    // if still values in vecL, emplace_back
+    if (itrL != vecL.cend()) {
+        vec.reserve(vec.size() + (vecL.cend() - itrL));
+
+        while (itrL != vecL.cend()) {
+            vec.emplace_back((*itrL++) * C);
+        }
     }
 }
 
