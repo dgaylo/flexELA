@@ -147,7 +147,12 @@ void advectRow(
         s_p.add(F, -1.0 / del_p);
 
         // update s_{d} (addition)
-        s_0.add(F, +1.0 / del_0);
+        if (flux_loc > 0.0) {
+            s_0.add(F, +1.0 / del_0);
+        }
+        else if (F.NNZ() != 0) {
+            s_0.add_same(F, +1.0 / del_0);
+        }
     }
 }
 
