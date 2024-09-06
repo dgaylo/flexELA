@@ -160,6 +160,15 @@ class SVector {
     void add(const NormalizedSVector& a, const Value& C = 1.0);
 
     /**
+     * @brief Inplace Addition (and Multiplication), s=s+a*C, when a and s have same non-zero
+     * elements
+     *
+     * @param a SVector, \f$\mathbf{a}\f$
+     * @param C Value, \f$C\f$
+     */
+    void add_same(const SVector& a, const Value& C = 1.0);
+
+    /**
      * @brief s=s/sum(s) * total
      *
      * If sum(s) is zero or sum(s)/total is subnormal, \f$\mathbf{s}\gets\mathbf{0}\f$.

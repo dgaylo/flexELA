@@ -128,6 +128,20 @@ void SVector::add(const NormalizedSVector& a, const Value& C)
     add(a.base, C * a.factor);
 }
 
+void SVector::add_same(const SVector& a, const Value& C)
+{
+    // length of vectors should be the same
+    assert(a.NNZ() == NNZ());
+
+    auto itrL = a.vec.cbegin();
+    for (auto& elm : vec) {
+        // labels should be the same
+        assert(elm.l == itrL->l);
+
+        elm.v = std::fma((itrL++)->v, C, elm.v);
+    }
+}
+
 void SVector::normalize(const Value& total)
 {
     // quick exit

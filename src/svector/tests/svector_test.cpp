@@ -177,6 +177,25 @@ TEST(SVectorTests, Add)
     }
 }
 
+TEST(SVectorTests, Add_Same)
+{
+    svec::Element buff1[4] = {{1, 0.1}, {3, 0.2}, {4, 0.8}, svec::END_ELEMENT};
+    svec::SVector s1 = svec::SVector(buff1);
+    svec::SVector s2 = s1 * 0.6;
+
+    s1.add_same(s2, 2.5);
+
+    for (auto i = 0; i < 3; i++) {
+        EXPECT_EQ(s1.data()[i].l, buff1[i].l);
+        EXPECT_DOUBLE_EQ(s1.data()[i].v, buff1[i].v * (1.0 + 0.6 * 2.5));
+    }
+
+    svec::Element buff2[4] = {{2, 0.8}, {3, 0.3}, {8, 0.4}, svec::END_ELEMENT};
+    svec::SVector s3 = svec::SVector(buff2);
+
+    EXPECT_DEBUG_DEATH(s1.add_same(s3, 2.5), "");
+}
+
 TEST(SVectorTests, Chop)
 {
     svec::Element buff[6] = {{0, 5}, {1, -0.1}, {3, 0.2}, {4, 0.8}, {8, -5}, svec::END_ELEMENT};
