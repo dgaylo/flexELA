@@ -26,13 +26,12 @@ SVector::SVector(const Element* const buff)
 
 Value SVector::sum() const
 {
-    // Allows out of order
-    return std::reduce(vec.cbegin(), vec.cend(), 0.0, std::plus<Value>());
+    return std::accumulate(vec.cbegin(), vec.cend(), Value(0.0));
 }
 
 Value SVector::getMinValue() const
 {
-    return std::reduce(
+    return std::accumulate(
         vec.cbegin(), vec.cend(), std::numeric_limits<Value>::max(),
         [](Value a, Value b) { return std::min<Value>(a, b); }
     );
@@ -40,7 +39,7 @@ Value SVector::getMinValue() const
 
 Value SVector::getMaxValue() const
 {
-    return std::reduce(
+    return std::accumulate(
         vec.cbegin(), vec.cend(), std::numeric_limits<Value>::min(),
         [](Value a, Value b) { return std::max<Value>(a, b); }
     );
