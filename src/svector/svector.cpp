@@ -23,22 +23,6 @@ SVector::SVector(const Element* const buff)
     vec.assign(buff, itr);
 }
 
-svec::SVector::SVector(NormalizedSVector&& s)
-{
-    vec = std::move(s.base.vec);
-    for (auto& elm : vec) {
-        elm *= s.factor;
-    }
-}
-
-svec::SVector::SVector(const NormalizedSVector& s)
-{
-    vec = s.base.vec;
-    for (auto& elm : vec) {
-        elm *= s.factor;
-    }
-}
-
 Value SVector::sum() const
 {
     Value sum = 0.0;
