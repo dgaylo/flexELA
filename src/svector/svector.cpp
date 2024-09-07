@@ -32,20 +32,18 @@ Value SVector::sum() const
 
 Value SVector::getMinValue() const
 {
-    Value minimum = std::numeric_limits<Value>::max();
-    for (const auto& elm : vec) {
-        if (elm.v < minimum) minimum = elm.v;
-    }
-    return minimum;
+    return std::reduce(
+        vec.cbegin(), vec.cend(), std::numeric_limits<Value>::max(),
+        [](Value a, Value b) { return std::min<Value>(a, b); }
+    );
 }
 
 Value SVector::getMaxValue() const
 {
-    Value maximum = std::numeric_limits<Value>::min();
-    for (const auto& elm : vec) {
-        if (elm.v > maximum) maximum = elm.v;
-    }
-    return maximum;
+    return std::reduce(
+        vec.cbegin(), vec.cend(), std::numeric_limits<Value>::min(),
+        [](Value a, Value b) { return std::max<Value>(a, b); }
+    );
 }
 
 Label svec::SVector::getMaxLabel() const
