@@ -97,15 +97,17 @@ void SVector::add(const SVector& a, const Value& C)
 
     // merge sort
     while (itrL != itrL_end && itrR != itrR_end) {
-        const svec::Label& labelL = itrL->l;
-        const svec::Label& labelR = itrR->l;
+        const auto elmL = *itrL;
+        auto& elmR = *itrR;
 
-        if (labelL == labelR) {
-            itrR->v = std::fma((itrL++)->v, C, itrR->v);
+        if (elmL.l == elmR.l) {
+            elmR.v = std::fma(elmL.v, C, elmR.v);
+            ++itrL;
         }
-        else if (labelL < labelR) {
-            itrR = vec.insert(itrR, (*itrL++) * C);
+        else if (elmL.l < elmR.l) {
+            itrR = vec.insert(itrR, elmL * C);
             itrR_end = vec.end();
+            ++itrL;
         }
 
         ++itrR;
