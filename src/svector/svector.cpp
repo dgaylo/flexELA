@@ -87,14 +87,16 @@ void SVector::add(const SVector& a, const Value& C)
     // quick exit
     if (a.isEmpty() || C == 0.0) return;
 
-    // references to the underlying vector
-    const std::vector<Element>& vecL = a.vec;
+    // iterators to the incoming SVector
+    auto itrL = a.vec.cbegin();
+    const auto itrL_end = a.vec.cend();
 
-    auto itrL = vecL.cbegin();
+    // iterators to this SVector
     auto itrR = vec.begin();
+    auto itrR_end = vec.end(); // need to update whenever vec changes
 
     // merge sort
-    while (itrL != vecL.cend() && itrR != vec.cend()) {
+    while (itrL != itrL_end && itrR != itrR_end) {
         const svec::Label& labelL = itrL->l;
         const svec::Label& labelR = itrR->l;
 
@@ -103,16 +105,17 @@ void SVector::add(const SVector& a, const Value& C)
         }
         else if (labelL < labelR) {
             itrR = vec.insert(itrR, (*itrL++) * C);
+            itrR_end = vec.end();
         }
 
         ++itrR;
     }
 
     // if still values in vecL, emplace_back
-    if (itrL != vecL.cend()) {
-        vec.reserve(vec.size() + (vecL.cend() - itrL));
+    if (itrL != itrL_end) {
+        vec.reserve(vec.size() + (itrL_end - itrL));
 
-        while (itrL != vecL.cend()) {
+        while (itrL != itrL_end) {
             vec.emplace_back((*itrL++) * C);
         }
     }
