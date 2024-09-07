@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <numeric>
 #include <utility>
 
 using namespace svec;
@@ -25,11 +26,8 @@ SVector::SVector(const Element* const buff)
 
 Value SVector::sum() const
 {
-    Value sum = 0.0;
-    for (const auto& elm : vec) {
-        sum += elm.v;
-    }
-    return sum;
+    // Allows out of order
+    return std::reduce(vec.cbegin(), vec.cend(), 0.0, std::plus<Value>());
 }
 
 Value SVector::getMinValue() const

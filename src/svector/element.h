@@ -33,6 +33,12 @@ struct Element {
      */
     Value v;
 
+    /** @brief Conversion to Value */
+    constexpr operator Value() const
+    {
+        return v;
+    }
+
     /** @brief Addition assignment */
     Element& operator+=(const Value& rhs);
     /** @brief Addition assignment */
