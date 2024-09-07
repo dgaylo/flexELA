@@ -85,7 +85,7 @@ input svector `a` to have many elements not in this svector, so insert is rarely
 void SVector::add(const SVector& a, const Value& C)
 {
     // quick exit
-    if (a.isEmpty() || C == 0.0) return;
+    if (C == 0.0 || a.isEmpty()) return;
 
     // iterators to the incoming SVector
     auto itrL = a.vec.cbegin();
