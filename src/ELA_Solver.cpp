@@ -96,42 +96,38 @@ void advectRow(
 {
     // Calculate the normalized SVector
     // ELA paper eq. 24
-    auto sNorm = std::vector<svec::NormalizedSVector>(sRow.size());
-    std::transform(sRow.begin(), sRow.end(), sNorm.begin(), [](const svec::SVector& s) {
+    auto sNormRow = std::vector<svec::NormalizedSVector>(sRow.size());
+    std::transform(sRow.begin(), sRow.end(), sNormRow.begin(), [](const svec::SVector& s) {
         return svec::NormalizedSVector(s);
     });
 
     auto s = sRow.begin();
-    auto sn = sNorm.begin();
     auto del = deltaRow.begin();
     auto flux = fluxRow.begin();
 
-    for (sn = sNorm.begin(); sn < sNorm.end() - 1; ++sn) {
-        // s_{d}
+    for (auto sNorm = sNormRow.begin(); sNorm < sNormRow.end() - 1; ++sNorm) {
+        // s_{d}, s_{d+1}
         svec::SVector& s_0 = *(s);
-        // s_{d+1}
         svec::SVector& s_p = *(++s);
 
-        // delta_{d}
-        const double del_0 = *(del);
-        // delta_{d+1}
-        const double del_p = *(++del);
+        // delta_{d}, delta_{d+1}
+        const double& del_0 = *(del);
+        const double& del_p = *(++del);
 
-        // F_{d+1/2
+        // F_{d+1/2}
         const double flux_loc = *(flux++);
 
         if (flux_loc != 0) {
-            // a negative velocity corresponds to a positive flux
-            const auto& sn_upwind =
-                (flux_loc > 0.0 ? sn[1] : // F_{d+1/2}>0, s_{d+1} is upwind
-                     sn[0]                // F_{d+1/2}<0, s_{d} is upwind
-                );
-
-            // update s_{d+1} (subtraction)
-            s_p.add(sn_upwind, -flux_loc / del_p);
+            // a negative velocity corresponds to a positive flux, therfore:
+            // F_{d+1/2}>0, s_{d+1} is upwind
+            // F_{d+1/2}<0, s_{d} is upwind
+            const auto& sNorm_loc = (flux_loc > 0.0 ? sNorm[1] : sNorm[0]);
 
             // update s_{d} (addition)
-            s_0.add(sn_upwind, +flux_loc / del_0);
+            s_0.add(sNorm_loc, +flux_loc / del_0);
+
+            // update s_{d+1} (subtraction)
+            s_p.add(sNorm_loc, -flux_loc / del_p);
         }
     }
 }
