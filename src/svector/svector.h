@@ -144,6 +144,19 @@ class SVector {
      * @param C Value, \f$C\f$
      */
     void add(const SVector& a, const Value& C = 1.0);
+
+    /**
+     * @brief Inplace Addition (and Multiplication), s=s+a*C
+     *
+     * For an NormalizedSVector \f$\tilde{\mathbf{a}}\f$ and a Value \f$C\f$, changes this
+     * \f$\mathbf{s}\f$ by
+     * \f[
+     * \mathbf{s} \gets \mathbf{s} + \left(C  \times \tilde{\mathbf{a}}\right)
+     * \f]
+     *
+     * @param a NormalizedSVector, \f$\tilde{\mathbf{a}}\f$
+     * @param C Value, \f$C\f$
+     */
     void add(const NormalizedSVector& a, const Value& C = 1.0);
 
     /**
@@ -192,22 +205,59 @@ class SVector {
 };
 
 /**
- * @brief A wrapper for a SVector who's data has not yet been normalized
+ * @brief A normalized SVector
+ *
+ * It is often the case where an SVector is normalized followed by multiple calls to SVector::add()
+ * including multiplication. In this case, using NormalizedSVector requires only one division
+ * operation rather than two.
+ *
+ * The NormalizedSVector \f$ \tilde{\mathbf{s}} \f$ is stored in the form,
+ * \f[
+ * \tilde{s} = \left(\frac{T}{\sum \mathbf{a}}\right) \times \mathbf{a}
+ * \f]
+ * where \f$\mathbf{a}\f$ and \f$ T \f$ are set by NormalizedSVector()
+ *
  *
  */
 class NormalizedSVector {
   public:
+    /**
+     * @brief Construct an empty NormalizedSVector
+     *
+     */
     NormalizedSVector()
     {
         factor = 0;
     };
+
+    /**
+     * @brief Construct an NormalizedSVector from a SVector
+     *
+     * @param a the base SVector \f$ \mathbf{a} \f$
+     * @param total the total value \f$ T \f$
+     */
     NormalizedSVector(const SVector& a, const Value& total = 1.0);
 
+    /**
+     * @brief Convert the NormalizedSVector to an SVector
+     *
+     * \f[
+     * \mathbf{s} \gets \left(\frac{T}{\sum \mathbf{a}}\right) \times \mathbf{a}
+     * \f]
+     *
+     * @return SVector \f$ \mathbf{s} \f$
+     */
     inline operator SVector() const
     {
         return base * factor;
     }
 
+    /**
+     * @brief Clear out all entries
+     *
+     * Has the effect of \f$ \mathbf{a} \gets \mathbf{0} \f$
+     *
+     */
     inline void clear() noexcept
     {
         base.clear();
