@@ -163,20 +163,19 @@ class SVector {
      * @brief Inplace Addition (and Multiplication), s=s+a*C, when a and s have same non-zero
      * elements
      *
-     * For a NormalizedSVector \f$\mathbf{a}\f$ and a Value \f$C\f$, changes this \f$\mathbf{s}\f$
-     * by
+     * For an NormalizedSVector \f$\tilde{\mathbf{a}}\f$ and a Value \f$C\f$, changes this
+     * \f$\mathbf{s}\f$ by
      * \f[
-     * \mathbf{s} \gets \mathbf{s} + \left(C  \times \mathbf{a}\right)
+     * \mathbf{s} \gets \mathbf{s} + \left(C  \times \tilde{\mathbf{a}}\right)
      * \f]
      *
-     * @attention Unlike add(), this function assumes the NormalizedSVector \f$\mathbf{a}\f$ is of
-     * the form
+     * @attention Unlike add(), this function assumes the NormalizedSVector \f$\tilde{\mathbf{a}}\f$
+     * is of the form
      * \f[
-     * \mathbf{a} = \left(\frac{A}{\sum \mathbf{s}} \right) \times \mathbf{s}
+     * \tilde{\mathbf{a}} = \left(\frac{T}{\sum \mathbf{s}} \right) \times \mathbf{s}
      * \f]
-     * This allows the function to be much faster than add()
      *
-     * @param a NormalizedSVector, \f$\mathbf{a}\f$
+     * @param a NormalizedSVector, \f$ \tilde{\mathbf{a}} \f$
      * @param C Value, \f$C\f$
      */
     void add_same(const NormalizedSVector& a, const Value& C = 1.0);
