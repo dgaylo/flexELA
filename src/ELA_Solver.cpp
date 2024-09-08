@@ -2,6 +2,7 @@
 
 #include "domain/domain.h"
 #include "globalVariables.h"
+#include <algorithm>
 #include <cmath>
 
 void ELA_SolverSaveDilation(const double* c_in)
@@ -93,41 +94,46 @@ void advectRow(
     const fields::Helper<const double>& deltaRow
 )
 {
-    // Calculate Vector fluxes on positive faces
-    auto VectorFlux = std::vector<svec::NormalizedSVector>(sRow.size() - 1);
+    // Calculate the normalized SVector
+    // ELA paper eq. 24
+    auto sNorm = std::vector<svec::NormalizedSVector>(sRow.size());
+    std::transform(sRow.begin(), sRow.end(), sNorm.begin(), [](const svec::SVector& s) {
+        return svec::NormalizedSVector(s);
+    });
 
     auto s = sRow.begin();
-    auto flux = fluxRow.begin();
-    for (auto& F : VectorFlux) {
-        // figure out which cell is upwind
-        // a negative velocity corresponds to a positive flux
-        const auto& s_upwind =
-            (*flux > 0.0 ? *(++s) : // F_{d+1/2}>0, s_{d+1} is upwind
-                 *(s++)             // F_{d+1/2}<0, s_{d} is upwind
-            );
-
-        // calculate vector flux term F_{d+1/2}
-        F = svec::NormalizedSVector(s_upwind, *(flux++));
-    }
-
-    // Update the SVector
-    s = sRow.begin();
+    auto sn = sNorm.begin();
     auto del = deltaRow.begin();
+    auto flux = fluxRow.begin();
 
-    s->add(VectorFlux[0], +1.0 / *del);
+    for (sn = sNorm.begin(); sn < sNorm.end() - 1; ++sn) {
+        // s_{d}
+        svec::SVector& s_0 = *(s);
+        // s_{d+1}
+        svec::SVector& s_p = *(++s);
 
-    for (uint i = 1; i < VectorFlux.size(); ++i) {
-        ++s;
-        ++del;
+        // delta_{d}
+        const double del_0 = *(del);
+        // delta_{d+1}
+        const double del_p = *(++del);
 
-        // subtract F_{d-1/2}
-        s->add(VectorFlux[i - 1], -1.0 / *del);
+        // F_{d+1/2
+        const double flux_loc = *(flux++);
 
-        // add F_{d+1/2}
-        s->add(VectorFlux[i], +1.0 / *del);
+        if (flux_loc != 0) {
+            // a negative velocity corresponds to a positive flux
+            const auto& sn_upwind =
+                (flux_loc > 0.0 ? sn[1] : // F_{d+1/2}>0, s_{d+1} is upwind
+                     sn[0]                // F_{d+1/2}<0, s_{d} is upwind
+                );
+
+            // update s_{d+1} (subtraction)
+            s_p.add(sn_upwind, -flux_loc / del_p);
+
+            // update s_{d} (addition)
+            s_0.add(sn_upwind, +flux_loc / del_0);
+        }
     }
-
-    (++s)->add(VectorFlux[VectorFlux.size() - 1], -1.0 / *(++del));
 }
 
 void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta)
