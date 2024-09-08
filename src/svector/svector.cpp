@@ -128,17 +128,22 @@ void SVector::add(const NormalizedSVector& a, const Value& C)
     add(a.base, C * a.factor);
 }
 
-void SVector::add_same(const SVector& a, const Value& C)
+void SVector::add_same(const NormalizedSVector& a, const Value& C)
 {
-    // length of vectors should be the same
-    assert(a.NNZ() == NNZ());
+    const Value factor = C * a.factor;
 
-    auto itrL = a.vec.cbegin();
+    if (factor == 0) return;
+
+    // length of vectors should be the same
+    assert(a.base.NNZ() == NNZ());
+
+    auto itrL = a.base.vec.cbegin();
     for (auto& elm : vec) {
         // labels should be the same
-        assert(elm.l == itrL->l);
+        assert(elm.l == (itrL)->l);
+        assert(elm.v == (itrL++)->v);
 
-        elm.v = std::fma((itrL++)->v, C, elm.v);
+        elm.v = std::fma(elm.v, factor, elm.v);
     }
 }
 

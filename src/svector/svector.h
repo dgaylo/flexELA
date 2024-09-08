@@ -163,10 +163,23 @@ class SVector {
      * @brief Inplace Addition (and Multiplication), s=s+a*C, when a and s have same non-zero
      * elements
      *
-     * @param a SVector, \f$\mathbf{a}\f$
+     * For a NormalizedSVector \f$\mathbf{a}\f$ and a Value \f$C\f$, changes this \f$\mathbf{s}\f$
+     * by
+     * \f[
+     * \mathbf{s} \gets \mathbf{s} + \left(C  \times \mathbf{a}\right)
+     * \f]
+     *
+     * @attention Unlike add(), this function assumes the NormalizedSVector \f$\mathbf{a}\f$ is of
+     * the form
+     * \f[
+     * \mathbf{a} = \left(\frac{A}{\sum \mathbf{s}} \right) \times \mathbf{s}
+     * \f]
+     * This allows the function to be much faster than add()
+     *
+     * @param a NormalizedSVector, \f$\mathbf{a}\f$
      * @param C Value, \f$C\f$
      */
-    void add_same(const SVector& a, const Value& C = 1.0);
+    void add_same(const NormalizedSVector& a, const Value& C = 1.0);
 
     /**
      * @brief s=s/sum(s) * total
@@ -273,7 +286,13 @@ class NormalizedSVector {
         factor = 0;
     }
 
+    inline std::size_t NNZ() const noexcept
+    {
+        return base.NNZ();
+    }
+
     friend void SVector::add(const NormalizedSVector& a, const Value& C);
+    friend void SVector::add_same(const NormalizedSVector& a, const Value& C);
 
   private:
     SVector base;

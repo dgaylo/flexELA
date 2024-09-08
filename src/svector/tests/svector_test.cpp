@@ -181,18 +181,25 @@ TEST(SVectorTests, Add_Same)
 {
     svec::Element buff1[4] = {{1, 0.1}, {3, 0.2}, {4, 0.8}, svec::END_ELEMENT};
     svec::SVector s1 = svec::SVector(buff1);
-    svec::SVector s2 = s1 * 0.6;
+    svec::NormalizedSVector s2 = svec::NormalizedSVector(s1, 1.0);
 
     s1.add_same(s2, 2.5);
 
     for (auto i = 0; i < 3; i++) {
         EXPECT_EQ(s1.data()[i].l, buff1[i].l);
-        EXPECT_DOUBLE_EQ(s1.data()[i].v, buff1[i].v * (1.0 + 0.6 * 2.5));
+        EXPECT_DOUBLE_EQ(s1.data()[i].v, buff1[i].v * (1.0 + 1.0 / (0.1 + 0.2 + 0.8) * 2.5));
     }
 
-    svec::Element buff2[4] = {{2, 0.8}, {3, 0.3}, {8, 0.4}, svec::END_ELEMENT};
-    svec::SVector s3 = svec::SVector(buff2);
+    // should fail if labels dont match
+    s1 = svec::SVector(buff1);
+    svec::Element buff2[4] = {{1, 0.1}, {3, 0.2}, {5, 0.8}, svec::END_ELEMENT};
+    auto s3 = svec::NormalizedSVector(buff2, 1.0);
+    EXPECT_DEBUG_DEATH(s1.add_same(s3, 2.5), "");
 
+    // should fail if volumes dont match
+    s1 = svec::SVector(buff1);
+    svec::Element buff3[4] = {{1, 0.1}, {3, 0.3}, {4, 0.8}, svec::END_ELEMENT};
+    s3 = svec::NormalizedSVector(buff3, 1.0);
     EXPECT_DEBUG_DEATH(s1.add_same(s3, 2.5), "");
 }
 
