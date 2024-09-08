@@ -286,11 +286,6 @@ class NormalizedSVector {
         factor = 0;
     }
 
-    inline std::size_t NNZ() const noexcept
-    {
-        return base.NNZ();
-    }
-
     friend void SVector::add(const NormalizedSVector& a, const Value& C);
     friend void SVector::add_same(const NormalizedSVector& a, const Value& C);
 

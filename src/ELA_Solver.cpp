@@ -150,7 +150,7 @@ void advectRow(
         if (flux_loc > 0.0) {
             s_0.add(F, +1.0 / del_0);
         }
-        else if (F.NNZ() != 0) {
+        else {
             // F is just s_0 with a scalar factor, add_same() is faster
             s_0.add_same(F, +1.0 / del_0);
         }
