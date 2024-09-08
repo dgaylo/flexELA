@@ -132,7 +132,7 @@ void SVector::add_same(const NormalizedSVector& a, const Value& C)
 {
     const Value factor = C * a.factor;
 
-    if (factor == 0) return;
+    if (factor == 0 || a.base.isEmpty()) return;
 
     // length of vectors should be the same
     assert(a.base.NNZ() == NNZ());
@@ -261,6 +261,7 @@ NormalizedSVector::NormalizedSVector(const SVector& a, const Value& total)
     //
     // total/s will give inf if s/total is subnormal
     if (total == 0 || s == 0 || std::abs(s / total) < std::numeric_limits<Value>::min()) {
+
         factor = 0;
     }
     else {
