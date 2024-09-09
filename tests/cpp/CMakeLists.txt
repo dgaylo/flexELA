@@ -10,6 +10,13 @@ else()
     target_link_libraries(${TEST_PGRM} GTest::gtest_main flexELA)
     gtest_discover_tests(${TEST_PGRM})
 
+
+    set(TEST_PGRM twodimvortex_test)
+    add_executable(${TEST_PGRM} twodimvortex_test.cpp)
+    target_link_libraries(${TEST_PGRM} GTest::gtest_main flexELA)
+    gtest_discover_tests(${TEST_PGRM})
+
+
     set(TEST_PGRM solver_test)
     add_executable(${TEST_PGRM} solver_test.cpp)
     target_link_libraries(${TEST_PGRM} GTest::gtest_main flexELA)
