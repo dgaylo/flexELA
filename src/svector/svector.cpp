@@ -85,37 +85,47 @@ input svector `a` to have many elements not in this svector, so insert is rarely
 void SVector::add(const SVector& a, const Value& C)
 {
     // quick exit
-    if (a.isEmpty() || C == 0.0) return;
+    if (C == 0.0 || a.isEmpty()) return;
 
-    // references to the underlying vector
-    const std::vector<Element>& vecL = a.vec;
+    // iterators to the incoming SVector
+    auto itrL = a.vec.cbegin();
+    const auto itrL_end = a.vec.cend();
 
-    auto itrL = vecL.cbegin();
+    // iterators to this SVector
     auto itrR = vec.begin();
+    auto itrR_end = vec.end(); // need to update whenever vec changes
 
     // merge sort
-    while (itrL != vecL.cend() && itrR != vec.cend()) {
-        const svec::Label& labelL = itrL->l;
-        const svec::Label& labelR = itrR->l;
+    while (itrL != itrL_end && itrR != itrR_end) {
+        const auto elmL = *itrL;
+        auto& elmR = *itrR;
 
-        if (labelL == labelR) {
-            itrR->v = std::fma((itrL++)->v, C, itrR->v);
+        if (elmL.l == elmR.l) {
+            elmR.v = std::fma(elmL.v, C, elmR.v);
+            ++itrL;
         }
-        else if (labelL < labelR) {
-            itrR = vec.insert(itrR, (*itrL++) * C);
+        else if (elmL.l < elmR.l) {
+            itrR = vec.insert(itrR, elmL * C);
+            itrR_end = vec.end();
+            ++itrL;
         }
 
         ++itrR;
     }
 
     // if still values in vecL, emplace_back
-    if (itrL != vecL.cend()) {
-        vec.reserve(vec.size() + (vecL.cend() - itrL));
+    if (itrL != itrL_end) {
+        vec.reserve(vec.size() + (itrL_end - itrL));
 
-        while (itrL != vecL.cend()) {
+        while (itrL != itrL_end) {
             vec.emplace_back((*itrL++) * C);
         }
     }
+}
+
+void SVector::add(const NormalizedSVector& a, const Value& C)
+{
+    add(a.base, C * a.factor);
 }
 
 void SVector::normalize(const Value& total)
@@ -223,7 +233,7 @@ SVector svec::operator*(const SVector& a, const Value& C)
     return out;
 }
 
-SVector svec::normalize(const SVector& a, const Value& total)
+NormalizedSVector::NormalizedSVector(const SVector& a, const Value& total)
 {
     const Value s = a.sum();
 
@@ -232,11 +242,11 @@ SVector svec::normalize(const SVector& a, const Value& total)
     //
     // total/s will give inf if s/total is subnormal
     if (total == 0 || s == 0 || std::abs(s / total) < std::numeric_limits<Value>::min()) {
-        return SVector();
+        factor = 0;
     }
-
-    const Value factor = total / s;
-    assert(std::isfinite(factor));
-
-    return a * factor;
+    else {
+        base = a;
+        factor = total / s;
+        assert(std::isfinite(factor));
+    }
 }

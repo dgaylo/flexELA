@@ -166,6 +166,15 @@ TEST(SVectorTests, Add)
         EXPECT_EQ(s1.data()[i].l, solution2[i].l);
         EXPECT_DOUBLE_EQ(s1.data()[i].v, solution2[i].v);
     }
+
+    auto ns = svec::NormalizedSVector(s1, 0.5);
+    auto sum = s1.sum();
+    s1.add(ns, 1.0);
+
+    for (auto i = 0; i < 5; i++) {
+        EXPECT_EQ(s1.data()[i].l, solution2[i].l);
+        EXPECT_DOUBLE_EQ(s1.data()[i].v, solution2[i].v * (1.0 + 0.5 / sum));
+    }
 }
 
 TEST(SVectorTests, Chop)
@@ -202,7 +211,7 @@ TEST(SVectorTests, Normalize)
         EXPECT_DOUBLE_EQ(buff[i].v * (0.3 / sum), s.data()[i].v);
     }
 
-    svec::SVector s2 = svec::normalize(svec::SVector(buff), 0.3);
+    svec::SVector s2 = svec::NormalizedSVector(svec::SVector(buff), 0.3);
     ASSERT_EQ(s.NNZ(), s2.NNZ());
     for (std::size_t i = 0; i < length; i++) {
         EXPECT_EQ(s.data()[i].l, s2.data()[i].l);
@@ -214,7 +223,7 @@ TEST(SVectorTests, Normalize)
     s.normalize(0.0);
     EXPECT_EQ(s.NNZ(), 0);
 
-    s2 = svec::normalize(svec::SVector(buff), 0);
+    s2 = svec::NormalizedSVector(svec::SVector(buff), 0);
     EXPECT_EQ(s2.NNZ(), 0);
 
     delete[] buff;
@@ -230,11 +239,11 @@ TEST(SVectorTests, Normalize)
     EXPECT_EQ(s.NNZ(), 0);
     EXPECT_EQ(s.sum(), 0.0);
 
-    s2 = normalize(svec::Element({1, 0.0}));
+    s2 = svec::NormalizedSVector(svec::Element({1, 0.0}));
     EXPECT_EQ(s2.NNZ(), 0);
     EXPECT_EQ(s2.sum(), 0.0);
 
-    s2 = normalize(svec::SVector());
+    s2 = svec::NormalizedSVector(svec::SVector());
     EXPECT_EQ(s2.NNZ(), 0);
     EXPECT_EQ(s2.sum(), 0.0);
 
@@ -246,7 +255,7 @@ TEST(SVectorTests, Normalize)
     s.normalize(2.0);
     EXPECT_EQ(s.sum(), 0.0);
 
-    EXPECT_EQ(svec::normalize(svec::SVector(buff2), 2.0).sum(), 0.0);
+    EXPECT_EQ(svec::SVector(svec::NormalizedSVector(svec::SVector(buff2), 2.0)).sum(), 0.0);
 }
 
 TEST(SVectorTests, FMA)

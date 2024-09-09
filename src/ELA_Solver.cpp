@@ -16,8 +16,7 @@ void ELA_SolverSaveDilation(const double* c_in)
 
         for (auto& cVector : ela::dom->c[n]) {
             if (*c_scalar != 1.0) {
-                cVector = *sVector;
-                cVector.normalize(1.0 - *c_scalar);
+                cVector = svec::NormalizedSVector(*sVector, 1.0 - *c_scalar);
             }
             else {
                 cVector.clear();
@@ -139,7 +138,7 @@ void advectRow(
             );
 
         // calculate vector flux term on positive face
-        const svec::SVector F = svec::normalize(s_upwind, flux_loc);
+        const auto F = svec::NormalizedSVector(s_upwind, flux_loc);
 
         // store store s_{d} (will be s_{d+1} next iteration)
         if (flux_next > 0.0) s_temp = s_0;

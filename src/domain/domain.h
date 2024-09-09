@@ -84,7 +84,7 @@ struct Domain {
      * accessed through `c[n]`.
      *
      */
-    std::vector<fields::Owner<svec::SVector>> c;
+    std::vector<fields::Owner<svec::NormalizedSVector>> c;
 
     /**
      * @brief From \ref s `[n]`, returns ghost cells immediately adjacent to \ref Face \p f
