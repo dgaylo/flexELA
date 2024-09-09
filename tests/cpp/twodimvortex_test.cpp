@@ -39,7 +39,6 @@ constexpr int l0 ARRAY_SIZE =
     {0, 2, 0, 4, 0},
     {0, 0, 0, 0, 0}
 };
-constexpr int maxLabel = 4;
 
 // velocity in j
 constexpr double v ARRAY_SIZE =
