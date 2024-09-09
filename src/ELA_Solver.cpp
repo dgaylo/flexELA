@@ -105,7 +105,7 @@ void advectRow(
     auto del = deltaRow.begin();
     auto flux = fluxRow.begin();
 
-    for (auto sNorm = sNormRow.begin(); sNorm < sNormRow.end() - 1; ++sNorm) {
+    for (auto sNorm = sNormRow.cbegin(); sNorm < sNormRow.cend() - 1; ++sNorm) {
         // s_{d}, s_{d+1}
         svec::SVector& s_0 = *(s);
         svec::SVector& s_p = *(++s);
