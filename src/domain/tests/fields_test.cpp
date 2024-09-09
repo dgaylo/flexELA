@@ -65,9 +65,9 @@ TEST(FieldsTests, Pad)
 
     Helper<const int> a = Helper<const int>(array, n, pad);
 
-    for (int i = 0; i < n[0]; i++) {
-        for (int j = 0; j < n[1]; j++) {
-            for (int k = 0; k < n[2]; k++) {
+    for (int i = -pad[0]; i < n[0] + pad[1]; i++) {
+        for (int j = -pad[2]; j < n[1] + pad[3]; j++) {
+            for (int k = -pad[4]; k < n[2] + pad[5]; k++) {
                 EXPECT_EQ(DummyFunction(i + pad[0], j + pad[2], k + pad[4]), a.at(i, j, k));
             }
         }
