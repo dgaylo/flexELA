@@ -29,7 +29,7 @@ TEST(DomainTests, Basic)
             ASSERT_TRUE(s.isEmpty());
         }
         for (auto c : dilationVectorField) {
-            ASSERT_TRUE(c.isEmpty());
+            ASSERT_TRUE(((svec::SVector)c).isEmpty());
         }
 
         // ensure all vectors are writable
@@ -37,15 +37,15 @@ TEST(DomainTests, Basic)
             s = svec::SVector({1, 0.3});
         }
         for (auto& c : dilationVectorField) {
-            c = svec::SVector({2, 0.5});
+            c = svec::NormalizedSVector(svec::SVector({2, 0.5}), 0.5);
         }
         for (auto s : sourceVectorField) {
             ASSERT_EQ(s.NNZ(), 1);
             ASSERT_EQ(s.sum(), 0.3);
         }
         for (auto c : dilationVectorField) {
-            ASSERT_EQ(c.NNZ(), 1);
-            ASSERT_EQ(c.sum(), 0.5);
+            ASSERT_EQ(((svec::SVector)c).NNZ(), 1);
+            ASSERT_EQ(((svec::SVector)c).sum(), 0.5);
         }
     }
 

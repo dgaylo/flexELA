@@ -8,6 +8,8 @@
 //! For sparse vector containers and operations
 namespace svec {
 
+class NormalizedSVector;
+
 /**
  * @brief A container for sparse vectors
  *
@@ -144,6 +146,20 @@ class SVector {
     void add(const SVector& a, const Value& C = 1.0);
 
     /**
+     * @brief Inplace Addition (and Multiplication), s=s+a*C
+     *
+     * For an NormalizedSVector \f$\tilde{\mathbf{a}}\f$ and a Value \f$C\f$, changes this
+     * \f$\mathbf{s}\f$ by
+     * \f[
+     * \mathbf{s} \gets \mathbf{s} + \left(C  \times \tilde{\mathbf{a}}\right)
+     * \f]
+     *
+     * @param a NormalizedSVector, \f$\tilde{\mathbf{a}}\f$
+     * @param C Value, \f$C\f$
+     */
+    void add(const NormalizedSVector& a, const Value& C = 1.0);
+
+    /**
      * @brief s=s/sum(s) * total
      *
      * If sum(s) is zero or sum(s)/total is subnormal, \f$\mathbf{s}\gets\mathbf{0}\f$.
@@ -183,10 +199,76 @@ class SVector {
     friend SVector fma(const SVector& a, const Value& C, const SVector& b);
     friend SVector operator/(const SVector& a, const Value& C);
     friend SVector operator*(const SVector& a, const Value& C);
-    friend SVector normalize(const SVector& a, const Value& total);
 
   private:
     std::vector<Element> vec;
+};
+
+/**
+ * @brief A normalized SVector
+ *
+ * It is often the case where an SVector is normalized followed by multiple calls to SVector::add()
+ * including multiplication. In this case, using NormalizedSVector requires only one division
+ * operation rather than two.
+ *
+ * The NormalizedSVector \f$ \tilde{\mathbf{s}} \f$ is stored in the form,
+ * \f[
+ * \tilde{s} = \left(\frac{T}{\sum \mathbf{a}}\right) \times \mathbf{a}
+ * \f]
+ * where \f$\mathbf{a}\f$ and \f$ T \f$ are set by NormalizedSVector()
+ *
+ *
+ */
+class NormalizedSVector {
+  public:
+    /**
+     * @brief Construct an empty NormalizedSVector
+     *
+     */
+    NormalizedSVector()
+    {
+        factor = 0;
+    };
+
+    /**
+     * @brief Construct an NormalizedSVector from a SVector
+     *
+     * @param a the base SVector \f$ \mathbf{a} \f$
+     * @param total the total value \f$ T \f$
+     */
+    NormalizedSVector(const SVector& a, const Value& total = 1.0);
+
+    /**
+     * @brief Convert the NormalizedSVector to an SVector
+     *
+     * \f[
+     * \mathbf{s} \gets \left(\frac{T}{\sum \mathbf{a}}\right) \times \mathbf{a}
+     * \f]
+     *
+     * @return SVector \f$ \mathbf{s} \f$
+     */
+    inline operator SVector() const
+    {
+        return base * factor;
+    }
+
+    /**
+     * @brief Clear out all entries
+     *
+     * Has the effect of \f$ \mathbf{a} \gets \mathbf{0} \f$
+     *
+     */
+    inline void clear() noexcept
+    {
+        base.clear();
+        factor = 0;
+    }
+
+    friend void SVector::add(const NormalizedSVector& a, const Value& C);
+
+  private:
+    SVector base;
+    Value factor;
 };
 
 /**
@@ -231,8 +313,6 @@ SVector operator/(const SVector& a, const Value& C);
  * @return SVector
  */
 SVector operator*(const SVector& a, const Value& C);
-
-SVector normalize(const SVector& a, const Value& total = 1.0);
 
 inline SVector::SVector(const Element& elm) : vec(1, elm)
 {
