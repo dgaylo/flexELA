@@ -201,9 +201,11 @@ svec::SVector getVectorVolume(int n)
     for (auto i = 0; i < N[0]; ++i) {
         for (auto j = 0; j < N[1]; ++j) {
             auto& s = ela::dom->s[n].at(i, j, 0);
-            if (s.sum() > 0.0) v.add(s, dX[i + pad[0]] * dY[j + pad[2]]);
+            v.add(s, dX[i + pad[0]] * dY[j + pad[2]]);
         }
     }
+    v.chop();
+
     return v;
 }
 
@@ -342,7 +344,7 @@ void UpdateLabels(int d, const bool normalize)
     }
 }
 
-TEST(ELASolver, TwoDimVortex)
+TEST(TwoDimVortex, Norm)
 {
     consistencyCheck();
 
@@ -357,6 +359,29 @@ TEST(ELASolver, TwoDimVortex)
 
             updateF(d % 2);
             UpdateLabels(d % 2, true);
+        }
+        ELA_SolverClearDilation();
+
+        consistencyCheck();
+        conservationCheck();
+    }
+}
+
+TEST(TwoDimVortex, NoNorm)
+{
+    consistencyCheck();
+
+    for (auto count = 0; count < 1000; ++count) {
+        calculateC();
+        auto ctmp = flatten(c);
+        ELA_SolverSaveDilation(ctmp);
+        delete[] ctmp;
+        for (auto d = count % 2; d < 2 + count % 2; ++d) {
+            calculateFlux(d % 2);
+            calculateUDiv(d % 2);
+
+            updateF(d % 2);
+            UpdateLabels(d % 2, false);
         }
         ELA_SolverClearDilation();
 

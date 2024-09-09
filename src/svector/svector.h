@@ -18,7 +18,8 @@ class NormalizedSVector;
  * storage to grow dynamically as the number of non-zero elements changes.
  *
  * @note While elements \f$s_\ell\f$ are refereed to in documentation as ''non-zero elements'', it
- * is not guaranteed that \f$s_\ell\ne 0\f$.
+ * is not guaranteed that \f$s_\ell\ne 0\f$ until `chop()` is called, after which it is guaranteed
+ * \f$s_\ell\gt 0\f$.
  *
  */
 class SVector {
@@ -169,7 +170,7 @@ class SVector {
     void normalize(const Value& total = 1.0);
 
     /**
-     * @brief set any values less than zero to zero
+     * @brief remove any values <= 0
      *
      */
     void chop();
