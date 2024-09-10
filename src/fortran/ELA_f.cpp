@@ -51,6 +51,16 @@ void F90_NAME(ela_initlabels,ELA_INITLABELS)(
     );
 }
 
+void F90_NAME(ela_setinvertftrue,ELA_SETINVERTFTRUE)()
+{
+    ELA_SetInvertFTrue();
+}
+
+void F90_NAME(ela_setinvertffalse,ELA_SETINVERTFFALSE)()
+{
+    ELA_SetInvertFFalse();
+}
+
 void F90_NAME(ela_containsnans,ELA_CONTAINSNANS)(
     F90_Int out)
 {
