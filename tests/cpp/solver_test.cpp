@@ -125,6 +125,50 @@ TEST(ELASolver, Normalize)
     delete[] f;
 }
 
+TEST(ELASolver, NormalizeNoInversion)
+{
+    ELA_SetInvertFFalse();
+
+    for (auto n = 0; n < NN; ++n) {
+        const int* labels = newRandomLabelFeild(3);
+        const double* vol = newRandomDoubleFeild(-0.1, 3.0);
+        ELA_InitLabels(vol, n, labels);
+        delete[] labels;
+        delete[] vol;
+    }
+
+    const double* f = newRandomDoubleFeild(0.0, 1.0);
+    auto fFeild = ela::wrapField(f);
+
+    ELA_SolverNormalizeLabel(f);
+
+    for (auto n = 0; n < NN; ++n) {
+
+        auto fItr = fFeild.begin();
+        for (auto& s : ela::dom->s[n]) {
+            // ensure all volumes >= 0;
+            const svec::Element* elm = s.data();
+            const svec::Element* const end = elm + s.NNZ();
+            while (elm != end) {
+                ASSERT_GE((elm++)->v, 0.0);
+            };
+
+            const auto sum = s.sum();
+
+            if (sum == 0.0) {
+                ASSERT_EQ(s.NNZ(), 0);
+                fItr++;
+            }
+            else {
+                ASSERT_DOUBLE_EQ(sum, *fItr);
+                fItr++;
+            }
+        }
+    }
+
+    delete[] f;
+}
+
 TEST(ELASolver, FilterLabels)
 {
     for (auto n = 0; n < ela::dom->nn; ++n) {
@@ -156,6 +200,49 @@ TEST(ELASolver, FilterLabels)
                 }
             }
             if (*fItr == 1.0) {
+                ASSERT_EQ(s.NNZ(), 0);
+            }
+
+            fItr++;
+        }
+    }
+
+    delete[] f;
+}
+
+TEST(ELASolver, FilterLabelsNoInversion)
+{
+    ELA_SetInvertFFalse();
+
+    for (auto n = 0; n < ela::dom->nn; ++n) {
+        const int* labels = newRandomLabelFeild(3);
+        const double* vol = newRandomDoubleFeild(-0.1, 3.0);
+        ELA_InitLabels(vol, n, labels);
+        delete[] labels;
+        delete[] vol;
+    }
+
+    double* f = newRandomDoubleFeild(0.0, 1.0);
+    auto fFeild = ela::wrapField(f);
+
+    constexpr double tol = 0.1;
+    ELA_SolverFilterLabels(tol, f);
+
+    for (auto& f_loc : fFeild) {
+        if (f_loc <= tol) f_loc = 0.0;
+        if ((1 - f_loc) <= tol) f_loc = 1.0;
+    }
+
+    for (auto n = 0; n < ela::dom->nn; ++n) {
+
+        auto fItr = fFeild.begin();
+        for (auto& s : ela::dom->s[n]) {
+            if (*fItr == 1.0) {
+                if (s.NNZ() != 0) {
+                    ASSERT_DOUBLE_EQ(s.sum(), 1.0);
+                }
+            }
+            if (*fItr == 0.0) {
                 ASSERT_EQ(s.NNZ(), 0);
             }
 
