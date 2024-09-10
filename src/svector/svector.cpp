@@ -153,11 +153,13 @@ void SVector::normalize(const Value& total)
     }
 }
 
-void SVector::chop()
+void SVector::chop(const Value& ref)
 {
+    Value minV = std::numeric_limits<Value>::epsilon() * ref;
+
     // remove any values <= 0
-    auto itr = std::remove_if(vec.begin(), vec.end(), [](const svec::Element& elm) {
-        return elm.v <= 0.0;
+    auto itr = std::remove_if(vec.begin(), vec.end(), [&minV](const svec::Element& elm) {
+        return elm.v <= minV;
     });
 
     vec.erase(itr, vec.end());
