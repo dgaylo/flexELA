@@ -24,14 +24,16 @@ extern "C" {
  * source fraction is \f$\mathbf{s}^{(0)}\f$. The vector dilation term \f$\tilde{\mathbf{c}}\f$ is
  * calculated
  * \f[
- * \tilde{\mathbf{c}} \gets (1-\tilde{c}) \; \hat{\mathbf{s}},
+ * \tilde{\mathbf{c}} \gets \tilde{c} \; \hat{\mathbf{s}},
  * \f]
  * and stored internally, where the normalized vector source fraction is computed
  * \f[
  * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
  * \f]
  *
- * @param c The scalar dilation term \f$\tilde{c}\f$
+ * @param c The scalar dilation term \f$ 1 -\tilde{c} \f$ with ELA_SetInvertFTrue() (default) or \f$
+ * \tilde{c} \f$ with ELA_SetInvertFFalse().
+ *
  */
 void ELA_SolverSaveDilation(const double* c);
 
@@ -65,14 +67,15 @@ void ELA_SolverDilateLabels(const double* u_div);
  * First, it sets any \f$s_l<0\f$ to \f$s_l=0\f$.
  * Second, it performs the normalization (@cite Gaylo2022, Eq. 47):
  * \f[
- * \mathbf{s} \gets (1-f) \; \hat{\mathbf{s}},
+ * \mathbf{s} \gets f \; \hat{\mathbf{s}},
  * \f]
  * where the normalized vector source fraction is computed
  * \f[
  * \hat{s}_l = \frac{s_l}{\sum_i s_i}.
  * \f]
  *
- * @param f The volume fraction \f$ f \f$.
+ * @param f The volume fraction \f$ 1 -f \f$ with ELA_SetInvertFTrue() (default) or \f$ f \f$ with
+ * ELA_SetInvertFFalse().
  */
 void ELA_SolverNormalizeLabel(const double* f);
 
@@ -82,8 +85,8 @@ void ELA_SolverNormalizeLabel(const double* f);
  * This applies a filter to keep ELA consistent with filtered VOF (@cite Gaylo2022, Eq. 29):
  * \f[
  * \mathbf{s} \gets \begin{cases}
- * \hat{\mathbf{s}} & \text{if} \quad f<\epsilon \\
- * \mathbf{0} & \text{if} \quad 1-f<\epsilon \\
+ * \hat{\mathbf{s}} & \text{if} \quad 1 - f<\epsilon \\
+ * \mathbf{0} & \text{if} \quad f<\epsilon \\
  * \mathbf{s} & \text{otherwise}
  * \end{cases},
  * \f]
@@ -93,7 +96,8 @@ void ELA_SolverNormalizeLabel(const double* f);
  * \f]
  *
  * @param tol The tolerance \f$ \epsilon \f$.
- * @param f The volume fraction \f$ f \f$.
+ * @param f The volume fraction \f$ 1 -f \f$ with ELA_SetInvertFTrue() (default) or \f$ f \f$ with
+ * ELA_SetInvertFFalse().
  */
 void ELA_SolverFilterLabels(const double& tol, const double* f);
 
@@ -129,6 +133,10 @@ void ELA_SolverFilterLabels(const double& tol, const double* f);
  * @param delta The size of the cell in direction \p d, \f$ \Delta x_d \f$
  *
  * @note When calling from Fortran, \p d should be `1`, `2`, or `3`
+ *
+ * @attention Unlike other functions, \p flux is not affected by ELA_SetInvertFTrue() and
+ * ELA_SetInvertFFalse() and must be correctly calculated by the user based on the void fraction
+ * convention.
  *
  */
 void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delta);

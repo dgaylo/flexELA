@@ -64,7 +64,7 @@ void ELA_DeInit();
  * Each element \f$ s_l \f$ in the cell \f$ \Omega_{ijk} \f$ is given by
  * \f[
  * (s_l)_{ijk} \gets \begin{cases}
- * 1-f_{ijk} & \text{if} \quad \Omega_{ijk} \in \text{blob } l \\
+ * f_{ijk} & \text{if} \quad \Omega_{ijk} \in \text{blob } l \\
  * 0 & \text{otherwise}
  * \end{cases}
  * \f]
@@ -73,12 +73,24 @@ void ELA_DeInit();
  * and a cell can only be in one blob.
  * The number of blobs \f$ M \f$ is determined based on \p labels provided.
  *
- *
- * @param vof The volume fraction \f$ f \f$
+ * @param vof The volume fraction \f$ 1 -f \f$ with ELA_SetInvertFTrue() (default) or \f$ f \f$ with
+ * ELA_SetInvertFFalse().
  * @param num The ELA instance
  * @param labels The label feild
  */
 void ELA_InitLabels(const double* vof, const int& num, const int* labels);
+
+/**
+ * @brief Have ELA use \f$ 1 - f \f$ in calculations (default behaviour)
+ *
+ */
+void ELA_SetInvertFTrue();
+
+/**
+ * @brief Have ELA use \f$ f \f$ in calculations
+ *
+ */
+void ELA_SetInvertFFalse();
 
 /**
  * @brief Get the first label at (\p i, \p j, \p k) for ELA instance \p n

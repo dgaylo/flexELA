@@ -69,7 +69,7 @@ struct Domain {
     const int nn;
 
     /** @brief If true, use 1-f, otherwise use f */
-    const bool invertF = true;
+    bool invertF = true;
 
     /**
      * @brief Source vector field

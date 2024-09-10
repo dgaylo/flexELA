@@ -43,6 +43,16 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels)
     }
 }
 
+void ELA_SetInvertFTrue()
+{
+    ela::dom->invertF = true;
+}
+
+void ELA_SetInvertFFalse()
+{
+    ela::dom->invertF = false;
+}
+
 int ELA_GetLabel(const int& i, const int& j, const int& k, const int& n)
 {
     const auto& sVector = ela::dom->s[n].at(i, j, k);
