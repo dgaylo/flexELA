@@ -127,7 +127,12 @@ void advectRow(
             s_0.add(sNorm_loc, +flux_loc / del_0);
 
             // update s_{d+1} (subtraction)
-            s_p.add(sNorm_loc, -flux_loc / del_p);
+            if (flux_loc > 0.0) {
+                s_p.add_same(sNorm_loc, -flux_loc / del_p);
+            }
+            else {
+                s_p.add(sNorm_loc, -flux_loc / del_p);
+            }
         }
     }
 }
