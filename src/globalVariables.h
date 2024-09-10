@@ -40,6 +40,13 @@ fields::Helper<T> wrapRow(T* in, const int& d)
     return fields::Helper<T>(in, n, pad);
 }
 
+// helper function for inverting or not inverting void fraction
+template <typename T>
+inline T voidFraction(const T in)
+{
+    return (dom->invertF ? 1.0 - in : in);
+}
+
 } // namespace ela
 
 #endif

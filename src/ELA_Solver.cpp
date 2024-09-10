@@ -17,7 +17,7 @@ void ELA_SolverSaveDilation(const double* c_in)
 
         for (auto& cVector : ela::dom->c[n]) {
             if (*c_scalar != 1.0) {
-                cVector = svec::NormalizedSVector(*sVector, 1.0 - *c_scalar);
+                cVector = svec::NormalizedSVector(*sVector, ela::voidFraction(*c_scalar));
             }
             else {
                 cVector.clear();
@@ -65,7 +65,7 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
 
             // ensure sum(s)=1-f
             // ELA paper eq. 47
-            sVector.normalize(1.0 - *(f++));
+            sVector.normalize(ela::voidFraction(*(f++)));
         }
     }
 }
@@ -79,10 +79,9 @@ void ELA_SolverFilterLabels(const double& tol, const double* vof_in)
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto v = vofField.begin();
         for (auto& sVector : ela::dom->s[n]) {
-            // f_air=1-f_water
-            if (*v <= tol) sVector.normalize();
+            if (1.0 - ela::voidFraction(*v) <= tol) sVector.normalize();
 
-            if ((1 - *v) <= tol) sVector.clear();
+            if (ela::voidFraction(*v) <= tol) sVector.clear();
 
             ++v;
         }

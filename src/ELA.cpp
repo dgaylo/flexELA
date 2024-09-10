@@ -39,7 +39,7 @@ void ELA_InitLabels(const double* vof, const int& num, const int* labels)
     for (auto& sVector : ela::dom->s[num]) {
         // initialize s vector with single label
         sVector = svec::SVector(svec::Element{
-            static_cast<svec::Label>(*(l++)), static_cast<svec::Value>(1.0 - *(v++))});
+            static_cast<svec::Label>(*(l++)), static_cast<svec::Value>(ela::voidFraction(*(v++)))});
     }
 }
 

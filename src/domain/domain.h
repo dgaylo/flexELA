@@ -68,6 +68,9 @@ struct Domain {
     /** @brief Number of ELA instances*/
     const int nn;
 
+    /** @brief If true, use 1-f, otherwise use f */
+    const bool invertF = true;
+
     /**
      * @brief Source vector field
      *
