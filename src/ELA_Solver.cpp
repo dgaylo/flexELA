@@ -2,6 +2,7 @@
 
 #include "domain/domain.h"
 #include "globalVariables.h"
+#include <algorithm>
 #include <cmath>
 
 void ELA_SolverSaveDilation(const double* c_in)
@@ -93,61 +94,41 @@ void advectRow(
     const fields::Helper<const double>& deltaRow
 )
 {
-    auto f = fluxRow.rbegin();
-    auto del = deltaRow.rbegin();
-    auto s = sRow.rbegin();
+    // Calculate the normalized SVector
+    // ELA paper eq. 24
+    auto sNormRow = std::vector<svec::NormalizedSVector>(sRow.size());
+    std::transform(sRow.begin(), sRow.end(), sNormRow.begin(), [](const svec::SVector& s) {
+        return svec::NormalizedSVector(s);
+    });
 
-    // start with value from positive BC/Ghost
-    svec::SVector s_temp = svec::SVector(*s);
+    auto s = sRow.begin();
+    auto del = deltaRow.begin();
+    auto flux = fluxRow.begin();
 
-    // flux term for the first iteration
-    double flux_next = *(++f);
+    for (auto sNorm = sNormRow.cbegin(); sNorm < sNormRow.cend() - 1; ++sNorm) {
+        // s_{d}, s_{d+1}
+        svec::SVector& s_0 = *(s);
+        svec::SVector& s_p = *(++s);
 
-    while (true) {
-        // scalar flux on positive face, F_{d+1/2}
-        const double flux_loc = flux_next;
-        // flux term for next iteration (or zero if on the last iteration)
-        if (f != fluxRow.rend()) {
-            flux_next = (++f == fluxRow.rend() ? 0 : *(f));
+        // delta_{d}, delta_{d+1}
+        const double& del_0 = *(del);
+        const double& del_p = *(++del);
+
+        // F_{d+1/2}
+        const double flux_loc = *(flux++);
+
+        if (flux_loc != 0) {
+            // a negative velocity corresponds to a positive flux, therfore:
+            // F_{d+1/2}>0, s_{d+1} is upwind
+            // F_{d+1/2}<0, s_{d} is upwind
+            const auto& sNorm_loc = (flux_loc > 0.0 ? sNorm[1] : sNorm[0]);
+
+            // update s_{d} (addition)
+            s_0.add(sNorm_loc, +flux_loc / del_0);
+
+            // update s_{d+1} (subtraction)
+            s_p.add(sNorm_loc, -flux_loc / del_p);
         }
-
-        // s_{d+1}
-        svec::SVector& s_p = *(s);
-        // delta_{d+1}
-        const double& del_p = *(del);
-
-        // s_{d}
-        svec::SVector& s_0 = *(++s);
-        // delta_{d}
-        const double& del_0 = *(++del);
-
-        if (s == sRow.rend()) break;
-
-        // continue if flux is zero
-        if (flux_loc == 0.0) {
-            // store store s_{d} (will be s_{d+1} next iteration)
-            if (flux_next > 0.0) s_temp = s_0;
-
-            continue;
-        }
-
-        // dont forget that a negative velocity corresponds to a positive F
-        const svec::SVector& s_upwind =
-            (flux_loc > 0.0 ? s_temp : // F_{d+1/2}>0, s_{d+1} is upwind
-                 s_0                   // F_{d+1/2}<0, s_{d} is upwind
-            );
-
-        // calculate vector flux term on positive face
-        const auto F = svec::NormalizedSVector(s_upwind, flux_loc);
-
-        // store store s_{d} (will be s_{d+1} next iteration)
-        if (flux_next > 0.0) s_temp = s_0;
-
-        // update s_{d+1} (subtraction)
-        s_p.add(F, -1.0 / del_p);
-
-        // update s_{d} (addition)
-        s_0.add(F, +1.0 / del_0);
     }
 }
 

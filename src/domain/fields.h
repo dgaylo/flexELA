@@ -53,6 +53,13 @@ class Helper {
     T& at(int i, int j, int k) const;
 
     /**
+     * @brief Return the number of (not pad) cells
+     *
+     * @return \f$N_{i} \times N_{j} \times N_{k}\f$
+     */
+    std::size_t size() const;
+
+    /**
      * @brief Create a slice of the array
      *
      * Create a slice of \f$ i\in [i_s, i_e)\f$,\f$ j\in [j_s, j_e)\f$, and \f$ k\in [k_s, k_e)\f$.
@@ -279,6 +286,12 @@ template <class T>
 inline T& Helper<T>::at(int i, int j, int k) const
 {
     return *(basePtr + getIndex(i, j, k));
+}
+
+template <class T>
+inline std::size_t Helper<T>::size() const
+{
+    return n[0] * n[1] * n[2];
 }
 
 template <class T>
