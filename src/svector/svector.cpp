@@ -130,14 +130,16 @@ void SVector::add(const NormalizedSVector& a, const Value& C)
 
 void SVector::add_same(const NormalizedSVector& a, const Value& C)
 {
-    const Value factor = C * a.factor;
+    if (a.factor == 0 || C == 0) return;
 
-    if (factor == 0 || a.base.isEmpty()) return;
+    const Value factor = C * a.factor;
 
     // length of vectors should be the same
     assert(a.base.NNZ() == NNZ());
 
+#ifndef NDEBUG
     auto itrL = a.base.vec.cbegin();
+#endif
     for (auto& elm : vec) {
         // labels should be the same
         assert(elm.l == (itrL)->l);
