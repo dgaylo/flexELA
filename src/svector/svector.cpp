@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <numeric>
 #include <utility>
 
 using namespace svec;
@@ -25,29 +26,23 @@ SVector::SVector(const Element* const buff)
 
 Value SVector::sum() const
 {
-    Value sum = 0.0;
-    for (const auto& elm : vec) {
-        sum += elm.v;
-    }
-    return sum;
+    return std::accumulate(vec.cbegin(), vec.cend(), Value(0.0));
 }
 
 Value SVector::getMinValue() const
 {
-    Value minimum = std::numeric_limits<Value>::max();
-    for (const auto& elm : vec) {
-        if (elm.v < minimum) minimum = elm.v;
-    }
-    return minimum;
+    return std::accumulate(
+        vec.cbegin(), vec.cend(), std::numeric_limits<Value>::max(),
+        [](Value a, Value b) { return std::min<Value>(a, b); }
+    );
 }
 
 Value SVector::getMaxValue() const
 {
-    Value maximum = std::numeric_limits<Value>::min();
-    for (const auto& elm : vec) {
-        if (elm.v > maximum) maximum = elm.v;
-    }
-    return maximum;
+    return std::accumulate(
+        vec.cbegin(), vec.cend(), std::numeric_limits<Value>::min(),
+        [](Value a, Value b) { return std::max<Value>(a, b); }
+    );
 }
 
 Label svec::SVector::getMaxLabel() const
@@ -57,11 +52,9 @@ Label svec::SVector::getMaxLabel() const
 
 bool SVector::containsNaN() const
 {
-    for (const auto& elm : vec) {
-        if (std::isnan(elm.v)) return true;
-    }
-
-    return false;
+    return std::any_of(vec.cbegin(), vec.cend(), [](svec::Element elm) {
+        return std::isnan(elm.v);
+    });
 }
 
 // Simple version using temporary variable
