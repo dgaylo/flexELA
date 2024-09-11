@@ -62,8 +62,8 @@ void ELA_SolverDilateLabels(const double* u_div);
  * @brief Cleanup machine precision related errors, including @cite Gaylo2022, Eq. 47
  *
  * This function does two cleanup operations.
- * First, it sets any \f$s_l<0\f$ to \f$s_l=0\f$.
- * Second, it performs the normalization (@cite Gaylo2022, Eq. 47):
+ * First, it sets any \f$s_l\le\varepsilon (1-f)\f$ to \f$s_l=0\f$, where \f$ \varepsilon \f$ is
+ * machine precision. Second, it performs the normalization (@cite Gaylo2022, Eq. 47):
  * \f[
  * \mathbf{s} \gets (1-f) \; \hat{\mathbf{s}},
  * \f]

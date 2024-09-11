@@ -60,12 +60,15 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
         auto f = vofField.begin();
 
         for (auto& sVector : ela::dom->s[n]) {
-            // ensure there are no negative values
-            sVector.chop();
+            // calculate 1-f
+            const svec::Value& fInv = 1.0 - *(f++);
+
+            // remove very small (compared to 1-f) values of s
+            sVector.chop(fInv);
 
             // ensure sum(s)=1-f
             // ELA paper eq. 47
-            sVector.normalize(1.0 - *(f++));
+            sVector.normalize(fInv);
         }
     }
 }

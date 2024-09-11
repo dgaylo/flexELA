@@ -170,10 +170,14 @@ class SVector {
     void normalize(const Value& total = 1.0);
 
     /**
-     * @brief remove any values <= 0
+     * @brief Remove small elements in s
      *
+     * For any \f$s_l\le \varepsilon R \f$, \f$ s_l \gets 0 \f$. Where \f$ \varepsilon \f$ is
+     * machine precision.
+     *
+     * @param ref \f$ R \f$
      */
-    void chop();
+    void chop(const Value& ref = 0.0);
 
     /**
      * @brief Set the entry at label \p l to zero

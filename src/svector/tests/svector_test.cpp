@@ -179,12 +179,17 @@ TEST(SVectorTests, Add)
 
 TEST(SVectorTests, Chop)
 {
-    svec::Element buff[7] = {{0, 5},  {1, -0.1}, {3, 0.2},         {4, 0.8},
-                             {8, -5}, {9, 0.0},  svec::END_ELEMENT};
+    svec::Element buff[7] = {{0, 5},           {1, -0.1},
+                             {3, 0.2},         {4, 0.8},
+                             {8, -5},          {9, std::numeric_limits<svec::Value>::epsilon() / 2},
+                             svec::END_ELEMENT};
     svec::SVector s = svec::SVector(buff);
 
     s.chop();
+    EXPECT_EQ(s.NNZ(), 4);
+    EXPECT_DOUBLE_EQ(s.sum(), 5 + 0.2 + 0.8);
 
+    s.chop(1.0);
     EXPECT_EQ(s.NNZ(), 3);
     EXPECT_DOUBLE_EQ(s.sum(), 5 + 0.2 + 0.8);
 }
