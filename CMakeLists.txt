@@ -28,7 +28,7 @@ endif(ELA_USE_MPI)
 
 # Setup OpenMP
 if(ELA_USE_OPENMP)
-  find_package(OpenMP REQUIRED)
+  find_package(OpenMP REQUIRED COMPONENTS CXX)
 
   add_definitions(-DELA_USE_OPENMP)
 endif(ELA_USE_OPENMP)
