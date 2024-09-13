@@ -9,6 +9,10 @@ if(ELA_USE_MPI)
   link_libraries(${MPI_CXX_LINK_FLAGS})
 endif(ELA_USE_MPI)
 
+if(ELA_USE_OPENMP)
+  target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
+endif(ELA_USE_OPENMP)
+
 if(FORTRAN_COMPATIBLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_f)
 endif(FORTRAN_COMPATIBLE)

@@ -17,9 +17,12 @@ In addition to standard CMake configuration options, ELA provides the following 
 | Build Option | Description | Default |
 |:--:|:--|:--:|
 | `ELA_USE_MPI` | `ON`: The library will be built to be called by parallel MPI applications.<br/>`OFF` : The library will be built to be called by serial applications. | `ON` |
+| `ELA_USE_OPENMP` | `ON`: The library will be built to run use multithreading. (\ref openmpnote "see 1")<br/>`OFF` : The library will be built to run on a single thread. |  `OFF` |
 | `FORTRAN_COMPATIBLE` | `ON`: The library will include Fortran interfaces and will assume array ordering is column-major.<br/>`OFF`: The library will not include any Fortran interfaces and will assume row-major. | `OFF` |
 | `BUILD_TESTING` | `ON`: Build unit and integration tests.<br/>`OFF`: Do not build tests. | `ON` |
 | `BUILD_Fortran_TESTING` | `ON`: Include Fortran integration tests if `BUILD_TESTING=ON` and `FORTRAN_COMPATIBLE=ON`<br/>`OFF`: Do not build these tests (CMake sometimes struggles building Fortran programs) | `ON` |
+
+\anchor openmpnote 1. This primarily effects function in ELA_Solver.h.
 
 ### Build Types
 
