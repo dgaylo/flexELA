@@ -11,6 +11,9 @@ void ELA_SolverSaveDilation(const double* c_in)
     auto cField = ela::wrapField<const double>(c_in);
 
     // loop through all ELA instances
+#ifdef ELA_USE_OPENMP
+#pragma omp parallel for
+#endif
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto c_scalar = cField.begin();
         auto sVector = ela::dom->s[n].begin();
@@ -39,6 +42,9 @@ void ELA_SolverDilateLabels(const double* u_div)
     auto uField = ela::wrapField<const double>(u_div);
 
     // loop through all ELA instances
+#ifdef ELA_USE_OPENMP
+#pragma omp parallel for
+#endif
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto u = uField.begin();
         auto cVector = ela::dom->c[n].begin();
@@ -56,6 +62,9 @@ void ELA_SolverNormalizeLabel(const double* vof_in)
     auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
+#ifdef ELA_USE_OPENMP
+#pragma omp parallel for
+#endif
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto f = vofField.begin();
 
@@ -79,6 +88,9 @@ void ELA_SolverFilterLabels(const double& tol, const double* vof_in)
     auto vofField = ela::wrapField<const double>(vof_in);
 
     // loop through all ELA instances
+#ifdef ELA_USE_OPENMP
+#pragma omp parallel for
+#endif
     for (auto n = 0; n < ela::dom->nn; ++n) {
         auto v = vofField.begin();
         for (auto& sVector : ela::dom->s[n]) {
@@ -170,6 +182,9 @@ void ELA_SolverAdvectLabels(const int& d, const double* flux, const double* delt
         if (!std::isnormal(delta)) throw std::invalid_argument("Cell size delta is not normal");
     }
 
+#ifdef ELA_USE_OPENMP
+#pragma omp parallel for
+#endif
     for (auto n = 0; n < nn; ++n) {
         auto& sField = ela::dom->s[n];
 
