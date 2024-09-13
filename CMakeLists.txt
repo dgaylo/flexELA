@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 option(ELA_USE_MPI "Build an MPI version of the library" ON)
+option(ELA_USE_OPENMP "Build ELA for multithread" OFF)
 option(FORTRAN_COMPATIBLE "Build the library to be called from FORTRAN" OFF)
 option(BUILD_TESTING "Build testing" ON)
 
@@ -25,6 +26,12 @@ if(ELA_USE_MPI)
   add_definitions(-DELA_USE_MPI)
 endif(ELA_USE_MPI)
 
+# Setup OpenMP
+if(ELA_USE_OPENMP)
+  find_package(OpenMP REQUIRED COMPONENTS CXX)
+
+  add_definitions(-DELA_USE_OPENMP)
+endif(ELA_USE_OPENMP)
 
 ## Testing
 enable_testing()

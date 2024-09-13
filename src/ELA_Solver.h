@@ -12,7 +12,9 @@ extern "C" {
  *
  * The descriptions below describe operations on a single vector source fraction feild.
  * When there are multiple ELA instances (set by \p nn in \ref ELA_Init()), one call to the
- * following functions performs the operation on all instances
+ * following functions performs the operation on all instances.
+ * If `ELA_USE_OPENMP=ON`, this will be done in parallel with each ELA instance will be assigned to
+ * a thread.
  *
  * @file
  */
