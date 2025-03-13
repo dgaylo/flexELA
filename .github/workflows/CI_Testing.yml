@@ -46,6 +46,11 @@ jobs:
           - os: macos-latest
             mpiType: openMPI
 
+          # MacOS clang doesn't have fortran
+          - os: macos-latest
+            c_compiler: clang
+            fortran_compatible: on
+
     steps:
     - uses: actions/checkout@v4
 
