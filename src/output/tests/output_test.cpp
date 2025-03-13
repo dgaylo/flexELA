@@ -282,10 +282,14 @@ TEST(Output, ASCIILog)
         std::size_t maxNNZ;
 
         FILE* f = std::fopen("tracking.log", "r");
-        fscanf(
+        int status = fscanf(
             f, "%15E%18u%18E%18E%18E%18E%9lu", &time, &maxLabel, &maxValue, &minValue, &volError,
             &volErrorRel, &maxNNZ
         );
+        if(status != 7) {
+            FAIL() << "Error reading tracking.log";
+        }
+
         maxValue = 1.0 - maxValue;
 
         ASSERT_FLOAT_EQ(time, 0.5);
