@@ -18,7 +18,7 @@ jobs:
       matrix:
         build_type: ['Debug','Coverage']
         c_compiler: [gcc, clang]
-        mpiType: ['openMPI', 'MPICH', 'none']
+        mpiType: ['openMPI', 'none']
         fortran_compatible: [on, off]
         include:
           - c_compiler: gcc
@@ -29,25 +29,14 @@ jobs:
           - mpiType: 'openMPI'
             use_mpi: on
             oversubscribe: on
-          - mpiType: 'MPICH'
-            use_mpi: on
-            oversubscribe: off
           - mpiType: 'none'
             use_mpi: off
             oversubscribe: off
 
         exclude:
-          # CMAKE has trouble with clang and MPICH
-          - c_compiler: clang
-            mpiType: 'MPICH'
-
           # Coverage only works with gcc
           - build_type: 'Coverage'
             c_compiler: clang
-
-          # no need to get coverage from two different MPI versions
-          - build_type: 'Coverage'
-            mpiType: 'OpenMPI'
            
 
     steps:
@@ -56,10 +45,6 @@ jobs:
     - if: matrix.mpiType == 'openMPI'
       name: Install OpenMPI
       run: sudo apt-get update && sudo apt-get install -y openmpi-bin libopenmpi-dev && mpirun --version
-
-    - if: matrix.mpiType == 'MPICH'
-      name: Install MPICH
-      run: sudo apt-get update && sudo apt-get install -y mpich libmpich-dev && mpirun --version
 
     - if: matrix.build_type == 'Coverage'
       name: Install lcov
