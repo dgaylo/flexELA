@@ -64,9 +64,26 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Configure CMake
+    - name: Configure CMake (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: >
+        cmake -B ${{ steps.strings.outputs.build-output-dir }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
+        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DCMAKE_COMPILE_WARNING_AS_ERROR=on
+        -DELA_USE_MPI=${{ matrix.use_mpi }}
+        -DFORTRAN_COMPATIBLE=${{ matrix.fortran_compatible }}
+        -DBUILD_TESTING=on
+        -DMPIRUN_OVERSUBSCRIBE=${{ matrix.oversubscribe }}
+        -S ${{ github.workspace }}
+
+    - name: Configure CMake (MacOS)
+      if: matrix.os == 'macos-latest'
+      env:
+        ASAN_OPTIONS: detect_leaks=0
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
