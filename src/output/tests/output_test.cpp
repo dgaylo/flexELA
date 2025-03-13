@@ -286,7 +286,7 @@ TEST(Output, ASCIILog)
             f, "%15E%18u%18E%18E%18E%18E%9lu", &time, &maxLabel, &maxValue, &minValue, &volError,
             &volErrorRel, &maxNNZ
         );
-        if(status != 7) {
+        if (status != 7) {
             FAIL() << "Error reading tracking.log";
         }
 
