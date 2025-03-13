@@ -95,7 +95,7 @@ jobs:
       name: Baseline coverage report
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: |
-        lcov --directory . --capture --initial --output-file ./coverage_base.info
+        lcov --directory . --capture --initial --output-file ./coverage_base.info --ignore-errors mismatch
 
     - name: Test
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
@@ -107,7 +107,7 @@ jobs:
       name: Create coverage report
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: |
-        lcov --directory . --capture --output-file ./coverage_test.info
+        lcov --directory . --capture --output-file ./coverage_test.info --ignore-errors mismatch
         lcov -a ./coverage_test.info -a ./coverage_base.info --output-file ./coverage.info
 
     - if: matrix.build_type == 'Coverage'
