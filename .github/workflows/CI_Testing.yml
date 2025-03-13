@@ -31,7 +31,7 @@ jobs:
             oversubscribe: on
           - mpiType: 'MPICH'
             use_mpi: on
-            oversubscribe: off
+            oversubscribe: on
           - mpiType: 'none'
             use_mpi: off
             oversubscribe: off
