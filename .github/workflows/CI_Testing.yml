@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         build_type: ['Debug','Coverage']
         c_compiler: [gcc, clang]
         mpiType: ['openMPI', 'none']
@@ -34,22 +34,17 @@ jobs:
             use_mpi: off
             oversubscribe: off
 
+          - os: macos-latest
+            c_compiler: gcc-14
+            cpp_compiler: gcc-14
+            fortran_compiler: gfortran-14
+            mpiType: 'none'
+            build_type: Debug
+
         exclude:
           # Coverage only works with gcc
           - build_type: 'Coverage'
             c_compiler: clang
-           
-          # MacOS doesn't have apt-get
-          - os: macos-latest
-            build_type: Coverage
-
-          - os: macos-latest
-            mpiType: openMPI
-
-          # MacOS clang doesn't have fortran
-          - os: macos-latest
-            c_compiler: clang
-            fortran_compatible: on
 
     steps:
     - uses: actions/checkout@v4
@@ -76,6 +71,7 @@ jobs:
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_Fortran_COMPILER=${{ matrix.fortran_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DCMAKE_COMPILE_WARNING_AS_ERROR=on
         -DELA_USE_MPI=${{ matrix.use_mpi }}
