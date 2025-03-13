@@ -41,6 +41,13 @@ jobs:
             mpiType: 'none'
             build_type: Debug
 
+          - os: macos-latest
+            c_compiler: clang
+            cpp_compiler: clang
+            fortran_compiler: flang
+            mpiType: 'none'
+            build_type: Debug
+
         exclude:
           # Coverage only works with gcc
           - build_type: 'Coverage'
