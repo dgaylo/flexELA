@@ -9,13 +9,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
       fail-fast: false
 
       matrix:
+        os: [ubuntu-latest, macos-latest]
         build_type: ['Debug','Coverage']
         c_compiler: [gcc, clang]
         mpiType: ['openMPI', 'none']
@@ -38,6 +39,12 @@ jobs:
           - build_type: 'Coverage'
             c_compiler: clang
            
+          # MacOS doesn't have apt-get
+          - os: macos-latest
+            build_type: Coverage
+
+          - os: macos-latest
+            mpiType: openMPI
 
     steps:
     - uses: actions/checkout@v4
