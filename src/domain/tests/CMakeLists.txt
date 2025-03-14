@@ -1,11 +1,11 @@
 set(TEST_PGRM fields_test)
 add_executable(${TEST_PGRM} fields_test.cpp)
-target_link_libraries(${TEST_PGRM} GTest::gtest_main)
+target_link_libraries(${TEST_PGRM} GTest::gtest_main GTest::gtest)
 gtest_discover_tests(${TEST_PGRM})
 
 set(TEST_PGRM domain_test)
 add_executable(${TEST_PGRM} domain_test.cpp compression_test.cpp)
-target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
+target_link_libraries(${TEST_PGRM} GTest::gtest_main GTest::gtest ${PROJECT_NAME})
 gtest_discover_tests(${TEST_PGRM})
 
 
@@ -14,7 +14,7 @@ if(ELA_USE_MPI)
     set(TEST_Name DomainTests.MPI)
 
     add_executable(${TEST_PGRM} mpi_test.cpp)
-    target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
+    target_link_libraries(${TEST_PGRM} GTest::gtest_main GTest::gtest ${PROJECT_NAME})
 
 
     option(MPIRUN_OVERSUBSCRIBE off)
