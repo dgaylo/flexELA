@@ -85,7 +85,11 @@ class Helper {
      * of the underlying data.
      *
      */
-    struct Iterator : public std::iterator<std::forward_iterator_tag, T, long, T*, T&> {
+    struct Iterator : public std::forward_iterator_tag {
+        /** @cond Doxygen_Suppress */
+        using difference_type = long;
+        using value_type = T;
+        /** @endcond */
 
         Iterator() = default;
 
