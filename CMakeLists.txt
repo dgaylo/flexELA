@@ -57,9 +57,16 @@ endif()
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  option(USE_ASAN "Use ASan library with Debug build" ON)
+
   # add sanitizing
-  add_compile_options(-g -fsanitize=leak,address,undefined -Wpedantic -Wall)
-  link_libraries(-g -fsanitize=leak,address,undefined)
+  if(USE_ASAN)
+    add_compile_options(-g -fsanitize=leak,address,undefined -Wpedantic -Wall)
+    link_libraries(-g -fsanitize=leak,address,undefined)
+  else()
+    add_compile_options(-g -Wpedantic -Wall)
+    link_libraries(-g)
+  endif()
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")

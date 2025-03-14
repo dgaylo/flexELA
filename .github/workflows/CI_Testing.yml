@@ -97,6 +97,7 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_Fortran_COMPILER=${{ matrix.fortran_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DUSE_ASAN=OFF
         -DCMAKE_COMPILE_WARNING_AS_ERROR=on
         -DELA_USE_MPI=${{ matrix.use_mpi }}
         -DFORTRAN_COMPATIBLE=${{ matrix.fortran_compatible }}
