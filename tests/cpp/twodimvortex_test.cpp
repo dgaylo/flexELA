@@ -274,7 +274,10 @@ int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
     ::testing::AddGlobalTestEnvironment(new TwoDimELADomain);
+
+    #ifndef __APPLE__
     feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+    #endif
 
     return RUN_ALL_TESTS();
 }

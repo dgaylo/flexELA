@@ -36,7 +36,7 @@ if(BUILD_TESTING)
   include(FetchContent)
   FetchContent_Declare(
     googletest
-    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+    URL https://github.com/google/googletest/archive/6910c9d9165801d8827d628cb72eb7ea9dd538c5.zip
   )
   # For Windows: Prevent overriding the parent project's compiler/linker settings
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -57,9 +57,16 @@ endif()
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  option(USE_ASAN "Use ASan library with Debug build" ON)
+
   # add sanitizing
-  add_compile_options(-g -fsanitize=leak,address,undefined -Wpedantic -Wall)
-  link_libraries(-g -fsanitize=leak,address,undefined)
+  if(USE_ASAN)
+    add_compile_options(-g -fsanitize=leak,address,undefined -Wpedantic -Wall)
+    link_libraries(-g -fsanitize=leak,address,undefined)
+  else()
+    add_compile_options(-g -Wpedantic -Wall)
+    link_libraries(-g)
+  endif()
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Coverage")
