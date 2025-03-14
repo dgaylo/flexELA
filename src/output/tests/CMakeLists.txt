@@ -1,6 +1,6 @@
 set(TEST_PGRM output_test)
 add_executable(${TEST_PGRM} output_test.cpp)
-target_link_libraries(${TEST_PGRM} GTest::gtest_main GTest::gtest ${PROJECT_NAME})
+target_link_libraries(${TEST_PGRM} GTest::gtest_main ${PROJECT_NAME})
 
 if(ELA_USE_MPI)
     set(TEST_Name Output.MPI)
