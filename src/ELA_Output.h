@@ -27,7 +27,9 @@ extern "C" {
  * @param f The volume fraction \f$ f \f$
  * @param labels The label feild
  * @param dV Cell volume \f$ \Delta \Omega \f$
+ * @param num The ELA instance
  * @param t_num The snapshot index \f$ n \f$
+ * @param time The snapshot time \f$ t^{n} \f$
  * @param folder The folder to create the volume vector file in
  */
 void ELA_OutputData(
