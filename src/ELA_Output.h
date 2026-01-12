@@ -16,6 +16,32 @@ extern "C" {
  */
 
 /**
+ * @brief Has the same effect as calling `ELA_OutputWriteV()`, `ELA_OutputWriteVTM()`, and (if \p write_log is true) `ELA_OutputLog()`
+ * 
+ * @see  [Volume Vector](OutputFiles.html#volumevector), [Volume Tracking Matrix](OutputFiles.html#volumetrackingmatrix), and
+ * [timelog.bin](OutputFiles.html#timelogbin)
+ * 
+ * @warning It is assumed the \p folder exists
+ * 
+ * @param labels The label feild
+ * @param f The volume fraction \f$ f \f$
+ * @param labels The label feild
+ * @param dV Cell volume \f$ \Delta \Omega \f$
+ * @param num The ELA instance
+ * @param t_num The snapshot index \f$ n \f$
+ * @param time The snapshot time \f$ t^{n} \f$
+ * @param folder The folder to create the volume vector file in
+ * @param write_log Whether or not to call `ELA_OutputLog()`
+ * 
+ * @note When calling from Fortran, \p write_log is an integer and is cast to a boolean with `write_log!=0`
+ * 
+ */
+void ELA_Output(
+    const int* labels, const double* f, const double* dV, const int& num, const int& t_num, const double& time,
+    const char* folder, const bool& write_log=true
+);
+
+/**
  * @brief Calculate the volume vector (@cite Gaylo2022, Eq. 8)
  *
  * This function outputs the volume vector \f$\mathbf{v}^{n}\f$,

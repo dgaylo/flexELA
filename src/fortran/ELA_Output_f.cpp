@@ -6,6 +6,28 @@ extern "C" {
 #endif
 // clang-format off
 
+void F90_NAME(ela_output, ELA_OUTPUT)(
+    F90_IntArray labels, 
+    F90_RealArray f,
+    F90_RealArray dV, 
+    F90_Int num,
+    F90_Int t_num, 
+    F90_Real time, 
+    F90_CharArray folder,
+    F90_Int write_log)
+{
+    ELA_Output(
+        F90_PassIntArray(labels),
+        F90_PassRealArray(f),
+        F90_PassRealArray(dV),
+        F90_PassInt(num)-1,
+        F90_PassInt(t_num),
+        F90_PassReal(time),
+        F90_PassCharArray(folder),
+        write_log != 0
+    );
+}
+
 void F90_NAME(ela_outputwritev, ELA_OUTPUTWRITEV)(
     F90_RealArray f, 
     F90_IntArray labels, 
