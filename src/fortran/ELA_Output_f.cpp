@@ -6,7 +6,7 @@ extern "C" {
 #endif
 // clang-format off
 
-void F90_NAME(ela_outputdata, ELA_OUPUTDATA)(
+void F90_NAME(ela_output, ELA_OUTPUT)(
     F90_IntArray labels, 
     F90_RealArray f,
     F90_RealArray dV, 
@@ -16,7 +16,7 @@ void F90_NAME(ela_outputdata, ELA_OUPUTDATA)(
     F90_CharArray folder,
     F90_Int write_log)
 {
-    ELA_OutputData(
+    ELA_Output(
         F90_PassIntArray(labels),
         F90_PassRealArray(f),
         F90_PassRealArray(dV),

@@ -36,7 +36,7 @@ extern "C" {
  * @note When calling from Fortran, \p write_log is an integer and is cast to a boolean with `write_log!=0`
  * 
  */
-void ELA_OutputData(
+void ELA_Output(
     const int* labels, const double* f, const double* dV, const int& num, const int& t_num, const double& time,
     const char* folder, const bool& write_log=true
 );
