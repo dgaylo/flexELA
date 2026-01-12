@@ -16,6 +16,26 @@ extern "C" {
  */
 
 /**
+ * @brief Has the same effect as calling `ELA_OutputWriteV()` and `ELA_OutputWriteVTM()`
+ * 
+ * @see  [Volume Vector](OutputFiles.html#volumevector), [Volume Tracking Matrix](OutputFiles.html#volumetrackingmatrix), and
+ * [timelog.bin](OutputFiles.html#timelogbin)
+ * 
+ * @warning It is assumed the \p folder exists
+ * 
+ * @param labels The label feild
+ * @param f The volume fraction \f$ f \f$
+ * @param labels The label feild
+ * @param dV Cell volume \f$ \Delta \Omega \f$
+ * @param t_num The snapshot index \f$ n \f$
+ * @param folder The folder to create the volume vector file in
+ */
+void ELA_OutputData(
+    const int* labels, const double* f, const double* dV, const int& num, const int& t_num, const double& time,
+    const char* folder
+);
+
+/**
  * @brief Calculate the volume vector (@cite Gaylo2022, Eq. 8)
  *
  * This function outputs the volume vector \f$\mathbf{v}^{n}\f$,

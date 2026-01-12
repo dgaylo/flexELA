@@ -41,6 +41,15 @@ std::string getNameASCIILogFileName(const char* folder)
     return std::string(folder) + "/" + "tracking.log";
 }
 
+void ELA_OutputData(
+    const int* labels, const double* vof_in, const double* dV_in, const int& num, const int& t_num,
+    const double& time, const char* folder
+)
+{
+    ELA_OutputWriteV(vof_in, labels, dV_in, t_num, folder);
+    ELA_OutputWriteVTM(labels, dV_in, num, t_num, time, folder);
+}
+
 void ELA_OutputWriteV(
     const double* vof_in, const int* labels, const double* dV_in, const int& t_num,
     const char* folder
