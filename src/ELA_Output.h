@@ -16,7 +16,7 @@ extern "C" {
  */
 
 /**
- * @brief Has the same effect as calling `ELA_OutputWriteV()` and `ELA_OutputWriteVTM()`
+ * @brief Has the same effect as calling `ELA_OutputWriteV()`, `ELA_OutputWriteVTM()`, and (if \p write_log is true) `ELA_OutputLog()`
  * 
  * @see  [Volume Vector](OutputFiles.html#volumevector), [Volume Tracking Matrix](OutputFiles.html#volumetrackingmatrix), and
  * [timelog.bin](OutputFiles.html#timelogbin)
@@ -31,10 +31,14 @@ extern "C" {
  * @param t_num The snapshot index \f$ n \f$
  * @param time The snapshot time \f$ t^{n} \f$
  * @param folder The folder to create the volume vector file in
+ * @param write_log Whether or not to call `ELA_OutputLog()`
+ * 
+ * @note When calling from Fortran, \p write_log is an integer and is cast to a boolean with `write_log!=0`
+ * 
  */
 void ELA_OutputData(
     const int* labels, const double* f, const double* dV, const int& num, const int& t_num, const double& time,
-    const char* folder
+    const char* folder, const bool& write_log=true
 );
 
 /**
