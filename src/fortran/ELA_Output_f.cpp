@@ -24,7 +24,7 @@ void F90_NAME(ela_output, ELA_OUTPUT)(
         F90_PassInt(t_num),
         F90_PassReal(time),
         F90_PassCharArray(folder),
-        write_log != 0
+        F90_PassInt(write_log) != 0
     );
 }
 
